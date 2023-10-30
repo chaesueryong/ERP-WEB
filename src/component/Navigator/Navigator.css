@@ -1,0 +1,14 @@
+.Navigator {
+    display: flex;
+    height: 58px;
+    background-color: #7B61FF1A;
+}
+
+.navbar {
+    display: flex;
+    align-self: flex-end;
+    flex: 1;
+    height: 35px;
+    border-left: 2px solid #C0C7CE;
+    border-bottom: 2px solid #C0C7CE;
+}
