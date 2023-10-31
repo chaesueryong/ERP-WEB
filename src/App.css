@@ -109,3 +109,15 @@
 /* ******** */
 /* 모달 CSS */
 /* ******** */
+
+
+
+/*  */
+
+.dx-header-row > td {
+  vertical-align: middle !important;
+}
+
+.dx-datagrid .dx-column-indicators {
+  float: right !important;
+}

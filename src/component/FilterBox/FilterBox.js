@@ -1,7 +1,7 @@
 import FilterItem from '../FilterItem/FilterItem';
 import './FilterBox.css';
 
-function FilterBox({title, search_title, filterList=[]}) {
+function FilterBox({title, search_title, filter_title, check=true, filterList=[], filter_box_border=true}) {
 
   return (
     <div className="FilterBox">
@@ -16,10 +16,10 @@ function FilterBox({title, search_title, filterList=[]}) {
             </div>
 
             <div className='check-box'>
-                <div className='check-title'>검색 필터</div>
-                <div className='check-list'>
+                <div className='check-title'>{filter_title}</div>
+                <div className='check-list' style={filter_box_border ? {} : {border: 'none', padding: '10px 0'}}>
                     {
-                        filterList.map((e, i)=><FilterItem key={i} name={e.name} />)
+                        filterList.map((e, i)=><FilterItem key={i} name={e.name} check={check} />)
                     }
                 </div>
             </div>

@@ -7,7 +7,7 @@ function NavTab({index, name, path, moveTab, deleteNavTab}) {
     
     return (
         <div className="NavTab">
-            <div className='nav-tap' style={location.pathname === path ? {backgroundColor: '#7B61FF1A'} : {}} onClick={() => {
+            <div className='nav-tap' style={location.pathname === path ? {backgroundColor: '#F1F3F5'} : {}} onClick={() => {
                 moveTab(path);
             }}> 
             <div style={{overflow: 'hidden', whiteSpace: 'nowrap'}}>

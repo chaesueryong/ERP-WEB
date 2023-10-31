@@ -1,11 +1,11 @@
 import './FilterItem.css';
 
-function FilterItem({name}) {
+function FilterItem({name, check=true}) {
 
   return (
     <div className="FilterItem">
-        <input id={name} className='check-filter' type='checkbox' />
-        <label for={name}><span>{name}</span></label>
+        <input id={name} className={`${check ? 'check-filter' : 'filter'}`} type='checkbox' style={check ? {} : {display: 'none'}} />
+        <label for={name} className={`${check ? 'check-filter' : 'filter'}`}><span>{name}</span></label>
     </div>
   );
 }

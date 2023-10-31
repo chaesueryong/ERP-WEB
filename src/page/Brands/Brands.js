@@ -1,11 +1,14 @@
 import FilterBox from '../../component/FilterBox/FilterBox';
 import './Brands.css';
 import ButtonNormal from '../../component/ButtonNormal/ButtonNormal';
+import { useState } from 'react';
 
 function Brands() {
+  const [filterList, setFilterList] = useState(filters);
+
   return (
     <div className="Brands">
-      <FilterBox title='브랜드 관리' search_title='브랜드 찾기' />
+      <FilterBox title='브랜드 관리' search_title='브랜드 찾기' filter_title='검색 필터' filterList={filterList} filter_box_border={false} check={false} />
       
       <div className='list-button'>
         <div className='list-button-left'>
@@ -29,3 +32,9 @@ function Brands() {
 }
 
 export default Brands;
+
+const filters = [
+  {name: '카테고리'},
+  {name: '스포츠의류'},
+  {name: '신발'},
+];

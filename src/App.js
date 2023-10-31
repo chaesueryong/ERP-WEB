@@ -1,4 +1,5 @@
 import './App.css';
+import 'devextreme/dist/css/dx.light.css';
 import { Route, Routes } from 'react-router-dom';
 import Home from './page/Home/Home';
 import Menu from './component/Menu/Menu';
