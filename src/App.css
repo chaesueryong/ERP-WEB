@@ -10,12 +10,16 @@
   flex: 1;
 }
 
+.grid-box {
+  padding: 0 33px;
+  flex: 1;
+  background-color: #F8F9FA;
+}
+
 .list-button {
   display: flex;
   justify-content: space-between;
-  border-top: 2px solid #D9D9D9;
-  padding-top: 20px;
-  margin: 15px 0;
+  margin: 20px 0;
 }
 
 .list-button-left, .list-button-right {
@@ -28,6 +32,7 @@
 .render-count-title {
   font-size: 12px;
   font-weight: 600;
+  white-space: nowrap;
 }
 
 .render-count {
@@ -120,4 +125,31 @@
 
 .dx-datagrid .dx-column-indicators {
   float: right !important;
+
+}
+
+.dx-datagrid-pager {
+  border-top: 1px solid #ddd;
+  background-color: #F8F9FA !important;
+}
+
+.dx-datagrid-headers {
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+  background-color: #F1F3F5;
+  overflow: hidden;
+}
+
+.dx-datagrid-rowsview {
+  border-bottom-left-radius: 10px;
+  border-bottom-right-radius: 10px;
+  overflow: hidden;
+}
+
+.dx-datagrid-content .dx-datagrid-table .dx-row .dx-command-select {
+  background-color: white;
+}
+
+.dx-datagrid-rowsview .dx-row {
+
 }

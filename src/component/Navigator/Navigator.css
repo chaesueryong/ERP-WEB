@@ -1,6 +1,19 @@
 .Navigator {
     display: flex;
-    height: 58px;
+    height: 33px;
+}
+
+.navbar-left {
+    width: 33px;
+    height: 33px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.navbar-left img {
+    width: 21.69px;
+    cursor: pointer;
 }
 
 .navbar {
@@ -10,4 +23,6 @@
     height: 35px;
     border-left: 2px solid #C0C7CE;
     border-bottom: 2px solid #C0C7CE;
+    box-sizing: border-box;
 }
+

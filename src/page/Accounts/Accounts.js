@@ -3,7 +3,7 @@ import './Accounts.css';
 import FilterBox from '../../component/FilterBox/FilterBox';
 import ButtonNormal from '../../component/ButtonNormal/ButtonNormal';
 
-import DataGrid, { Column, Selection, Export, Paging, Pager } from 'devextreme-react/data-grid';
+import DataGrid, { Column, Selection, HeaderFilter, Paging, Pager, Sorting, Search } from 'devextreme-react/data-grid';
 import { Workbook } from 'exceljs';
 import { saveAs } from 'file-saver-es';
 import { exportDataGrid } from 'devextreme/excel_exporter';
@@ -95,102 +95,75 @@ function Accounts() {
       <FilterBox title='거래처 관리' search_title='거래처 찾기' filter_title='필터' filterList={filterList} />
 
 
-      <div className='list-button'>
-        <div className='list-button-left'>
-          <ButtonNormal name='거래처 등록' bg_color='#495057' font_weight='400' icon={true} color='white' handleClick={toggleModal} />
-          <ButtonNormal name='상품 관리 바로가기' bg_color='#E9ECEF' color='black' />
+      <div className='grid-box'>
+        <div className='list-button'>
+          <div className='list-button-left'>
+            <ButtonNormal name='거래처 등록' bg_color='#495057' font_weight='400' icon={true} color='white' handleClick={toggleModal} />
+            <ButtonNormal name='상품 관리 바로가기' bg_color='#E9ECEF' color='black' />
+          </div>
+          <div className='list-button-right'>
+            <div className='render-count-title'>페이지당 항목수</div>
+            <select className='render-count'>
+              <option value='10'>10</option>
+              <option value='30'>30</option>
+              <option value='50'>50</option>
+              <option value='100'>100</option>
+            </select>
+            <ButtonNormal name='인쇄' bg_color='#E9ECEF' color='black' />
+            <ButtonNormal name='엑셀 내려받기' bg_color='#E9ECEF' color='black' handleClick={exportExcel} />
+          </div>
         </div>
-        <div className='list-button-right'>
-          <div className='render-count-title'>페이지당 항목수</div>
-          <select className='render-count'>
-            <option value='10'>10</option>
-            <option value='30'>30</option>
-            <option value='50'>50</option>
-            <option value='100'>100</option>
-          </select>
-          <ButtonNormal name='인쇄' bg_color='#E9ECEF' color='black' />
-          <ButtonNormal name='엑셀 내려받기' bg_color='#E9ECEF' color='black' handleClick={exportExcel} />
-        </div>
-      </div>
 
-      <DataGrid
-        dataSource={countries}
-        keyExpr="ID"
-        showBorders={true}
-        onExporting={exportExcel}
-      >
-        {/* <Export enabled={true} /> */}
-        <Selection selectAllMod='allpages' showCheckBoxesMode='always' mode='multiple' />
-        <Paging defaultPageSize={15} />
-        <Pager visible showPageSizeSelector />
+        <DataGrid
+          dataSource={countries}
+          keyExpr="ID"
+          showBorders={true}
+          showRowLines={true}
+          onExporting={exportExcel}
+        >
+
+          {/* <Export enabled={true} /> */}
+          <Selection selectAllMod='allpages' showCheckBoxesMode='always' mode='multiple' />
+          {/* <HeaderFilter visible={true} /> */}
+
+          <Pager allowedPageSizes={5} />
+          <Paging defaultPageSize={15} />
+          <Sorting mode="multiple" />
 
 
-
-        <Column dataField="브랜드수" />
-
-        <Column caption="거래처명">
-          <Column
-            dataField="Population_Total"
-            caption="코드"
-            format="fixedPoint"
-            alignment='left'
-          />
-          <Column
-            dataField="Population_Urban"
-            caption="거래처명"
-            format="percent"
-            alignment='left'
-          />
-        </Column>
-        <Column dataField="업종분류" />
-        <Column dataField="브랜드수" />
-        <Column dataField="대표자" />
-        <Column dataField="대표자 연락처" />
-        <Column dataField="담당자" />
-        <Column dataField="담당자 연락처" />
-        <Column dataField="주소" />
-
-        {/* <Column caption="Nominal GDP">
-          <Column
-            dataField="GDP_Total"
-            caption="Total, mln $"
-            format="fixedPoint"
-            sortOrder="desc"
-          />
-          <Column caption="By Sector">
+          <Column caption="*거래처명">
             <Column
-              dataField="GDP_Agriculture"
-              caption="Agriculture"
-              format={gdpFormat}
-              width={95}
+              dataField=""
+              caption="코드"
+              format="fixedPoint"
+              alignment='left'
             />
             <Column
-              dataField="GDP_Industry"
-              caption="Industry"
-              format={gdpFormat}
-              width={80}
-            />
-            <Column
-              dataField="GDP_Services"
-              caption="Services"
-              format={gdpFormat}
-              width={85}
+              dataField=""
+              caption="거래처명"
+              format="percent"
+              alignment='left'
             />
           </Column>
-        </Column> */}
-      </DataGrid>
+
+          <Column dataField="업종분류">
+            <HeaderFilter visible={true} allowSelectAll={false}>
+              <Search enabled={true} />
+            </HeaderFilter>
+          </Column>
+          <Column dataField="브랜드수" />
+          <Column dataField="대표자" />
+          <Column dataField="대표자 연락처" />
+          <Column dataField="주소" />
+        </DataGrid>
+      </div>
 
       <div className='modal' style={modal ? {display: 'block'} : {display: 'none'}}>
         <div className='modal-bg' onClick={closeModal}></div>
         <div className='modal-content-box'>
           <div className='modal-content'>
-            <div>거래처 정보</div>
-            <div>거래처 정보</div>
-            <div>거래처 정보</div>
-            <div>거래처 정보</div>
-            <div>거래처 정보</div>
-            <div>거래처 정보</div>
-            <div>거래처 정보</div>
+
+
           </div>
           <div className='modal-button'>등록하기</div>
         </div>

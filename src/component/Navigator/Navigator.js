@@ -2,8 +2,12 @@ import './Navigator.css';
 import NavTab from '../NavTab/NavTab';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import hamburger_menu from '../../assets/images/hamburger-icon.svg';
+import { useRecoilState } from 'recoil';
+import { menuState } from '../../recoil/status';
 
 function Navigator() {
+  const [menu, setMenu] = useRecoilState(menuState);
   const navigate = useNavigate();
   const [navList, setNavList] = useState(list);
 
@@ -17,6 +21,12 @@ function Navigator() {
 
   return (
     <div className="Navigator">
+
+      <div className='navbar-left'>
+        <img src={hamburger_menu} onClick={() => {
+            setMenu(!menu);
+          }} />
+      </div>
       <div className='navbar'>
         {
           navList.map((e, i)=>(

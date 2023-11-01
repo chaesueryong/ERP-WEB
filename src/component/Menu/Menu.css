@@ -25,17 +25,3 @@
 .logo.on {
     width: 68px;
 }
-
-.menu-right {
-    width: 33px;
-    height: 33px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-top: 25px;
-}
-
-.menu-right img {
-    width: 21.69px;
-    cursor: pointer;
-}

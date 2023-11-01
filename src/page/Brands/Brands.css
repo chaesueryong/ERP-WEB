@@ -1,3 +1,5 @@
 .Brands {
-    padding-right: 33px;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
 }
