@@ -1,4 +1,8 @@
-const url = 'https://partyon.co.kr:4444/vendor/';
-export const api = {
+const url = 'https://dev-erp.aftercompany.co.kr/';
 
+export const api = {
+    get_accounts: `${url}vendor/get`,
+    add_accounts: `${url}vendor/addVendor`,
+    put_accounts: `${url}vendor/updateVendor`,
+    delete_accounts: `${url}vendor/deleteVendor`,
 }

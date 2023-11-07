@@ -3,6 +3,15 @@
     height: 33px;
 }
 
+.focus-input {
+    width: 0;
+    border: none;
+}
+
+.focus-input:focus {
+    outline: none;
+}
+
 .navbar-left {
     width: 33px;
     height: 33px;

@@ -5,7 +5,7 @@ function FilterItem({name, check=true}) {
   return (
     <div className="FilterItem">
         <input id={name} className={`${check ? 'check-filter' : 'filter'}`} type='checkbox' style={check ? {} : {display: 'none'}} />
-        <label for={name} className={`${check ? 'check-filter' : 'filter'}`}><span>{name}</span></label>
+        <label htmlFor={name} className={`${check ? 'check-filter' : 'filter'}`}><span>{name}</span></label>
     </div>
   );
 }

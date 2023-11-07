@@ -1,15 +1,19 @@
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import './Accounts.css';
 import FilterBox from '../../component/FilterBox/FilterBox';
 import ButtonNormal from '../../component/ButtonNormal/ButtonNormal';
 
-import DataGrid, { Column, Selection, HeaderFilter, Paging, Pager, Sorting, Search } from 'devextreme-react/data-grid';
+import DataGrid, { Column, Selection, HeaderFilter, Paging, Pager, Sorting, Search, Export } from 'devextreme-react/data-grid';
 import { Workbook } from 'exceljs';
 import { saveAs } from 'file-saver-es';
 import { exportDataGrid } from 'devextreme/excel_exporter';
+import axios from 'axios';
+import { api } from '../../api/api';
 
 function Accounts() {
   const [filterList, setFilterList] = useState(filters);
+  const [accountList, setAccountList] = useState([]);
+  const dataGridRef = useRef(null);
   const [modal, setModal] = useState(false);
 
   const toggleModal = () => {
@@ -41,8 +45,6 @@ function Accounts() {
     };
   }
 
-
-
   const itemRender = (data) => {
     const imageSource = `images/icons/status-${data.id}.svg`;
     if (data != null) {
@@ -54,14 +56,36 @@ function Accounts() {
     return <span>(All)</span>;
   }
 
+  const getAccounts = () => {
+    axios.post(api.get_accounts, {
+      "use_yn": "Y", // 페이징 인덱스(최초 0)
+      "size": 10, //페이징 처리시 사이즈 크기
+      "number": 0 // 페이징 인덱스(최초 0)
+      
+      //"all" : "Y" // "all" :"Y" 인경우, 모든 데이터 가져오기
+      //"all" : "Y" // 넣지 않은 경우 페이징 처리.
+    }, {
+      headers: {
+        'jwt_token': 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJicmFuZEBhZnRlcnNwYWNlLmNvLmtyIiwiaWF0IjoxNjk3MDg5ODUwLCJleHAiOjE2OTk2ODE4NTB9.UzruqCKTg-dVcqNm-vKpRf-LB7_RxR1WvoDDv_udayU',
+      }
+    }).then(res => {
+      setAccountList(res.data.data.content.map((e,i)=>({
+        ...e,
+        ID: i
+      })))
+      console.log(res.data.data)
+    })
+  }
   
 
   const onExporting = (e) => {
     const workbook = new Workbook();
     const worksheet = workbook.addWorksheet('CountriesPopulation');
 
+    const dataGrid = dataGridRef.current.instance;
+
     exportDataGrid({
-      component: e.component,
+      component: dataGrid,
       worksheet,
       topLeftCell: { row: 4, column: 1 },
     }).then((cellRange) => {
@@ -89,6 +113,9 @@ function Accounts() {
     });
   }
 
+  useEffect(() => {
+    getAccounts();
+  },[])
 
   return (
     <div className="Accounts">
@@ -115,16 +142,17 @@ function Accounts() {
         </div>
 
         <DataGrid
-          dataSource={countries}
+          dataSource={accountList}
           keyExpr="ID"
           showBorders={true}
           showRowLines={true}
+          ref={dataGridRef}
           onExporting={exportExcel}
         >
 
           {/* <Export enabled={true} /> */}
           <Selection selectAllMod='allpages' showCheckBoxesMode='always' mode='multiple' />
-          {/* <HeaderFilter visible={true} /> */}
+          <HeaderFilter visible={true} />
 
           <Pager allowedPageSizes={5} />
           <Paging defaultPageSize={15} />
@@ -133,28 +161,42 @@ function Accounts() {
 
           <Column caption="*거래처명">
             <Column
-              dataField=""
               caption="코드"
-              format="fixedPoint"
-              alignment='left'
+              dataField="code"
+              sortOrder=""
             />
             <Column
-              dataField=""
               caption="거래처명"
-              format="percent"
-              alignment='left'
+              dataField="bank_acc"
+              sortOrder=""
             />
           </Column>
 
-          <Column dataField="업종분류">
-            <HeaderFilter visible={true} allowSelectAll={false}>
+          <Column 
+            caption="업종분류"
+            dataField="sector_c_nm"
+          >
+            {/* <HeaderFilter visible={true} allowSelectAll={false}>
               <Search enabled={true} />
-            </HeaderFilter>
+            </HeaderFilter> */}
           </Column>
-          <Column dataField="브랜드수" />
-          <Column dataField="대표자" />
-          <Column dataField="대표자 연락처" />
-          <Column dataField="주소" />
+          <Column 
+            caption="브랜드수"
+            dataField="brand_cnt" 
+            alignment='left'
+          />
+          <Column 
+            caption="대표자"
+            dataField="owener" 
+          />
+          <Column 
+            caption="대표자 연락처"  
+            dataField="owener_phone" 
+          />
+          <Column 
+            caption="주소"
+            dataField="l_address"
+          />
         </DataGrid>
       </div>
 
@@ -193,116 +235,3 @@ const filters = [
   {name: '지급 방식'},
   {name: '등록 일자'},
 ];
-
-
-const countries = [{
-  ID: 1,
-  Country: 'Brazil',
-  Area: 8515767,
-  Population_Urban: 0.85,
-  Population_Rural: 0.15,
-  Population_Total: 205809000,
-  GDP_Agriculture: 0.054,
-  GDP_Industry: 0.274,
-  GDP_Services: 0.672,
-  GDP_Total: 2353025,
-}, {
-  ID: 2,
-  Country: 'China',
-  Area: 9388211,
-  Population_Urban: 0.54,
-  Population_Rural: 0.46,
-  Population_Total: 1375530000,
-  GDP_Agriculture: 0.091,
-  GDP_Industry: 0.426,
-  GDP_Services: 0.483,
-  GDP_Total: 10380380,
-}, {
-  ID: 3,
-  Country: 'France',
-  Area: 675417,
-  Population_Urban: 0.79,
-  Population_Rural: 0.21,
-  Population_Total: 64529000,
-  GDP_Agriculture: 0.019,
-  GDP_Industry: 0.183,
-  GDP_Services: 0.798,
-  GDP_Total: 2846889,
-}, {
-  ID: 4,
-  Country: 'Germany',
-  Area: 357021,
-  Population_Urban: 0.75,
-  Population_Rural: 0.25,
-  Population_Total: 81459000,
-  GDP_Agriculture: 0.008,
-  GDP_Industry: 0.281,
-  GDP_Services: 0.711,
-  GDP_Total: 3859547,
-}, {
-  ID: 5,
-  Country: 'India',
-  Area: 3287590,
-  Population_Urban: 0.32,
-  Population_Rural: 0.68,
-  Population_Total: 1286260000,
-  GDP_Agriculture: 0.174,
-  GDP_Industry: 0.258,
-  GDP_Services: 0.569,
-  GDP_Total: 2047811,
-}, {
-  ID: 6,
-  Country: 'Italy',
-  Area: 301230,
-  Population_Urban: 0.69,
-  Population_Rural: 0.31,
-  Population_Total: 60676361,
-  GDP_Agriculture: 0.02,
-  GDP_Industry: 0.242,
-  GDP_Services: 0.738,
-  GDP_Total: 2147952,
-}, {
-  ID: 7,
-  Country: 'Japan',
-  Area: 377835,
-  Population_Urban: 0.93,
-  Population_Rural: 0.07,
-  Population_Total: 126920000,
-  GDP_Agriculture: 0.012,
-  GDP_Industry: 0.275,
-  GDP_Services: 0.714,
-  GDP_Total: 4616335,
-}, {
-  ID: 8,
-  Country: 'Russia',
-  Area: 17098242,
-  Population_Urban: 0.74,
-  Population_Rural: 0.26,
-  Population_Total: 146544710,
-  GDP_Agriculture: 0.039,
-  GDP_Industry: 0.36,
-  GDP_Services: 0.601,
-  GDP_Total: 1857461,
-}, {
-  ID: 9,
-  Country: 'United States',
-  Area: 9147420,
-  Population_Urban: 0.81,
-  Population_Rural: 0.19,
-  Population_Total: 323097000,
-  GDP_Agriculture: 0.0112,
-  GDP_Industry: 0.191,
-  GDP_Services: 0.797,
-  GDP_Total: 17418925,
-}, {
-  ID: 10,
-  Country: 'United Kingdom',
-  Area: 244820,
-  Population_Urban: 0.82,
-  Population_Rural: 0.18,
-  Population_Total: 65097000,
-  GDP_Agriculture: 0.007,
-  GDP_Industry: 0.21,
-  GDP_Services: 0.783,
-  GDP_Total: 2945146,
-}];

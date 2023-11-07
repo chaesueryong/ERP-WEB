@@ -11,7 +11,6 @@ import { useRecoilValue } from 'recoil';
 function Menu() {
   const menu = useRecoilValue(menuState);
 
-
   return (
     <div className="Menu">
       <div className={`menu-left ${menu ? 'on' : ''}`}>

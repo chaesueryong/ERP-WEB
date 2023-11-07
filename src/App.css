@@ -125,7 +125,6 @@
 
 .dx-datagrid .dx-column-indicators {
   float: right !important;
-
 }
 
 .dx-datagrid-pager {
@@ -152,4 +151,10 @@
 
 .dx-datagrid-rowsview .dx-row {
 
+}
+
+.dx-datagrid .dx-header-filter {
+  position: relative;
+  color: rgba(0,0,0,.54);
+  font: 12px/1 DXIcons !important
 }
