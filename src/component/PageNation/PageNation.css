@@ -1,0 +1,37 @@
+.PageNation {
+    display: flex;
+    justify-content: center;
+    height: 38px;
+    margin: 40px 0;
+}
+
+.arrow-box, .page-box {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    border-radius: 10px;
+    width: 38px;
+}
+
+.arrow-box:hover, .page-box:hover {
+    background-color: #DEE2E6;
+}
+
+.page-box-check {
+    background-color: #DEE2E6;
+}
+
+.page-box {
+    font-size: 16px;
+    font-weight: 600;
+    line-height: 1;
+}
+
+.arrow {
+
+}
+
+.left-arrow {
+    transform: rotate(180deg);
+}

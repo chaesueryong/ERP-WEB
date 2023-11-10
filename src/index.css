@@ -31,3 +31,43 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+input:focus {
+  outline: none;
+}
+
+input::placeholder {
+  color: #C0C7CE;
+}
+
+select {
+  color: #C0C7CE;
+}
+
+.opt {
+  color: black;
+}
+
+select:focus {
+  outline: none;
+}
+
+select option[value=""][disabled] {
+  color: #C0C7CE;
+	display: none;
+}
+
+select {
+  -webkit-appearance: none; /* for chrome */
+
+  -moz-appearance: none; /*for firefox*/
+
+  appearance: none;
+  background: url('./assets/images/drop-down-arrow.svg') no-repeat calc(100% - 10px) 52%/12px auto;
+}
+
+select::-ms-expand{
+
+  display: none; /*for IE10,11*/
+
+}

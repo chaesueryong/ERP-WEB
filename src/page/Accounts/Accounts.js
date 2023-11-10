@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import './Accounts.css';
 import FilterBox from '../../component/FilterBox/FilterBox';
 import ButtonNormal from '../../component/ButtonNormal/ButtonNormal';
+import x_button from '../../assets/images/x-icon-1.svg';
 
 import DataGrid, { Column, Selection, HeaderFilter, Paging, Pager, Sorting, Search, Export } from 'devextreme-react/data-grid';
 import { Workbook } from 'exceljs';
@@ -9,10 +10,16 @@ import { saveAs } from 'file-saver-es';
 import { exportDataGrid } from 'devextreme/excel_exporter';
 import axios from 'axios';
 import { api } from '../../api/api';
+import PageNation from '../../component/PageNation/PageNation';
 
 function Accounts() {
   const [filterList, setFilterList] = useState(filters);
   const [accountList, setAccountList] = useState([]);
+
+  const [pageSize, setPageSize] = useState(10);
+
+  const [data, setData] = useState({});
+
   const dataGridRef = useRef(null);
   const [modal, setModal] = useState(false);
 
@@ -28,6 +35,17 @@ function Accounts() {
     onExporting();
   }
 
+  const changeSelectBox = (e) => {
+    if(e.target.selectedIndex === 0){
+      e.target.style.color = '#C0C7CE';
+    }else {
+      e.target.style.color = 'black';
+    }
+  }
+
+  const defaultModal = () => {
+
+  }
 
   const cellTemplate = (container, options) => {
     const noBreakSpace = '\u00A0';
@@ -56,11 +74,15 @@ function Accounts() {
     return <span>(All)</span>;
   }
 
-  const getAccounts = () => {
+  const handlePageClick = (number) => {
+    getAccounts(number);
+  }
+
+  const getAccounts = (number = 0, pager = 10) => {
     axios.post(api.get_accounts, {
       "use_yn": "Y", // 페이징 인덱스(최초 0)
-      "size": 10, //페이징 처리시 사이즈 크기
-      "number": 0 // 페이징 인덱스(최초 0)
+      "size": pager, //페이징 처리시 사이즈 크기
+      "number": number // 페이징 인덱스(최초 0)
       
       //"all" : "Y" // "all" :"Y" 인경우, 모든 데이터 가져오기
       //"all" : "Y" // 넣지 않은 경우 페이징 처리.
@@ -72,8 +94,50 @@ function Accounts() {
       setAccountList(res.data.data.content.map((e,i)=>({
         ...e,
         ID: i
-      })))
+      })))    
+        setData(res.data.data);
       console.log(res.data.data)
+    })
+  }
+
+  const addAccount = () => {
+    axios.post(api.add_accounts, {
+      nm_kr : "nm_kr",
+      code : "code",
+      sector:"select value",
+      owener:"owener",
+      owener_phone:"owener_phone",
+      manager:"manager",
+      manager_phone:"manager_phone",
+      crn:"crn", //사업자번호
+      c_phone:"c_phone",
+      c_fax:"c_fax",
+      pay_method:"select",
+      c_account:"c_account",
+      w_phone:"w_phone",
+      w_b_phone:"w_b_phone",
+      w_address:"w_address",
+      bank_nm:"select value",
+      bank_acc:"bank_acc", 
+      bank_owner:"bank_owner",
+      l_address:"l_address",
+      homepage:"homepage",
+      descript:"descript",
+      showOrder:1,
+      etc:"etc",
+      
+      brand :[], //옵션
+      
+   
+       "use_yn":"Y"
+   }, {
+      headers: {
+        'jwt_token': 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJicmFuZEBhZnRlcnNwYWNlLmNvLmtyIiwiaWF0IjoxNjk3MDg5ODUwLCJleHAiOjE2OTk2ODE4NTB9.UzruqCKTg-dVcqNm-vKpRf-LB7_RxR1WvoDDv_udayU',
+      }
+    }).then(res => {
+      alert('추가 되었습니다');
+      closeModal();
+      getAccounts();
     })
   }
   
@@ -113,6 +177,11 @@ function Accounts() {
     });
   }
 
+  const changePager = (e) => {
+    setPageSize(e.target.value);
+    getAccounts(0, e.target.value);
+  }
+
   useEffect(() => {
     getAccounts();
   },[])
@@ -130,7 +199,7 @@ function Accounts() {
           </div>
           <div className='list-button-right'>
             <div className='render-count-title'>페이지당 항목수</div>
-            <select className='render-count'>
+            <select className='render-count' onChange={changePager}>
               <option value='10'>10</option>
               <option value='30'>30</option>
               <option value='50'>50</option>
@@ -154,8 +223,8 @@ function Accounts() {
           <Selection selectAllMod='allpages' showCheckBoxesMode='always' mode='multiple' />
           <HeaderFilter visible={true} />
 
-          <Pager allowedPageSizes={5} />
-          <Paging defaultPageSize={15} />
+          <Pager visible={false} />
+          <Paging pageSize={pageSize} />
           <Sorting mode="multiple" />
 
 
@@ -198,6 +267,8 @@ function Accounts() {
             dataField="l_address"
           />
         </DataGrid>
+
+        <PageNation first={data.first} last={data.last} empty={data.empty} totalPage={data.totalPages} number={data.number} handlePageClick={handlePageClick} />
       </div>
 
       <div className='modal' style={modal ? {display: 'block'} : {display: 'none'}}>
@@ -205,9 +276,159 @@ function Accounts() {
         <div className='modal-content-box'>
           <div className='modal-content'>
 
+            <div className='modal-top-box'>
+              <div className='modal-title'>거래처 정보</div>
+              <img style={{cursor: 'pointer'}} src={x_button} onClick={closeModal} />
+            </div>
 
+            <div className='modal-middle-box'>
+
+              <div className='modal-col'>
+                <div className='modal-col-box'>
+                  <div className='modal-col-box-title'>*거래처 명</div>
+                  <input className='modal-col-box-input' placeholder='거래처 명을 입력하세요'/>
+                </div>
+
+                <div className='modal-col-box' style={{flexDirection: 'row', gap: '10px'}}>
+                  <div className='modal-col-box'>
+                    <div className='modal-col-box-title'>거래처 코드</div>
+                    <input className='modal-col-box-input' />
+                  </div>
+                  <div className='modal-col-box'>
+                    <div className='modal-col-box-title'>업종 분류</div>
+                    <select className='modal-col-box-input' onChange={changeSelectBox}>
+                      <option value="" disabled selected>업종 선택</option>
+                    </select>
+                  </div>
+
+                </div>
+              </div>
+
+              <div className='modal-col'>
+                <div className='modal-col-box'>
+                  <div className='modal-col-box-title'>브랜드 명</div>
+                  <input className='modal-col-box-input' placeholder='브랜드 명을 입력하세요'/>
+                </div>
+
+                <div className='modal-col-box' style={{flexDirection: 'row', gap: '15px'}}>
+
+                </div>
+              </div>
+
+              <div className='modal-col'>
+                <div className='modal-col-box'>
+                  <div className='modal-col-box-title'>주소</div>
+                  <input className='modal-col-box-input' placeholder='입력'/>
+                </div>
+              </div>
+
+              <div className='modal-col'>
+                <div className='modal-col-box'>
+                  <div className='modal-col-box-title'>사업자 등록번호</div>
+                  <input className='modal-col-box-input' placeholder='입력'/>
+                </div>
+
+                <div className='modal-col-box'>
+                  <div className='modal-col-box-title'>전화번호</div>
+                  <input className='modal-col-box-input' placeholder='숫자만 입력해주세요'/>
+                </div>
+              </div>
+
+              <div className='modal-col'>
+                <div className='modal-col-box'>
+                </div>
+
+                <div className='modal-col-box'>
+                  <div className='modal-col-box-title'>팩스 번호</div>
+                  <input className='modal-col-box-input' placeholder='숫자만 입력해주세요'/>
+                </div>
+              </div>
+
+              <div className='modal-col'>
+                <div className='modal-col-box'>
+                  <div className='modal-col-box-title'>지급 방식</div>
+                  <select className='modal-col-box-input' onChange={changeSelectBox}>
+                    <option value="" disabled selected>거래금 지급방식을 선택해주세요</option>
+                    <option className='opt' value="df">거래금요</option>
+                  </select>
+                </div>
+
+                <div className='modal-col-box'>
+                  <div className='modal-col-box-title'>현 잔액</div>
+                  <input className='modal-col-box-input' placeholder='숫자만 입력해 주세요'/>
+                </div>
+              </div>
+
+              <div className='modal-col'>
+                <div className='modal-col-box'>
+                  <div className='modal-col-box-title'>입금 은행</div>
+                    <select className='modal-col-box-input' onChange={changeSelectBox}>
+                    <option value="" disabled selected>거래 은행을 선택해 주세요</option>
+                  </select>
+                </div>
+
+                <div className='modal-col-box'>
+                  <div className='modal-col-box-title'>계좌 번호</div>
+                  <input className='modal-col-box-input' placeholder='숫자만 입력해 주세요'/>
+                </div>
+              </div>
+
+              <div className='modal-col'>
+                <div className='modal-col-box'>
+                </div>
+
+                <div className='modal-col-box'>
+                  <div className='modal-col-box-title'>예금주</div>
+                  <input className='modal-col-box-input' placeholder='입력'/>
+                </div>
+              </div>
+
+              <div className='modal-col'>
+                <div className='modal-col-box'>
+                  <div className='modal-col-box-title'>대표자</div>
+                  <input className='modal-col-box-input' placeholder='입력'/>
+                </div>
+
+                <div className='modal-col-box'>
+                  <div className='modal-col-box-title'>대표자 연락처</div>
+                  <input className='modal-col-box-input' placeholder='숫자만 입력해주세요'/>
+                </div>
+              </div>
+
+              <div className='modal-col'>
+                <div className='modal-col-box'>
+                  <div className='modal-col-box-title'>담당자</div>
+                  <input className='modal-col-box-input' placeholder='입력'/>
+                </div>
+
+                <div className='modal-col-box'>
+                  <div className='modal-col-box-title'>담당자 연락처</div>
+                  <input className='modal-col-box-input' placeholder='숫자만 입력해주세요'/>
+                </div>
+              </div>
+
+              <div className='modal-col'>
+                <div className='modal-col-box'>
+                </div>
+
+                <div className='modal-col-box'>
+                  <div className='modal-col-box-title'>계산서 전화번호</div>
+                  <input className='modal-col-box-input' placeholder='숫자만 입력해주세요'/>
+                </div>
+              </div>
+
+              <div className='modal-col'>
+                <div className='modal-col-box'>
+                  <div className='modal-col-box-title'>비고</div>
+                  <input className='modal-col-box-input' placeholder='입력'/>
+                </div>
+              </div>
+            </div>
+
+            <div className='modal-bottom-box'>
+              <div className='modal-button' onClick={addAccount}>등록하기</div>
+            </div>
           </div>
-          <div className='modal-button'>등록하기</div>
         </div>
       </div>
 
