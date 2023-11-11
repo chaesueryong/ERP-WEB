@@ -30,6 +30,13 @@
     height: 45px;
     padding: 0 50px 0 10px;
     border-radius: 10px;
+
+    -webkit-appearance: none; /* for chrome */
+
+    -moz-appearance: none; /*for firefox*/
+  
+    appearance: none;
+    background: url('../../assets/images/search-icon.svg') no-repeat calc(100% - 10px) 52%/20px auto;
 }
 
 .input-box:focus {
