@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import './Accounts.css';
+import './Products';
 import FilterBox from '../../component/FilterBox/FilterBox';
 import ButtonNormal from '../../component/ButtonNormal/ButtonNormal';
 
@@ -12,7 +12,7 @@ import { api } from '../../api/api';
 import PageNation from '../../component/PageNation/PageNation';
 import AddAccountModal from '../../component/modal/AddAccountModal/AddAccountModal';
 
-function Accounts() {
+function Products() {
   const [filterList, setFilterList] = useState(filters);
 
     // 페이지 데이터
@@ -221,8 +221,8 @@ function Accounts() {
   },[])
 
   return (
-    <div className="Accounts">
-      <FilterBox title='거래처 관리' search_title='거래처 찾기' search_placeholder='거래처명을 입력해 주세요' filter_title='필터' handleChangeSearch={handleChangeSearch} handleClickCheckFilter={handleClickCheckFilter} filterList={filterList} />
+    <div className="Products">
+      <FilterBox title='상품 관리' filter_box_border={false} handleChangeSearch={handleChangeSearch} handleClickCheckFilter={handleClickCheckFilter} filterList={filterList} />
 
 
       <div className='grid-box'>
@@ -281,6 +281,36 @@ function Accounts() {
               </HeaderFilter>
             </Column>
           </Column>
+
+          
+          <Column caption="*브랜드명">
+            <Column
+              caption="코드"
+              dataField="code"
+              sortOrder=""
+            >
+            </Column>
+            <Column
+              caption="브랜드명"
+              dataField="nm_kr"
+              sortOrder=""
+            >
+              <HeaderFilter visible={true} allowSelectAll={false}>
+                <Search enabled={true} />
+              </HeaderFilter>
+            </Column>
+          </Column>
+
+          <Column 
+            caption="*상품 명"
+            dataField="categorys"
+            alignment='left'
+          >
+            <HeaderFilter visible={true} allowSelectAll={false}>
+              <Search enabled={true} />
+            </HeaderFilter>
+          </Column>
+
           
           {
             filter.map((e, i) => {
@@ -318,22 +348,18 @@ function Accounts() {
   );
 }
 
-export default Accounts;
+export default Products;
 
 const filters = [
-  {name: '업종 분류', value: 'sector', default: true},
-  {name: '브랜드 수', value: 'brand_cnt', default: true},
-  {name: '대표자', value: 'owener', default: true},
-  {name: '대표자 연락처', value: 'owener_phone', default: true},
-  {name: '담당자', value: 'manager', default: true},
-  {name: '당담자 연락처', value: 'manager_phone', default: true},
-  {name: '주소', value: 'l_address'},
-  {name: '현 잔액', value: 'c_account'},
-  {name: '팩스', value: 'c_fax'},
-  {name: '도매 주소', value: 'w_address'},
-  {name: '계좌 번호', value: 'bank_acc'},
-  {name: '홈페이지', value: 'homepage'},
-  {name: '비고', value: 'etc'},
-  {name: '지급 방식', value: 'pay_method'},
-  {name: '등록 일자', value: 'reg_dt_str'},
+  {name: '제품사진', value: 'sector', default: true},
+  {name: '컬러', value: 'brand_cnt', default: true},
+  {name: '사이즈', value: 'owener', default: true},
+  {name: '시즌', value: 'owener_phone', default: true},
+  {name: '마지막 입고일자', value: 'manager', default: true},
+  {name: '상품 분류', value: 'manager_phone', default: true},
+  {name: '원가', value: 'l_address'},
+  {name: '공급가', value: 'c_account'},
+  {name: '부가세', value: 'c_fax'},
+  {name: '소비자가', value: 'w_address'},
+  {name: '기타', value: 'bank_acc'},
 ];

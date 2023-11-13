@@ -9,7 +9,7 @@ function PageNation({first, last, empty, totalPage, number, handlePageClick}) {
         const arr = [];
 
         for(let i = 0; i < totalPage; i++) {
-            arr.push(<div className={number === i ? 'page-box page-box-check': 'page-box'}
+            arr.push(<div key={i} className={number === i ? 'page-box page-box-check': 'page-box'}
                 onClick={() => {
                     handlePageClick(i);
                 }}

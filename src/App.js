@@ -6,7 +6,7 @@ import Menu from './component/Menu/Menu';
 import Navigator from './component/Navigator/Navigator';
 import Accounts from './page/Accounts/Accounts';
 import Brands from './page/Brands/Brands';
-import Goods from './page/Goods/Goods';
+import Products from './page/Products/Products';
 import Orders from './page/Orders/Orders';
 
 function App() {
@@ -22,7 +22,7 @@ function App() {
           <Route path='/' element={<Home/>}/>
           <Route path='/accounts' element={<Accounts/>}/>
           <Route path='/brands' element={<Brands/>}/>
-          <Route path='/goods' element={<Goods/>}/>
+          <Route path='/products' element={<Products/>}/>
           <Route path='/orders' element={<Orders/>}/>
         </Routes>
       </div>

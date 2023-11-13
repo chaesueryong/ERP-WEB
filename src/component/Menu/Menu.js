@@ -21,7 +21,7 @@ function Menu() {
 
         <Tab name="거래처 관리" path='/accounts' img={account_icon} />
         <Tab name="브랜드 관리" path='/brands' img={brand_icon} />
-        <Tab name="상품관리" path='/goods' img={good_icon} />
+        <Tab name="상품관리" path='/products' img={good_icon} />
         <Tab name="발주/반품 내역 조회" path='/orders' img={order_icon} />
 
       </div>

@@ -1,0 +1,151 @@
+/* ******** */
+/* 모달 CSS */
+/* ******** */
+.modal {
+    position: fixed;
+    width: 100vw;
+    height: 100vh;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.modal-bg {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: gray;
+    opacity: .5;
+}
+
+.modal-content-box {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 600px;
+    height: auto;
+    border-radius: 10px;
+    background-color: white;
+    overflow: hidden;
+    min-height: 680px;
+    max-height: 1035px;
+}
+
+.modal-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.modal-top-box {
+    display: flex;
+    padding: 0 25px;
+    height: 53px;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.modal-middle-box {
+    flex: 1;
+    padding: 0 25px;
+    overflow-y: scroll;
+}
+
+.modal-middle-box::-webkit-scrollbar {
+    width: 10px;  /* 스크롤바의 너비 */
+}
+
+.modal-middle-box::-webkit-scrollbar-thumb {
+    height: 30%; /* 스크롤바의 길이 */
+    background: #C0C7CE; /* 스크롤바의 색상 */
+
+    border-radius: 10px;
+}
+
+.modal-middle-box::-webkit-scrollbar-track {
+    background: #E9ECEF;  /*스크롤바 뒷 배경 색상*/
+    border-radius: 10px;
+}
+
+
+.modal-bottom-box {
+    height: 60px;
+}
+
+.modal-title {
+    font-size: 20px;
+    font-weight: 600;
+}
+
+.modal-col {
+    display: flex;
+    justify-content: space-between;
+    gap: 15px;
+    margin: 20px 0;
+}
+
+.modal-col-box {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    flex: 1;
+}
+
+.modal-col-box-title {
+    font-size: 12px;
+    font-weight: 600;
+    color: #495057;
+    margin-bottom: 5px;
+}
+
+.modal-col-box-input {
+    border: 1px solid #7B61FF1A ;
+    border-radius: 10px;
+    font-size: 12px;
+    padding: 10px 10px;
+    height: 38px;
+    box-sizing: border-box;
+}
+
+.box-select {
+    color: #C0C7CE;
+}
+
+.modal-col-box-input:focus {
+    outline: none;
+}
+
+.modal-col-box-input option[value=""][disabled] {
+    color: #C0C7CE;
+    display: none;
+}
+  
+.modal-col-box-input::placeholder{
+    font-size: 12px;
+    font-weight: 500;
+}
+
+.opt {
+    color: black;
+}
+
+.modal-button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: 700;
+    font-size: 16px;
+    height: 60px;
+    color: #C0C7CE;
+    background-color: #F1F3F5;
+}
+/* ******** */
+/* 모달 CSS */
+/* ******** */

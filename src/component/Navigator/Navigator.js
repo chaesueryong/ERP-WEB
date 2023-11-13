@@ -42,7 +42,7 @@ function Navigator() {
       case '/brands':
       current.name = '브랜드 관리';
         break;
-      case '/goods':
+      case '/products':
         current.name = '상품관리';
         break;
       case '/orders':
