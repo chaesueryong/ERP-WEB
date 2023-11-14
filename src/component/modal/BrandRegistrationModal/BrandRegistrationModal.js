@@ -1,9 +1,8 @@
-import './AddBrandModal.css';
 import '../modal.css';
 import x_button from '../../../assets/images/x-icon-1.svg';
 import { useState } from 'react';
 
-function AddBrandModal({isModal, closeModal, addBrand}) {
+function BrandRegistrationModal({isModal, closeModal, addBrand}) {
   const [modalValues, setModalValues] = useState({
       "nm_kr":"브랜드이름1",
       "group_nm":"after",
@@ -47,7 +46,7 @@ function AddBrandModal({isModal, closeModal, addBrand}) {
     }
 
     return (
-        <div className="AddAccountModal">
+        <div className="BrandRegistrationModal">
       <div className='modal' style={isModal ? {display: 'block'} : {display: 'none'}}>
         <div className='modal-bg'></div>
         <div className='modal-content-box'>
@@ -135,7 +134,7 @@ function AddBrandModal({isModal, closeModal, addBrand}) {
     );
 }
 
-export default AddBrandModal;
+export default BrandRegistrationModal;
 
 const categories = [
   {name: '선택안함', value: '선택안함'},

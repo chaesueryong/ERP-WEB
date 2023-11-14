@@ -10,7 +10,7 @@ import { exportDataGrid } from 'devextreme/excel_exporter';
 import axios from 'axios';
 import { api } from '../../api/api';
 import PageNation from '../../component/PageNation/PageNation';
-import AddAccountModal from '../../component/modal/AddAccountModal/AddAccountModal';
+import AccountRegistrationModal from '../../component/modal/AccountRegistrationModal/AccountRegistrationModal';
 
 function Accounts() {
   const [filterList, setFilterList] = useState(filters);
@@ -312,7 +312,7 @@ function Accounts() {
       </div>
 
       {
-        isModal && <AddAccountModal isModal={isModal} closeModal={closeModal} addAccount={addAccount} />
+        isModal && <AccountRegistrationModal isModal={isModal} closeModal={closeModal} addAccount={addAccount} />
       }
     </div>
   );

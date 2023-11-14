@@ -10,7 +10,7 @@ import { exportDataGrid } from 'devextreme/excel_exporter';
 import axios from 'axios';
 import { api } from '../../api/api';
 import PageNation from '../../component/PageNation/PageNation';
-import AddBrandModal from '../../component/modal/AddBrandModal/AddBrandModal';
+import BrandRegistrationModal from '../../component/modal/BrandRegistrationModal/BrandRegistrationModal';
 
 function Brands() {
   const [filterList, setFilterList] = useState(filters);
@@ -132,6 +132,7 @@ function Brands() {
       }).then(res => {
         setAccountList(res.data.data.content.map((e,i)=>({
           ...e,
+          categorys: e.categorys ? e.categorys.split(',').map(e => '#' + e).join(' ') : '',
           ID: i
         }))
         
@@ -340,7 +341,7 @@ function Brands() {
       </div>
 
       {
-        isModal && <AddBrandModal isModal={isModal} closeModal={closeModal} addBrand={addBrand} />
+        isModal && <BrandRegistrationModal isModal={isModal} closeModal={closeModal} addBrand={addBrand} />
       }
 
     </div>

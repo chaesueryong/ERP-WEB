@@ -10,7 +10,8 @@ import { exportDataGrid } from 'devextreme/excel_exporter';
 import axios from 'axios';
 import { api } from '../../api/api';
 import PageNation from '../../component/PageNation/PageNation';
-import AddAccountModal from '../../component/modal/AddAccountModal/AddAccountModal';
+import ProductRegistrationModal from '../../component/modal/ProductRegistrationModal/ProductRegistrationModal';
+import ProductOrderModal from '../../component/modal/ProductOrderModal/ProductOrderModal';
 
 function Products() {
   const [filterList, setFilterList] = useState(filters);
@@ -24,14 +25,29 @@ function Products() {
 
   const dataGridRef = useRef(null);
 
-  const [isModal, setIsModal] = useState(false);
+  const [registrationModal, setRegistrationModal] = useState(false);
+  const [orderModal, setOrderModal] = useState(false);
  
-  const closeModal = () => {
-    setIsModal(false)
+  const closeModal = (type) => {
+    switch(type){
+      case 'registration':
+        setRegistrationModal(false);
+        break;
+      case 'order':
+        setOrderModal(false);
+        break;
+    }
   }
 
-  const openModal = () => {
-    setIsModal(true)
+  const openModal = (type) => {
+    switch(type){
+      case 'registration':
+        setRegistrationModal(true);
+        break;
+      case 'order':
+        setOrderModal(true);
+        break;
+    }
   }
 
   const exportExcel = () => {
@@ -228,7 +244,8 @@ function Products() {
       <div className='grid-box'>
         <div className='list-button'>
           <div className='list-button-left'>
-            <ButtonNormal name='거래처 등록' bg_color='#495057' font_weight='400' icon={true} color='white' handleClick={openModal} />
+            <ButtonNormal name='상품 등록' bg_color='#495057' font_weight='400' icon={true} color='white' handleClick={()=>openModal('registration')} />
+            <ButtonNormal name='상품 발주' bg_color='#495057' font_weight='400' icon={true} color='white' handleClick={()=>openModal('order')} />
             {/* <ButtonNormal name='상품 관리 바로가기' bg_color='#E9ECEF' color='black' /> */}
           </div>
           <div className='list-button-right'>
@@ -342,7 +359,10 @@ function Products() {
       </div>
 
       {
-        isModal && <AddAccountModal isModal={isModal} closeModal={closeModal} addAccount={addAccount} />
+        registrationModal && <ProductRegistrationModal isModal={registrationModal} closeModal={()=>closeModal('registration')} addAccount={addAccount} />
+      }
+      {
+        orderModal && <ProductOrderModal isModal={orderModal} closeModal={()=>closeModal('order')} addAccount={addAccount} />
       }
     </div>
   );

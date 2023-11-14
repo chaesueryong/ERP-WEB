@@ -1,9 +1,8 @@
-import './AddAccountModal.css';
 import '../modal.css';
 import x_button from '../../../assets/images/x-icon-1.svg';
 import { useState } from 'react';
 
-function AddAccountModal({isModal, closeModal, addAccount}) {
+function AccountRegistrationModal({isModal, closeModal, addAccount}) {
   const [modalValues, setModalValues] = useState({
       nm_kr: "", // 거래처명
       code: "",  // 거래처 코드
@@ -70,7 +69,7 @@ function AddAccountModal({isModal, closeModal, addAccount}) {
     }
 
     return (
-        <div className="AddAccountModal">
+        <div className="AccountRegistrationModal">
       <div className='modal' style={isModal ? {display: 'block'} : {display: 'none'}}>
         <div className='modal-bg'></div>
         <div className='modal-content-box'>
@@ -278,7 +277,7 @@ function AddAccountModal({isModal, closeModal, addAccount}) {
     );
 }
 
-export default AddAccountModal;
+export default AccountRegistrationModal;
 
 const sectors = [
   {name: '도매', value: '도매'},
