@@ -1,8 +1,12 @@
 import '../modal.css';
 import x_button from '../../../assets/images/x-icon-1.svg';
 import { useState } from 'react';
+import SelectBox from '../../SelectBox/SelectBox';
+import { Navigate, useNavigate } from 'react-router-dom';
+import { api } from '../../../api/api';
 
 function AccountRegistrationModal({isModal, closeModal, addAccount}) {
+  const navigate = useNavigate();
   const [modalValues, setModalValues] = useState({
       nm_kr: "", // 거래처명
       code: "",  // 거래처 코드
@@ -40,7 +44,11 @@ function AccountRegistrationModal({isModal, closeModal, addAccount}) {
 
       etc: "",  // 비고
      use_yn: "Y"
-    })
+    });
+
+    const [brandList, setBrandList] = useState([]);
+    const [brandInputText, setBrandInputText] = useState('');
+
 
     // 모달 값 변경 이벤트
     const handleOnChange = (e, target) => {
@@ -67,6 +75,45 @@ function AccountRegistrationModal({isModal, closeModal, addAccount}) {
           e.target.style.color = 'black';
       }
     }
+
+    const moveTo = () => {
+      navigate('/brands?modal=open');
+    }
+
+    const getList = (text = '') => {
+      api.post(api.get_brand_list, {
+          "search_text" : text, //검색어
+          "categorys" : [], //카테고리
+          "orders" : ["nm_kr"], //오름차순- 내림차순 소팅 (컬럼명 적재 시 내림차순 적용)
+                      // 브랜드 그룹 group_nm, 브랜드 명 nm_kr, 브랜드 코드 code, 거래처 코드 vendor_code, 거래처명 vendor_nm, 상품 카테고리 categorys
+                      // 제품유형 type, 등록일자 reg_dt_str
+      
+          "size":10, //페이징 처리시 사이즈 크기
+          "number":0, // 페이징 인덱스(최초 0)
+          "use_yn":"Y"
+      })
+      .then(res=>{
+        setBrandList(res.data.data.content)
+      })
+      .catch(e=>{
+          console.log(e)
+      })
+  }
+  
+  const handleChange = (e) => {
+    setBrandInputText(e.target.value);
+    if(e.target.value === ''){
+      setBrandInputText([]);
+    }else{
+      getList(e.target.value);
+    }
+  }
+
+  const handleClickItem = (e) => {
+    setBrandInputText(e.nm_kr);
+  }
+
+
 
     return (
         <div className="AccountRegistrationModal">
@@ -115,9 +162,15 @@ function AccountRegistrationModal({isModal, closeModal, addAccount}) {
               <div className='modal-col'>
                 <div className='modal-col-box'>
                   <div className='modal-col-box-title'>브랜드 명</div>
-                  <input className='modal-col-box-input' placeholder='브랜드 명을 입력하세요' value={modalValues['brand']} onChange={e => {
-                    handleOnChange(e, 'brand');
-                  }}/>
+                  <SelectBox 
+                    placeholder='브랜드 명을 검색하세요' 
+                    emptyTitle='매칭되는 브랜드가 없습니다' 
+                    emptyButton='브랜드 등록하기'
+                    inputText={brandInputText}
+                    handleChange={handleChange}
+                    list={brandList}
+                    handleClickItem={handleClickItem}
+                    handleClickButton={moveTo} />
                 </div>
 
                 <div className='modal-col-box' style={{flexDirection: 'row', gap: '15px'}}>

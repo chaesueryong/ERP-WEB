@@ -3,8 +3,6 @@ import right_arrow from '../../assets/images/right-arrow-icon.svg';
 import rightx2_arrow from '../../assets/images/rightx2-arrow-icon.svg';
 
 function PageNation({first, last, empty, totalPage, number, handlePageClick}) {
-    // console.log(totalPage, number)
-
     const renderPage = () => {
         const arr = [];
 

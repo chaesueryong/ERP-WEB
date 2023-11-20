@@ -4,10 +4,18 @@ import { useEffect, useRef, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import hamburger_menu from '../../assets/images/hamburger-icon.svg';
 import { useRecoilState } from 'recoil';
-import { menuState } from '../../recoil/status';
+import { accountPageState, brandsPageState, menuState, ordersPageState, productsPageState } from '../../recoil/status';
+import { useRecoilValue } from 'recoil';
+
 
 function Navigator() {
   const [menu, setMenu] = useRecoilState(menuState);
+  const accountsPage = useRecoilValue(accountPageState);
+  const brandsPage = useRecoilValue(brandsPageState);
+  const productsPage = useRecoilValue(productsPageState);
+  const ordersPage = useRecoilValue(ordersPageState);
+
+
   const navigate = useNavigate();
   const location= useLocation();
   const [navList, setNavList] = useState([]);
@@ -31,7 +39,23 @@ function Navigator() {
 
   const moveTab = (path) => {
     inputRef.current.focus();
-    navigate(path);
+    console.log(path)
+    switch(path){
+      case '/accounts':
+        navigate(path + accountsPage.searchUrl);       
+        break;
+      case '/brands':
+        navigate(path + brandsPage.searchUrl);       
+        break;
+      case '/products':
+        navigate(path + productsPage.searchUrl);      
+        break;
+      case '/orders':
+        navigate(path + ordersPage.searchUrl);      
+        break;
+      default:
+        return;
+    }
   }
 
   const addNavTab = (current) => {

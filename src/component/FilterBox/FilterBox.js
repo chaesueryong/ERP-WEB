@@ -1,7 +1,7 @@
 import FilterItem from '../FilterItem/FilterItem';
 import './FilterBox.css';
 
-function FilterBox({title, search_title, search_placeholder, filter_title, check=true, handleChangeSearch, handleClickCheckFilter, filterList=[], filter_box_border=true}) {
+function FilterBox({title, search_title, search, search_placeholder, filter_title, check=true, handleChangeSearch, handleClickCheckFilter, filterList=[], filter_box_border=true}) {
   
   return (
     <div className="FilterBox">
@@ -12,7 +12,7 @@ function FilterBox({title, search_title, search_placeholder, filter_title, check
         <div className='filter'>
             <div className='search-box' style={search_title ? {} : {display: 'none'}}>
                 <div className='input-title'>{search_title}</div>
-                <input className='input-box' placeholder={search_placeholder} onChange={handleChangeSearch}></input>
+                <input className='input-box' value={search} placeholder={search_placeholder} onChange={handleChangeSearch}></input>
             </div>
 
             <div className='check-box'>

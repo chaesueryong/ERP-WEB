@@ -4,15 +4,20 @@ import FilterBox from '../../component/FilterBox/FilterBox';
 import ButtonNormal from '../../component/ButtonNormal/ButtonNormal';
 
 import DataGrid, { Column, Selection, HeaderFilter, Paging, Pager, Sorting, Search, SearchPanel, Export } from 'devextreme-react/data-grid';
-import { Workbook } from 'exceljs';
-import { saveAs } from 'file-saver-es';
-import { exportDataGrid } from 'devextreme/excel_exporter';
-import axios from 'axios';
 import { api } from '../../api/api';
 import PageNation from '../../component/PageNation/PageNation';
 import AccountRegistrationModal from '../../component/modal/AccountRegistrationModal/AccountRegistrationModal';
+import { useLocation, useNavigate, useSearchParams } from 'react-router-dom';
+import { common } from '../../utils/common';
+import { useRecoilState } from 'recoil';
+import { accountPageState } from '../../recoil/status';
 
 function Accounts() {
+  const [searchParams, setSearchParams] = useSearchParams();
+  const location = useLocation();
+  const navigate = useNavigate();
+  const [accountsPage, setAccountsPage] = useRecoilState(accountPageState);
+
   const [filterList, setFilterList] = useState(filters);
 
     // 페이지 데이터
@@ -20,31 +25,97 @@ function Accounts() {
   const [search, setSearch] = useState('');
   const [filter, setFilter] = useState([]);
   const [pageSize, setPageSize] = useState(10);
+  const [page, setPage] = useState(0);
   const [data, setData] = useState({});
 
   const dataGridRef = useRef(null);
 
   const [isModal, setIsModal] = useState(false);
  
+  const getAccountList = (search_text = '', columns = [], orders = [], number = 0, pager = 10) => {
+    api.post(api.get_account_list, {
+      "search_text" : search_text, //검색어
+      "columns" : ['nm_kr'], //필터
+                  // 업종분류 sector, 브랜드 수 brand_cnt, 
+                  // 대표자 owener, 대표자 연락처 owener_phone, 
+                  // 담당자 manager, 담당자 연락처 manager_phone, 주소 l_address
+                  // 현 잔액 c_account, 팩스 c_fax, 도메주소 w_address, 
+                  // 계좌번호 bank_acc, 홈페이지 homepage, 비고 etc, 
+                  // 지급방식 pay_method, 등록일자 reg_dt_str
+      "orders" : ["manager"], //오름차순- 내림차순 소팅 (컬럼명 적재 시 내림차순 적용)
+                  // 업종분류 sector, 브랜드 수 brand_cnt,
+                  // 대표자 owener, 대표자 연락처 owener_phone, 
+                  // 담당자 manager, 담당자 연락처 manager_phone, 주소 l_address
+                  // 거래처코드 code, 거래처 명 nm_kr 
+     
+      //"all" : "Y" // "all" :"Y" 인경우, 모든 데이터 가져오기
+      //"all" : "Y" // 넣지 않은 경우 페이징 처리.
+
+      "size": pager, //페이징 처리시 사이즈 크기
+      "number": number, // 페이징 인덱스(최초 0)
+      "use_yn":"Y"
+    }).then(res => {
+      setAccountList(res.data.data.content.map((e,i)=>({
+        ...e,
+        ID: i
+      }))
+      
+      )
+      setData(res.data.data);
+      // console.log(res.data.data)
+    }).catch(e => {
+      alert('네트워크 에러')
+      console.log(e)
+    })
+  }
+
+  const addAccount = (modalValues) => {
+    console.log(modalValues)
+    api.post(api.add_account, modalValues)
+    .then(res => {
+      // alert('추가 되었습니다');
+      console.log(res);
+      closeModal();
+      getAccountList();
+    }).catch(e=>{
+      alert('네트워크 에러')
+      console.log(e)
+    })
+  }
+
+  // const cellTemplate = (container, options) => {
+  //   const noBreakSpace = '\u00A0';
+  //   const text = (options.value || []).map((element) => options.column.lookup.calculateCellValue(element)).join(', ');
+  //   container.textContent = text || noBreakSpace;
+  //   container.title = text;
+  // }
+
+  // const calculateFilterExpression = (filterValue, selectedFilterOperation, target) => {
+  //   if (target === 'search' && typeof (filterValue) === 'string') {
+  //     return [this.dataField, 'contains', filterValue];
+  //   }
+  //   return function(data) {
+  //     return (data.AssignedEmployee || []).indexOf(filterValue) !== -1;
+  //   };
+  // }
+
+  // const itemRender = (data) => {
+  //   const imageSource = `images/icons/status-${data.id}.svg`;
+  //   if (data != null) {
+  //     return <div>
+  //       <img src={imageSource} className="status-icon middle"></img>
+  //       <span className="middle">{data.name}</span>
+  //     </div>;
+  //   }
+  //   return <span>(All)</span>;
+  // }
+
   const closeModal = () => {
     setIsModal(false)
   }
 
   const openModal = () => {
     setIsModal(true)
-  }
-
-  const exportExcel = () => {
-    onExporting();
-  }
-
-  const defaultModal = () => {
-
-  }
-
-  const handleChangeSearch = (e) => {
-    setSearch(e.target.value);
-    getAccountList(e.target.value, filter, [], 0, pageSize)
   }
 
   // 페이지 상단 필터 박스 클릭 이벤트
@@ -76,133 +147,27 @@ function Accounts() {
     console.log(arr)
   }
 
-  const cellTemplate = (container, options) => {
-    const noBreakSpace = '\u00A0';
-    const text = (options.value || []).map((element) => options.column.lookup.calculateCellValue(element)).join(', ');
-    container.textContent = text || noBreakSpace;
-    container.title = text;
+  const onExporting = (e) => {
+    common.exportExcel(e, dataGridRef);
   }
 
-  const calculateFilterExpression = (filterValue, selectedFilterOperation, target) => {
-    if (target === 'search' && typeof (filterValue) === 'string') {
-      return [this.dataField, 'contains', filterValue];
-    }
-    return function(data) {
-      return (data.AssignedEmployee || []).indexOf(filterValue) !== -1;
-    };
-  }
-
-  const itemRender = (data) => {
-    const imageSource = `images/icons/status-${data.id}.svg`;
-    if (data != null) {
-      return <div>
-        <img src={imageSource} className="status-icon middle"></img>
-        <span className="middle">{data.name}</span>
-      </div>;
-    }
-    return <span>(All)</span>;
+  const handleChangeSearch = (e) => {
+    applyParams({
+      search: e.target.value,
+      page: 1
+    });
   }
 
   // 페이지 네이션
   const handlePageClick = (number) => {
-    getAccountList(search, filter, [], number);
-  }
+    applyParams({page: number + 1});
+  }  
 
-  const getAccountList = (search_text = '', columns = [], orders = [], number = 0, pager = 10) => {
-    axios.post(api.get_account_list, {
-      "search_text" : search_text, //검색어
-      "columns" : ['nm_kr'], //필터
-                  // 업종분류 sector, 브랜드 수 brand_cnt, 
-                  // 대표자 owener, 대표자 연락처 owener_phone, 
-                  // 담당자 manager, 담당자 연락처 manager_phone, 주소 l_address
-                  // 현 잔액 c_account, 팩스 c_fax, 도메주소 w_address, 
-                  // 계좌번호 bank_acc, 홈페이지 homepage, 비고 etc, 
-                  // 지급방식 pay_method, 등록일자 reg_dt_str
-      "orders" : ["manager"], //오름차순- 내림차순 소팅 (컬럼명 적재 시 내림차순 적용)
-                  // 업종분류 sector, 브랜드 수 brand_cnt,
-                  // 대표자 owener, 대표자 연락처 owener_phone, 
-                  // 담당자 manager, 담당자 연락처 manager_phone, 주소 l_address
-                  // 거래처코드 code, 거래처 명 nm_kr 
-     
-      //"all" : "Y" // "all" :"Y" 인경우, 모든 데이터 가져오기
-      //"all" : "Y" // 넣지 않은 경우 페이징 처리.
-
-      "size": pager, //페이징 처리시 사이즈 크기
-      "number": number, // 페이징 인덱스(최초 0)
-      "use_yn":"Y"
-    }, {
-      headers: {
-        'jwt_token': 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJyb2RlY2s4MjZAb3ZlcnRoZXdpbmRvdy5uZXQiLCJpYXQiOjE2OTk4NTY1OTAsImV4cCI6MTcwMjQ0ODU5MH0.mYtaQhu_b4jAjn467i1ozS8pohTy0Ws6Q61OxVKJJXI',
-      }
-    }).then(res => {
-      setAccountList(res.data.data.content.map((e,i)=>({
-        ...e,
-        ID: i
-      }))
-      
-      )
-      setData(res.data.data);
-      // console.log(res.data.data)
-    }).catch(e => {
-      alert('네트워크 에러')
-      console.log(e)
+  const changePageSize = (e) => {
+    applyParams({
+      page: 1,
+      pagesize: e.target.value
     })
-  }
-
-  const addAccount = (modalValues) => {
-    axios.post(api.add_account, modalValues, {
-      headers: {
-        'jwt_token': 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJyb2RlY2s4MjZAb3ZlcnRoZXdpbmRvdy5uZXQiLCJpYXQiOjE2OTk4NTY1OTAsImV4cCI6MTcwMjQ0ODU5MH0.mYtaQhu_b4jAjn467i1ozS8pohTy0Ws6Q61OxVKJJXI',
-      }
-    }).then(res => {
-      alert('추가 되었습니다');
-      closeModal();
-      getAccountList();
-    }).catch(e=>{
-      alert('네트워크 에러')
-      console.log(e)
-    })
-  }
-  
-
-  const onExporting = (e) => {
-    const workbook = new Workbook();
-    const worksheet = workbook.addWorksheet('CountriesPopulation');
-
-    const dataGrid = dataGridRef.current.instance;
-
-    exportDataGrid({
-      component: dataGrid,
-      worksheet,
-      topLeftCell: { row: 4, column: 1 },
-    }).then((cellRange) => {
-      // header
-      const headerRow = worksheet.getRow(2);
-      headerRow.height = 30;
-      worksheet.mergeCells(2, 1, 2, 8);
-
-      headerRow.getCell(1).value = 'Country Area, Population, and GDP Structure';
-      headerRow.getCell(1).font = { name: 'Segoe UI Light', size: 22 };
-      headerRow.getCell(1).alignment = { horizontal: 'center' };
-
-      // footer
-      const footerRowIndex = cellRange.to.row + 2;
-      const footerRow = worksheet.getRow(footerRowIndex);
-      worksheet.mergeCells(footerRowIndex, 1, footerRowIndex, 8);
-
-      footerRow.getCell(1).value = 'www.wikipedia.org';
-      footerRow.getCell(1).font = { color: { argb: 'BFBFBF' }, italic: true };
-      footerRow.getCell(1).alignment = { horizontal: 'right' };
-    }).then(() => {
-      workbook.xlsx.writeBuffer().then((buffer) => {
-        saveAs(new Blob([buffer], { type: 'application/octet-stream' }), 'CountriesPopulation.xlsx');
-      });
-    });
-  }
-
-  const changePager = (e) => {
-    setPageSize(e.target.value);
-    getAccountList(search, filter, [], 0, e.target.value);
   }
 
   const defaultColumn = () => {
@@ -215,14 +180,58 @@ function Accounts() {
     setFilter([...arr]);
   }
 
+  const applyParams = (params = {}) => {
+    for (const [key, value] of Object.entries(params)) {
+      if(value === ''){
+        searchParams.delete(key);
+      }else{
+        searchParams.set(key, value);
+      }
+    }
+
+    setSearchParams(searchParams);
+    const _searchText = params.search || '';
+    const _filterList = params.filters;
+    const _pageSize = params.pagesize || pageSize;
+    const _page = params.page || page;
+
+    setSearch(_searchText);
+    setPageSize(_pageSize);
+    setPage(_page);
+
+    setAccountsPage({
+      ...accountsPage,
+      searchUrl: '?' + decodeURI(searchParams.toString())
+    });
+
+    getAccountList(_searchText, [], [], _page - 1, _pageSize);
+  }
+
+  const getParams = () => {
+    let searchString;
+    if(location.search === ''){
+      searchString = accountsPage.searchUrl.substring(1);
+    }else {
+      searchString = location.search.substring(1);
+    }
+
+    const obj = {};
+    searchString.split('&').map(e => {
+      const keyValue = e.split('=');
+      obj[keyValue[0]] = keyValue[1];
+    });
+
+    return obj;
+  }
+
   useEffect(() => {
-    getAccountList();
     defaultColumn();
+    applyParams(getParams());
   },[])
 
   return (
     <div className="Accounts">
-      <FilterBox title='거래처 관리' search_title='거래처 찾기' search_placeholder='거래처명을 입력해 주세요' filter_title='필터' handleChangeSearch={handleChangeSearch} handleClickCheckFilter={handleClickCheckFilter} filterList={filterList} />
+      <FilterBox title='거래처 관리' search_title='거래처 찾기' search={search} search_placeholder='거래처명을 입력해 주세요' filter_title='필터' handleChangeSearch={handleChangeSearch} handleClickCheckFilter={handleClickCheckFilter} filterList={filterList} />
 
 
       <div className='grid-box'>
@@ -233,14 +242,14 @@ function Accounts() {
           </div>
           <div className='list-button-right'>
             <div className='render-count-title'>페이지당 항목수</div>
-            <select className='render-count' onChange={changePager}>
+            <select className='render-count' value={pageSize} onChange={changePageSize}>
               <option value='10'>10</option>
               <option value='30'>30</option>
               <option value='50'>50</option>
               <option value='100'>100</option>
             </select>
             <ButtonNormal name='인쇄' bg_color='#E9ECEF' color='black' />
-            <ButtonNormal name='엑셀 내려받기' bg_color='#E9ECEF' color='black' handleClick={exportExcel} />
+            <ButtonNormal name='엑셀 내려받기' bg_color='#E9ECEF' color='black' handleClick={onExporting} />
           </div>
         </div>
 
@@ -250,7 +259,7 @@ function Accounts() {
           showBorders={true}
           showRowLines={true}
           ref={dataGridRef}
-          onExporting={exportExcel}
+          // onExporting={exportExcel}
         >
 
           {/* <Export enabled={true} /> */}
