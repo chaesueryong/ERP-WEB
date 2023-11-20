@@ -237,7 +237,7 @@ function Accounts() {
       <div className='grid-box'>
         <div className='list-button'>
           <div className='list-button-left'>
-            <ButtonNormal name='거래처 등록' bg_color='#495057' font_weight='400' icon={true} color='white' handleClick={openModal} />
+            <ButtonNormal name='거래처 등록' bg_color='#495057' font_weight='400' icon={true} color='white' handleClick={openModal} paddingTop='2' />
             {/* <ButtonNormal name='상품 관리 바로가기' bg_color='#E9ECEF' color='black' /> */}
           </div>
           <div className='list-button-right'>
