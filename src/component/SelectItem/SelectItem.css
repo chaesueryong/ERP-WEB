@@ -1,0 +1,17 @@
+.SelectItem {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #E9ECEF;
+    color: black;
+    font-size: 12px;
+    border-radius: 10px;
+    gap: 10px;
+    padding: 5px;
+    white-space: nowrap;
+    box-sizing: border-box;
+}
+
+.select-item-x-button {
+    cursor: pointer;
+}

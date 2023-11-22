@@ -1,0 +1,67 @@
+.HomeLoading {
+    position: fixed;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100vw;
+    height: 100vh;
+    background-color: white;
+    z-index: 100;
+}
+
+.home-loading-logo {
+    width: 400px;
+    margin-bottom: 40px;
+}
+
+.home-loading-title {
+    font-size: 32px;
+    font-weight: 600;
+    margin-bottom: 150px;
+}
+
+.progress-box {
+    display: flex;
+    align-items: center;
+}
+
+.progress-bar {
+    position: relative;
+    width: 858px;
+    height: 24px;
+    border-radius: 100px;
+    background-color: #E9ECEF;
+    overflow: hidden;
+}
+
+.progress-bar-gauge {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 0;
+    height: 24px;
+    border-radius: 100px;
+    background-color: #228BE6;
+    animation-name: loading-bar;
+    animation-duration: 1600ms;
+    animation-iteration-count: 1;
+    animation-timing-function: ease-out;
+}
+
+@keyframes loading-bar {
+    0% {
+        width: 0;
+        opacity: 1;
+    }
+
+    80% {
+        width: 100%;
+        opacity: 1;
+    }
+
+    100% {
+        width: 100%;
+        opacity: 0;
+    }
+}

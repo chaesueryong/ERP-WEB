@@ -1,5 +1,6 @@
 .SelectBox {
-
+    display: flex;
+    gap: 15px;
 }
 
 .select-input-box {
@@ -77,4 +78,22 @@
 
 .options div {
     cursor: pointer;
+}
+
+.select-box-left {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    flex: 1;
+}
+
+.select-box-right {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    min-width: 0;
+    gap: 10px;
+    flex: 1;
+    flex-wrap: wrap;
+    overflow: hidden;
 }

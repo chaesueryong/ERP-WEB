@@ -3,7 +3,7 @@ import './Accounts.css';
 import FilterBox from '../../component/FilterBox/FilterBox';
 import ButtonNormal from '../../component/ButtonNormal/ButtonNormal';
 
-import DataGrid, { Column, Selection, HeaderFilter, Paging, Pager, Sorting, Search, SearchPanel, Export } from 'devextreme-react/data-grid';
+import DataGrid, { Column, Selection, HeaderFilter, Paging, Pager, Sorting, Search, SearchPanel, Export, ColumnFixing, ColumnChooser, FilterRow, FilterPanel } from 'devextreme-react/data-grid';
 import { api } from '../../api/api';
 import PageNation from '../../component/PageNation/PageNation';
 import AccountRegistrationModal from '../../component/modal/AccountRegistrationModal/AccountRegistrationModal';
@@ -18,13 +18,13 @@ function Accounts() {
   const navigate = useNavigate();
   const [accountsPage, setAccountsPage] = useRecoilState(accountPageState);
 
-  const [filterList, setFilterList] = useState(filters);
+  const [modalData, setModalData] = useState({});
 
     // 페이지 데이터
   const [accountList, setAccountList] = useState([]);
   const [search, setSearch] = useState('');
-  const [filter, setFilter] = useState([]);
-  const [pageSize, setPageSize] = useState(10);
+  const [filterList, setFilterList] = useState(filters);
+  const [pageSize, setPageSize] = useState(50);
   const [page, setPage] = useState(0);
   const [data, setData] = useState({});
 
@@ -32,7 +32,7 @@ function Accounts() {
 
   const [isModal, setIsModal] = useState(false);
  
-  const getAccountList = (search_text = '', columns = [], orders = [], number = 0, pager = 10) => {
+  const getAccountList = (search_text = '', columns = [], orders = [], number = 0, pager = 50) => {
     api.post(api.get_account_list, {
       "search_text" : search_text, //검색어
       "columns" : ['nm_kr'], //필터
@@ -62,7 +62,6 @@ function Accounts() {
       
       )
       setData(res.data.data);
-      // console.log(res.data.data)
     }).catch(e => {
       alert('네트워크 에러')
       console.log(e)
@@ -70,15 +69,60 @@ function Accounts() {
   }
 
   const addAccount = (modalValues) => {
-    console.log(modalValues)
     api.post(api.add_account, modalValues)
     .then(res => {
-      // alert('추가 되었습니다');
-      console.log(res);
+      if(res.data.status === false){
+        throw res.data.error;
+      }
       closeModal();
       getAccountList();
     }).catch(e=>{
-      alert('네트워크 에러')
+      console.log(e)
+    })
+  }
+
+  const editAccount = (modalValues) => {
+    console.log(modalValues)
+    api.post(api.put_account, {
+      id : modalValues.id,
+
+      nm_kr : modalValues.nm_kr,
+      code : modalValues.code,
+      sector: modalValues.sector,//공통 테이블 nm_en : 'SECTOR'
+      owener: modalValues.owener,
+      owener_phone: modalValues.owener_phone,
+      manager: modalValues.manager,
+      manager_phone: modalValues.manager_phone,
+      crn: modalValues.crn, //사업자번호
+      c_phone: modalValues.c_phone,
+      c_fax: modalValues.c_fax,
+      pay_method_c_id: modalValues.pay_method_c_id, //공통 테이블 nm_en : 'PAYMETHOD'
+      c_account: modalValues.c_account,
+      w_phone: modalValues.w_phone,
+      w_b_phone: modalValues.w_b_phone,
+      w_address: modalValues.w_address,
+      bank_nm: modalValues.bank_nm, //공통 테이블 nm_en : 'BANK'
+      bank_acc: modalValues.bank_acc,
+      bank_owner: modalValues.bank_owner,
+      l_address: modalValues.l_address,
+      homepage: modalValues.homepage,
+      descript: modalValues.descript,
+      showOrder: modalValues.showOrder,
+      etc: modalValues.etc,
+      
+      brand: modalValues.brand.map(e => e.id),
+      
+   
+      use_yn:"Y"
+    })
+    .then(res => {
+      console.log(res);
+      if(res.data.status === false){
+        throw res.data.error;
+      }
+      closeModal();
+      getAccountList();
+    }).catch(e=>{
       console.log(e)
     })
   }
@@ -114,37 +158,28 @@ function Accounts() {
     setIsModal(false)
   }
 
-  const openModal = () => {
-    setIsModal(true)
+  const openModal = (data = null) => {
+    setModalData(data);
+    setIsModal(true);
   }
 
   // 페이지 상단 필터 박스 클릭 이벤트
   const handleClickCheckFilter = (e) => {
-    const arr = filter;
     if(e.target.checked){
       for(let i = 0; i < filterList.length; i++){
         if(filterList[i].name === e.target.id){
-          arr.push(filterList[i].value);
+          filterList[i].visible = true;
           break;
         }
       }
     }else{
-      let removeTarget = '';
       for(let i = 0; i < filterList.length; i++){
         if(filterList[i].name === e.target.id ){
-          removeTarget = filterList[i].value;
+          filterList[i].visible = false;
         }
       }
-
-      for(let j = 0; j < arr.length; j++){
-        if(arr[j] === removeTarget){
-          arr.splice(j, 1);
-        }
-      }
-    
     }
-    setFilter([...arr]);
-    console.log(arr)
+    setFilterList([...filterList]);
   }
 
   const onExporting = (e) => {
@@ -170,14 +205,8 @@ function Accounts() {
     })
   }
 
-  const defaultColumn = () => {
-    const arr = [];
-    for(let i = 0; i < filterList.length; i++){
-      if(filterList[i].default){
-        arr.push(filterList[i].value);
-      }
-    }
-    setFilter([...arr]);
+  const onRowDblClick = (e) => {
+    openModal(e.data);
   }
 
   const applyParams = (params = {}) => {
@@ -225,7 +254,6 @@ function Accounts() {
   }
 
   useEffect(() => {
-    defaultColumn();
     applyParams(getParams());
   },[])
 
@@ -237,43 +265,54 @@ function Accounts() {
       <div className='grid-box'>
         <div className='list-button'>
           <div className='list-button-left'>
-            <ButtonNormal name='거래처 등록' bg_color='#495057' font_weight='400' icon={true} color='white' handleClick={openModal} paddingTop='2' />
+            <ButtonNormal name='거래처 등록' bg_color='#E7F5FF' font_weight='400' icon={true} color='#0099FF' handleClick={()=>openModal()} paddingTop='2' />
             {/* <ButtonNormal name='상품 관리 바로가기' bg_color='#E9ECEF' color='black' /> */}
           </div>
           <div className='list-button-right'>
-            <div className='render-count-title'>페이지당 항목수</div>
+            {/* <div className='render-count-title'>페이지당 항목수</div>
             <select className='render-count' value={pageSize} onChange={changePageSize}>
               <option value='10'>10</option>
               <option value='30'>30</option>
               <option value='50'>50</option>
               <option value='100'>100</option>
-            </select>
-            <ButtonNormal name='인쇄' bg_color='#E9ECEF' color='black' />
-            <ButtonNormal name='엑셀 내려받기' bg_color='#E9ECEF' color='black' handleClick={onExporting} />
+            </select> */}
+            {/* <ButtonNormal name='인쇄' bg_color='#E9ECEF' color='black' /> */}
+            <ButtonNormal name='엑셀 내려받기' bg_color='#20C997' color='white' handleClick={onExporting} />
           </div>
         </div>
 
         <DataGrid
           dataSource={accountList}
           keyExpr="ID"
+          allowColumnReordering={true}
+          allowColumnResizing={true}
+          columnAutoWidth={true}
           showBorders={true}
           showRowLines={true}
+          hoverStateEnabled={true}
+          onRowDblClick={onRowDblClick}
           ref={dataGridRef}
+          filterBuilder={filterBuilder}
           // onExporting={exportExcel}
         >
 
           {/* <Export enabled={true} /> */}
           <Selection selectAllMod='allpages' showCheckBoxesMode='always' mode='multiple' />
-          <HeaderFilter visible={true} allowSelectAll={false}>
-            <Search enabled={true} />
+          <HeaderFilter visible={true} allowSelectAll={true}>
+            <Search enabled={true} editorOptions={searchEditorOptions} />
           </HeaderFilter>
+
+          {/* <FilterRow visible={true} /> */}
+          {/* <FilterPanel visible={true} /> */}
 
           <Pager visible={false} />
           <Paging pageSize={pageSize} />
           <Sorting mode="multiple" />
+          <ColumnFixing enabled={true} />
 
-
-          <Column caption="*거래처명">
+          <Column 
+            caption="*거래처명" 
+            fixed={true}>
             <Column
               caption="코드"
               dataField="code"
@@ -285,29 +324,26 @@ function Accounts() {
               dataField="nm_kr"
               sortOrder=""
             >
-              <HeaderFilter visible={true} allowSelectAll={false}>
+              <HeaderFilter visible={true} allowSelectAll={true}>
                 <Search enabled={true} />
               </HeaderFilter>
             </Column>
           </Column>
           
           {
-            filter.map((e, i) => {
-              let caption = '';
-              for(let i = 0; i < filterList.length; i++){
-                if(filterList[i].value === e){
-                  caption = filterList[i].name;
-                }
+            filterList.map((e, i) => {
+              if(filterList[i].visible === false){
+                return;
               }
 
               return (
                 <Column 
                 key={i}
-                caption={caption}
-                dataField={e}
+                caption={e.name}
+                dataField={e.value}
                 alignment='left'
               >
-                <HeaderFilter visible={true} allowSelectAll={false}>
+                <HeaderFilter visible={true} allowSelectAll={true}>
                   <Search enabled={true} />
                 </HeaderFilter>
               </Column>
@@ -317,11 +353,11 @@ function Accounts() {
 
         </DataGrid>
 
-        <PageNation first={data.first} last={data.last} empty={data.empty} totalPage={data.totalPages} number={data.number} handlePageClick={handlePageClick} />
+        {/* <PageNation first={data.first} last={data.last} empty={data.empty} totalPage={data.totalPages} number={data.number} handlePageClick={handlePageClick} /> */}
       </div>
 
       {
-        isModal && <AccountRegistrationModal isModal={isModal} closeModal={closeModal} addAccount={addAccount} />
+        isModal && <AccountRegistrationModal isModal={isModal} closeModal={closeModal} addAccount={addAccount} editAccount={editAccount} setData={modalData} />
       }
     </div>
   );
@@ -330,19 +366,32 @@ function Accounts() {
 export default Accounts;
 
 const filters = [
-  {name: '업종 분류', value: 'sector', default: true},
-  {name: '브랜드 수', value: 'brand_cnt', default: true},
-  {name: '대표자', value: 'owener', default: true},
-  {name: '대표자 연락처', value: 'owener_phone', default: true},
-  {name: '담당자', value: 'manager', default: true},
-  {name: '당담자 연락처', value: 'manager_phone', default: true},
-  {name: '주소', value: 'l_address'},
-  {name: '현 잔액', value: 'c_account'},
-  {name: '팩스', value: 'c_fax'},
-  {name: '도매 주소', value: 'w_address'},
-  {name: '계좌 번호', value: 'bank_acc'},
-  {name: '홈페이지', value: 'homepage'},
-  {name: '비고', value: 'etc'},
-  {name: '지급 방식', value: 'pay_method'},
-  {name: '등록 일자', value: 'reg_dt_str'},
+  {name: '업종 분류', value: 'sector', visible: true},
+  {name: '브랜드 수', value: 'brand_cnt', visible: true},
+  {name: '대표자', value: 'owener', visible: true},
+  {name: '대표자 연락처', value: 'owener_phone', visible: true},
+  {name: '담당자', value: 'manager', visible: true},
+  {name: '당담자 연락처', value: 'manager_phone', visible: true},
+  {name: '주소', value: 'l_address', visible: false},
+  {name: '현 잔액', value: 'c_account', visible: false},
+  {name: '팩스', value: 'c_fax', visible: false},
+  {name: '도매 주소', value: 'w_address', visible: false},
+  {name: '계좌 번호', value: 'bank_acc', visible: false},
+  {name: '홈페이지', value: 'homepage', visible: false},
+  {name: '비고', value: 'etc', visible: false},
+  {name: '지급 방식', value: 'pay_method', visible: false},
+  {name: '등록 일자', value: 'reg_dt_str', visible: false},
 ];
+
+const filterBuilder = {
+  customOperations: [{
+    name: 'weekends',
+    caption: 'Weekends',
+    dataTypes: ['date'],
+    icon: 'check',
+    hasValue: false,
+  }],
+  allowHierarchicalFields: true,
+};
+
+const searchEditorOptions = { placeholder: '' };

@@ -8,11 +8,15 @@ import Accounts from './page/Accounts/Accounts';
 import Brands from './page/Brands/Brands';
 import Products from './page/Products/Products';
 import Orders from './page/Orders/Orders';
+import HomeLoading from './component/HomeLoading/HomeLoading';
+import Toast from './component/Toast/Toast';
 
 function App() {
   return (
     <div className="App">
+      {/* <HomeLoading /> */}
 
+      <Toast />
       <Menu />
 
       <div className="router">

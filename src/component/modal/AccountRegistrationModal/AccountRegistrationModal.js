@@ -1,12 +1,13 @@
 import '../modal.css';
 import x_button from '../../../assets/images/x-icon-1.svg';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import SelectBox from '../../SelectBox/SelectBox';
 import { Navigate, useNavigate } from 'react-router-dom';
 import { api } from '../../../api/api';
 
-function AccountRegistrationModal({isModal, closeModal, addAccount}) {
+function AccountRegistrationModal({isModal, closeModal, addAccount, editAccount, setData}) {
   const navigate = useNavigate();
+
   const [modalValues, setModalValues] = useState({
       nm_kr: "", // 거래처명
       code: "",  // 거래처 코드
@@ -43,27 +44,58 @@ function AccountRegistrationModal({isModal, closeModal, addAccount}) {
       showOrder: 1,
 
       etc: "",  // 비고
-     use_yn: "Y"
+      use_yn: "Y"
     });
 
     const [brandList, setBrandList] = useState([]);
     const [brandInputText, setBrandInputText] = useState('');
 
+    const handleOnClickButton = () => {
+      if(setData === null) {
+        addAccount(modalValues);
+      }else{
+        editAccount(modalValues);
+      }
+    }
 
     // 모달 값 변경 이벤트
     const handleOnChange = (e, target) => {
       const values = modalValues;
 
-      values[target] = e.target.value;
+      if(target === 'crn'){
+        values[target] = licenseNum(e.target.value);
+      }else{
+        values[target] = e.target.value;
+      }
       setModalValues({
         ...values,
       })
     }
 
+    const licenseNum = (str) => {
+      str = str.replace(/[^0-9]/g, '');
+      let tmp = '';
+      if(str.length < 4){
+        return str;
+      }else if(str.length < 7){
+        tmp += str.substr(0, 3);
+        tmp += '-';
+        tmp += str.substr(3);
+        return tmp;
+      }else{ 
+        tmp += str.substr(0, 3);
+        tmp += '-';
+        tmp += str.substr(1, 2);
+        tmp += '-';
+        tmp += str.substr(5);
+        return tmp;
+      }
+    }
+
     // 모달 값 변경 이벤트
     const changeSelectBox = (e, target) => {
       const values = modalValues;
-
+      console.log(e.target.value);
       values[target] = e.target.value;
       setModalValues({
         ...values,
@@ -80,7 +112,7 @@ function AccountRegistrationModal({isModal, closeModal, addAccount}) {
       navigate('/brands?modal=open');
     }
 
-    const getList = (text = '') => {
+    const getList = (text = '', id) => {
       api.post(api.get_brand_list, {
           "search_text" : text, //검색어
           "categorys" : [], //카테고리
@@ -90,7 +122,9 @@ function AccountRegistrationModal({isModal, closeModal, addAccount}) {
       
           "size":10, //페이징 처리시 사이즈 크기
           "number":0, // 페이징 인덱스(최초 0)
-          "use_yn":"Y"
+          "use_yn":"Y",
+
+          "id": id
       })
       .then(res=>{
         setBrandList(res.data.data.content)
@@ -98,6 +132,57 @@ function AccountRegistrationModal({isModal, closeModal, addAccount}) {
       .catch(e=>{
           console.log(e)
       })
+  }
+
+  const setEditData = async () => {
+    if(setData === null){
+      return;
+    }
+    
+    const account = await api.post(api.get_account, {
+        "use_yn": "Y",
+        "size":10, 
+        "number":0, 
+        "id": setData.id
+
+    })
+
+    const accountBrandList = account.data.data.content[0].brand;
+
+    let brList = [];
+
+    for(let i = 0; i < accountBrandList.length; i++){
+      const brand = await api.post(api.get_brand, {
+        "use_yn":"Y",
+        "size":10, 
+        "number":0,
+        "id": accountBrandList[i].brand_id
+      })
+
+      if(brand.data.data.content[0] === undefined){
+        brList.push({
+          nm_kr: '미확인',
+          id: accountBrandList[i].brand_id
+        })
+      }else{
+        brList.push(brand.data.data.content[0])
+      }
+    }
+
+    // const brands = await Promise.all(accountBrandList.map( e=>
+    //    api.post(api.get_brand, {
+    //     "use_yn":"Y",
+    //     "size":10, 
+    //     "number":0,
+    //     "id": accountBrandList[i].brand_id
+    //   })
+    // ))
+
+    console.log(brList);
+    setModalValues({
+      ...setData,
+      brand: brList
+    });
   }
   
   const handleChange = (e) => {
@@ -111,9 +196,37 @@ function AccountRegistrationModal({isModal, closeModal, addAccount}) {
 
   const handleClickItem = (e) => {
     setBrandInputText(e.nm_kr);
+
+    // for(let i = 0; i < modalValues['brand'].length; i++){
+    //   if(modalValues['brand'][i].brand_id === e.brand_id){
+    //     alert('추가된 브랜드 입니다');
+    //     return;
+    //   }
+    // }
+
+    modalValues['brand'].push(e);
+    console.log(modalValues['brand'])
+    setModalValues({
+      ...modalValues
+    })
   }
 
+  const handleDeleteItem = (index) => {
+    // for(let i = 0; i < modalValues['brand'].length; i++){
+    //   if(modalValues['brand'][i].brand_id === e.brand_id){
+    //     modalValues['brand'].splice(i, 1);
+    //     break;
+    //   }
+    // }
+    modalValues['brand'].splice(index, 1);
+    setModalValues({
+      ...modalValues
+    })
+  }
 
+  useEffect(() => {
+    setEditData();
+  },[])
 
     return (
         <div className="AccountRegistrationModal">
@@ -168,14 +281,13 @@ function AccountRegistrationModal({isModal, closeModal, addAccount}) {
                     emptyButton='브랜드 등록하기'
                     inputText={brandInputText}
                     handleChange={handleChange}
-                    list={brandList}
+                    searchList={brandList}
+                    addList={modalValues['brand']}
                     handleClickItem={handleClickItem}
+                    handleDeleteItem={handleDeleteItem}
                     handleClickButton={moveTo} />
                 </div>
 
-                <div className='modal-col-box' style={{flexDirection: 'row', gap: '15px'}}>
-
-                </div>
               </div>
 
               <div className='modal-col'>
@@ -190,7 +302,7 @@ function AccountRegistrationModal({isModal, closeModal, addAccount}) {
               <div className='modal-col'>
                 <div className='modal-col-box'>
                   <div className='modal-col-box-title'>사업자 등록번호</div>
-                  <input className='modal-col-box-input' placeholder='입력' value={modalValues['crn']} onChange={e => {
+                  <input className='modal-col-box-input' placeholder='입력' maxLength='12' value={modalValues['crn']} onChange={e => {
                     handleOnChange(e, 'crn');
                   }}/>
                 </div>
@@ -319,9 +431,7 @@ function AccountRegistrationModal({isModal, closeModal, addAccount}) {
             </div>
 
             <div className='modal-bottom-box'>
-              <div className='modal-button' onClick={()=>{
-                addAccount(modalValues);
-              }}>등록하기</div>
+              <div className='modal-button' onClick={handleOnClickButton}>등록하기</div>
             </div>
           </div>
         </div>

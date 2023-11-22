@@ -13,6 +13,14 @@
     cursor: pointer;
 }
 
+.tab.home {
+    justify-content: flex-start;
+}
+
+.tab.menu {
+    justify-content: center;
+}
+
 .tab-text {
     font-size: 18px;
     font-weight: 600;
@@ -21,4 +29,39 @@
 
 .tab-text.on {
     color: black;
+}
+
+.tab-text.home {
+    color: black;
+}
+
+
+.tab-img-home-box {
+    position: relative;
+    width: 70px;
+    display: flex;
+    justify-content: center;
+}
+
+.tab-img-box {
+    position: relative;
+}
+
+.tab-img-hover {
+    position: absolute;
+    display: none;
+    top: calc(100% + 5px);
+    left: 50%;
+    transform: translate(-50%, 0);
+    background-color: #000000CC;
+    color: white;
+    white-space: nowrap;
+    font-size: 14px;
+    font-weight: 600;
+    padding: 4px 18px;
+    border-radius: 10px;
+}
+
+.tab-img-hover.hover {
+    display: block;
 }

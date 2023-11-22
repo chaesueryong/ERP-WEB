@@ -11,7 +11,7 @@
 }
 
 .grid-box {
-  padding: 0 33px;
+  padding: 0 33px 33px 33px;
   flex: 1;
   background-color: #F8F9FA;
 }
@@ -68,38 +68,61 @@
   vertical-align: middle !important;
 }
 
-.dx-datagrid .dx-column-indicators {
-  float: right !important;
-}
-
-.dx-datagrid-pager {
-  border-top: 1px solid #ddd;
-  background-color: #F8F9FA !important;
+.dx-datagrid-headers .dx-datagrid-table .dx-row > td {
+  background-color: #F1F3F5;
 }
 
 .dx-datagrid-headers {
   border-top-left-radius: 10px;
   border-top-right-radius: 10px;
   background-color: #F1F3F5;
-  overflow: hidden;
 }
 
 .dx-datagrid-rowsview {
   border-bottom-left-radius: 10px;
   border-bottom-right-radius: 10px;
-  overflow: hidden;
-}
-
-.dx-datagrid-content .dx-datagrid-table .dx-row .dx-command-select {
-  background-color: white;
-}
-
-.dx-datagrid-rowsview .dx-row {
-
 }
 
 .dx-datagrid .dx-header-filter {
   position: relative;
   color: rgba(0,0,0,.54);
   font: 12px/1 DXIcons !important
+}
+
+.dx-datagrid-headers {
+  color: #495057 !important
+}
+
+.dx-checkbox-icon { 
+  border: 2px solid #999999 !important
+}
+
+.dx-texteditor.dx-state-active.dx-editor-filled, .dx-texteditor.dx-state-active.dx-editor-outlined, .dx-texteditor.dx-state-active.dx-editor-underlined, .dx-texteditor.dx-state-focused.dx-editor-filled, .dx-texteditor.dx-state-focused.dx-editor-outlined, .dx-texteditor.dx-state-focused.dx-editor-underlined {
+  border-color: black !important;
+}
+
+
+/* 필터 인풋 */
+.dx-texteditor-input-container {
+  flex-direction: row-reverse;
+}
+
+.dx-searchbox .dx-placeholder::before, .dx-searchbox .dx-texteditor-input {
+  padding-left: 10px !important;
+  padding-right: 34px !important;
+
+}
+
+.dx-searchbox .dx-icon-search {
+  font: 17px/18px DXIcons;
+  position: absolute;
+  top: 50%;
+  margin-top: -17px;
+  width: 34px;
+  height: 34px;
+  background-position: 8px 8px;
+  background-size: 18px 18px;
+  padding: 8px;
+  text-align: center;
+  color: #999;
 }

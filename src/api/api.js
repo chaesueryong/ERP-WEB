@@ -5,11 +5,13 @@ const jwt_token = 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJyb2RlY2s4MjZAb3ZlcnRoZXdpbmRv
 
 export const api = {
     get_account_list: 'vendor/page/get',
+    get_account: 'vendor/get',
     add_account: 'vendor/addVendor',
     put_account: 'vendor/updateVendor',
     delete_account: 'vendor/deleteVendor',
 
     get_brand_list: 'brand/page/get',
+    get_brand: 'brand/get',
     add_brand: 'vendor/addBrand',
     put_brand: 'vendor/updateBrand',
     delete_brand: 'vendor/deleteBrand',

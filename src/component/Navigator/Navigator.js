@@ -117,7 +117,7 @@ function Navigator() {
       <div className='navbar-left'>
         <img src={hamburger_menu} onClick={toggleMenu} />
       </div>
-      <div className='navbar'>
+      <div className='navbar' style={location.pathname === '/' ? {backgroundColor : '#F8F9FA', border: 'none'} : {backgroundColor : 'white', borderLeft: '2px solid #C0C7CE', borderRight: '2px solid #C0C7CE'}}>
         {
           navList.map((e, i)=>(
             <NavTab key={i} index={i} name={e.name} pathname={e.pathname} currentPathName={location.pathname} moveTab={moveTab} deleteNavTab={deleteNavTab} />

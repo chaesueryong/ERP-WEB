@@ -1,0 +1,42 @@
+.Toast {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    z-index: 100;
+}
+
+.toast-background {
+    position: absolute;
+    width: 100vw;
+    height: 100vh;
+    background-color: black;
+    opacity: .7;
+}
+
+.toast-box{
+    width: 600px;
+    height: 50px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    padding: 0 12px;
+    font-size: 16px;
+    font-weight: 600;
+    gap: 12px;
+    z-index: 1;
+}
+
+.toast-1 {
+    background-color: #E7F5FF;
+    color: #228BE6;
+}
+
+.toast-2 {
+    background-color: #FFF5F5;
+    color: #FF6B6B;
+}
