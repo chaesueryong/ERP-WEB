@@ -138,16 +138,8 @@ function AccountRegistrationModal({isModal, closeModal, addAccount, editAccount,
     if(setData === null){
       return;
     }
-    
-    const account = await api.post(api.get_account, {
-        "use_yn": "Y",
-        "size":10, 
-        "number":0, 
-        "id": setData.id
 
-    })
-
-    const accountBrandList = account.data.data.content[0].brand;
+    const accountBrandList = setData.brand;
 
     let brList = [];
 
