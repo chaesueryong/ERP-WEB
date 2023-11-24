@@ -158,6 +158,7 @@ function AccountRegistrationModal({isModal, closeModal, addAccount, editAccount,
         })
       }else{
         brList.push(brand.data.data.content[0])
+        
       }
     }
 
