@@ -9,10 +9,7 @@ function Toast() {
     const [toast, setToast] = useRecoilState(toastState);
 
     useEffect(() => {
-        document.querySelector('html').style.overflow = 'hidden';
         setTimeout(() => {
-            document.querySelector('html').style.overflow = 'auto';
-
             setToast({
                 visible: false,
                 text: '거래처 정보가 등록되었습니다.',
@@ -25,15 +22,24 @@ function Toast() {
         <div className="Toast" style={toast.visible ? {display: 'flex'} : {display: 'none'}}>
             <div className='toast-background'></div>
 
-            <div className='toast-box toast-1'>
-                <img src={success_check_icon} />
-                <div>{toast.text}</div>
-            </div>
-
-            <div className='toast-box toast-2'>
-                <img src={error_check_icon} />
-                <div>{toast.text}</div>
-            </div>
+            {
+                toast.type === 'success' ? 
+                <div className='toast-box toast-1'>
+                    <img src={success_check_icon} />
+                    <div>{toast.text}</div>
+                </div>
+                :
+                <></>
+            }
+            {
+                toast.type === 'error' ? 
+                <div className='toast-box toast-2'>
+                    <img src={error_check_icon} />
+                    <div>{toast.text}</div>
+                </div>
+                :
+                <></>
+            }       
         </div>
     );
 }

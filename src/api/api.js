@@ -16,6 +16,8 @@ export const api = {
     put_brand: 'vendor/updateBrand',
     delete_brand: 'vendor/deleteBrand',
 
+    get_brand_category_list: 'brand/getCategory',
+
     get_goods_list: 'brand/page/get',
     add_goods: 'vendor/addBrand',
     put_goods: 'vendor/updateBrand',

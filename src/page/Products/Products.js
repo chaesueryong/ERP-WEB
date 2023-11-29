@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import './Products';
+import './Products.css';
 import FilterBox from '../../component/FilterBox/FilterBox';
 import ButtonNormal from '../../component/ButtonNormal/ButtonNormal';
 
@@ -164,12 +164,11 @@ function Products() {
     <div className="Products">
       <FilterBox title='상품 관리' filter_box_border={false} handleChangeSearch={handleChangeSearch} handleClickCheckFilter={handleClickCheckFilter} filterList={filterList} />
 
-
       <div className='grid-box'>
         <div className='list-button'>
           <div className='list-button-left'>
-            <ButtonNormal name='상품 등록' bg_color='#495057' font_weight='400' icon={true} color='white' handleClick={()=>openModal('registration')} />
-            <ButtonNormal name='상품 발주' bg_color='#495057' font_weight='400' icon={true} color='white' handleClick={()=>openModal('order')} />
+            <ButtonNormal name='상품 등록' bg_color='#E7F5FF' font_weight='400' icon={false} color='#0099FF' handleClick={()=>openModal('registration')} />
+            <ButtonNormal name='상품 발주' bg_color='#E7F5FF' font_weight='400' icon={false} color='#0099FF' handleClick={()=>openModal('order')} />
             {/* <ButtonNormal name='상품 관리 바로가기' bg_color='#E9ECEF' color='black' /> */}
           </div>
           <div className='list-button-right'>
@@ -180,8 +179,8 @@ function Products() {
               <option value='50'>50</option>
               <option value='100'>100</option>
             </select>
-            <ButtonNormal name='인쇄' bg_color='#E9ECEF' color='black' />
-            <ButtonNormal name='엑셀 내려받기' bg_color='#E9ECEF' color='black' handleClick={onExporting} />
+            {/* <ButtonNormal name='인쇄' bg_color='#E9ECEF' color='black' /> */}
+            <ButtonNormal name='엑셀 내려받기' bg_color='#20C997' color='white' handleClick={onExporting} />
           </div>
         </div>
 

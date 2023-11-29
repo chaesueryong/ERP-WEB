@@ -1,0 +1,31 @@
+.UploadImage {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.upload-button {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 134px;
+    height: 134px;
+    border-radius: 50%;
+    background-color: #F1F3F5;
+    color: #C0C7CE;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.preview {
+    display: none;
+    width: 134px;
+    height: 134px;
+    border-radius: 50%;
+}
+
+.upload {
+    display: none;
+}

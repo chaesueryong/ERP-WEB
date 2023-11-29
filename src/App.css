@@ -4,6 +4,11 @@
   height: 100%;
 }
 
+.empty-target {
+  width: 0px;
+  overflow: hidden;
+}
+
 .router {
   display: flex;
   flex-direction: column;
@@ -70,6 +75,8 @@
 
 .dx-datagrid-headers .dx-datagrid-table .dx-row > td {
   background-color: #F1F3F5;
+  color: #495057;
+  font-weight: 600;
 }
 
 .dx-datagrid-headers {
@@ -125,4 +132,11 @@
   padding: 8px;
   text-align: center;
   color: #999;
+}
+
+
+.dx-datagrid .dx-row-lines > td {
+  vertical-align: middle !important;
+  text-align: center !important;
+  font-weight: 600;
 }

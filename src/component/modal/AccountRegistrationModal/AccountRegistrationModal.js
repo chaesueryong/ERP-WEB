@@ -4,8 +4,11 @@ import { useEffect, useState } from 'react';
 import SelectBox from '../../SelectBox/SelectBox';
 import { Navigate, useNavigate } from 'react-router-dom';
 import { api } from '../../../api/api';
+import { useRecoilState } from 'recoil';
+import { toastState } from '../../../recoil/status';
 
 function AccountRegistrationModal({isModal, closeModal, addAccount, editAccount, setData}) {
+  const [toast, setToast] = useRecoilState(toastState);
   const navigate = useNavigate();
 
   const [modalValues, setModalValues] = useState({
@@ -51,6 +54,16 @@ function AccountRegistrationModal({isModal, closeModal, addAccount, editAccount,
     const [brandInputText, setBrandInputText] = useState('');
 
     const handleOnClickButton = () => {
+      if(modalValues.nm_kr === ''){
+        setToast({
+          visible: true,
+          type: 'error',
+          text: '필수 입력 항목을 입력해주세요. (* 표시)'
+        });
+
+        return;
+      }
+
       if(setData === null) {
         addAccount(modalValues);
       }else{
@@ -95,7 +108,7 @@ function AccountRegistrationModal({isModal, closeModal, addAccount, editAccount,
     // 모달 값 변경 이벤트
     const changeSelectBox = (e, target) => {
       const values = modalValues;
-      console.log(e.target.value);
+
       values[target] = e.target.value;
       setModalValues({
         ...values,
@@ -145,10 +158,10 @@ function AccountRegistrationModal({isModal, closeModal, addAccount, editAccount,
 
     for(let i = 0; i < accountBrandList.length; i++){
       const brand = await api.post(api.get_brand, {
-        "use_yn":"Y",
-        "size":10, 
-        "number":0,
-        "id": accountBrandList[i].brand_id
+        use_yn: "Y",
+        size: 10, 
+        number: 0,
+        id: accountBrandList[i].brand_id
       })
 
       if(brand.data.data.content[0] === undefined){
@@ -222,7 +235,7 @@ function AccountRegistrationModal({isModal, closeModal, addAccount, editAccount,
   },[])
 
     return (
-        <div className="AccountRegistrationModal">
+    <div className="AccountRegistrationModal">
       <div className='modal' style={isModal ? {display: 'block'} : {display: 'none'}}>
         <div className='modal-bg'></div>
         <div className='modal-content-box'>
@@ -275,6 +288,7 @@ function AccountRegistrationModal({isModal, closeModal, addAccount, editAccount,
                     inputText={brandInputText}
                     handleChange={handleChange}
                     searchList={brandList}
+                    itemType={0}
                     addList={modalValues['brand']}
                     handleClickItem={handleClickItem}
                     handleDeleteItem={handleDeleteItem}
@@ -424,12 +438,14 @@ function AccountRegistrationModal({isModal, closeModal, addAccount, editAccount,
             </div>
 
             <div className='modal-bottom-box'>
-              <div className='modal-button' onClick={handleOnClickButton}>등록하기</div>
+              <div className='modal-button' onClick={handleOnClickButton}>{
+                setData === null ? '등록하기' : '수정하기'
+              }</div>
             </div>
           </div>
         </div>
       </div>
-        </div>
+    </div>
     );
 }
 

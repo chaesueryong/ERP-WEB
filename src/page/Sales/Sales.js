@@ -1,11 +1,11 @@
-import './Orders.css';
+import './Sales.css';
 import FilterBox from '../../component/FilterBox/FilterBox';
 import ButtonNormal from '../../component/ButtonNormal/ButtonNormal';
 import DataGrid, { Column, Selection, HeaderFilter, Paging, Pager, Sorting, Search } from 'devextreme-react/data-grid';
 import { useState } from 'react';
 import { common } from '../../utils/common';
 
-function Orders() {
+function Sales() {
   const [modal, setModal] = useState(false);
 
   const toggleModal = () => {
@@ -25,11 +25,11 @@ function Orders() {
   }
 
   return (
-    <div className="Orders">
+    <div className="Sales">
+sales
 
-orders
     </div>
   );
 }
 
-export default Orders;
+export default Sales;

@@ -1,11 +1,11 @@
 import './FilterItem.css';
 
-function FilterItem({name, check=true, defaultChecked, handleClickCheckFilter}) {
+function FilterItem({name, isCheckButton=true, defaultChecked, handleClickCheckFilter}) {
 
   return (
     <div className="FilterItem">
-        <input id={name} className={`${check ? 'check-filter' : 'filter'}`} type='checkbox' style={check ? {} : {display: 'none'}} onChange={handleClickCheckFilter} defaultChecked={defaultChecked} />
-        <label htmlFor={name} className={`${check ? 'check-filter' : 'filter'}`}><span>{name}</span></label>
+        <input id={name} className={`${isCheckButton ? 'check-filter' : 'filter'}`} type='checkbox' style={isCheckButton ? {} : {display: 'none'}} onChange={handleClickCheckFilter} checked={defaultChecked} />
+        <label htmlFor={name} className={`${isCheckButton ? 'check-filter' : 'filter'}`}><span>{name}</span></label>
     </div>
   );
 }

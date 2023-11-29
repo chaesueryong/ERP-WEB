@@ -1,4 +1,17 @@
 import { atom } from "recoil";
+import { recoilPersist } from "recoil-persist";
+
+const { persistAtom } = recoilPersist({
+    key: 'localStorage',
+    storage: localStorage,
+})
+
+// example
+export const filterState = atom({
+    key: "filterState",
+    default: [],
+    effects_UNSTABLE: [persistAtom]
+  })
 
 export const menuState = atom({
     key: 'menuState',
@@ -8,8 +21,8 @@ export const menuState = atom({
 export const toastState = atom({
     key: 'toastState',
     default: {
-        visible: true,
-        text: '거래처 정보가 등록되었습니다.',
+        visible: false,
+        text: '',
         type: 0
     }
 })
@@ -17,14 +30,14 @@ export const toastState = atom({
 export const accountPageState = atom({
     key: 'accountPageState',
     default: {
-        searchUrl: '?page=1&pagesize=50'
+        searchUrl: '?page=1&pagesize=30'
     }
 })
 
 export const brandsPageState = atom({
     key: 'brandsPageState',
     default: {
-        searchUrl: '?page=1&pagesize=10'
+        searchUrl: '?page=1&pagesize=30'
     }
 })
 

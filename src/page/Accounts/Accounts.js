@@ -10,13 +10,16 @@ import AccountRegistrationModal from '../../component/modal/AccountRegistrationM
 import { useLocation, useNavigate, useSearchParams } from 'react-router-dom';
 import { common } from '../../utils/common';
 import { useRecoilState } from 'recoil';
-import { accountPageState } from '../../recoil/status';
+import { accountPageState, toastState } from '../../recoil/status';
 
 function Accounts() {
   const [searchParams, setSearchParams] = useSearchParams();
+  const [toast, setToast] = useRecoilState(toastState);
   const location = useLocation();
   const navigate = useNavigate();
   const [accountsPage, setAccountsPage] = useRecoilState(accountPageState);
+  const [isLoading, setLoading] = useState(false);
+  const target = useRef(null);
 
   const [modalData, setModalData] = useState({});
 
@@ -33,16 +36,17 @@ function Accounts() {
   const [isModal, setIsModal] = useState(false);
  
   const getAccountList = (search_text = '', columns = [], orders = [], number = 0, pager = 50) => {
+    setLoading(true);
     api.post(api.get_account_list, {
-      "search_text" : search_text, //검색어
-      "columns" : ['nm_kr'], //필터
+      search_text : search_text, //검색어
+      columns : ['nm_kr'], //필터
                   // 업종분류 sector, 브랜드 수 brand_cnt, 
                   // 대표자 owener, 대표자 연락처 owener_phone, 
                   // 담당자 manager, 담당자 연락처 manager_phone, 주소 l_address
                   // 현 잔액 c_account, 팩스 c_fax, 도메주소 w_address, 
                   // 계좌번호 bank_acc, 홈페이지 homepage, 비고 etc, 
                   // 지급방식 pay_method, 등록일자 reg_dt_str
-      "orders" : ["manager"], //오름차순- 내림차순 소팅 (컬럼명 적재 시 내림차순 적용)
+      orders : ["manager"], //오름차순- 내림차순 소팅 (컬럼명 적재 시 내림차순 적용)
                   // 업종분류 sector, 브랜드 수 brand_cnt,
                   // 대표자 owener, 대표자 연락처 owener_phone, 
                   // 담당자 manager, 담당자 연락처 manager_phone, 주소 l_address
@@ -51,20 +55,22 @@ function Accounts() {
       //"all" : "Y" // "all" :"Y" 인경우, 모든 데이터 가져오기
       //"all" : "Y" // 넣지 않은 경우 페이징 처리.
 
-      "size": pager, //페이징 처리시 사이즈 크기
-      "number": number, // 페이징 인덱스(최초 0)
-      "use_yn":"Y"
+      size: pager, //페이징 처리시 사이즈 크기
+      number: number, // 페이징 인덱스(최초 0)
+      use_yn:"Y"
     }).then(res => {
+      console.log(accountList)
       setAccountList(res.data.data.content.map((e,i)=>({
         ...e,
         ID: i
-      }))
-      
-      )
+      })))
+
       setData(res.data.data);
     }).catch(e => {
       alert('네트워크 에러')
       console.log(e)
+    }).finally(()=>{
+      setLoading(false);
     })
   }
 
@@ -74,6 +80,12 @@ function Accounts() {
       if(res.data.status === false){
         throw res.data.error;
       }
+      
+      setToast({
+        visible: true,
+        type: 'success',
+        text: '거래처 정보가 등록되었습니다.'
+      })
       closeModal();
       getAccountList();
     }).catch(e=>{
@@ -82,7 +94,6 @@ function Accounts() {
   }
 
   const editAccount = (modalValues) => {
-    console.log(modalValues)
     api.post(api.put_account, {
       id : modalValues.id,
 
@@ -112,14 +123,18 @@ function Accounts() {
       
       brand: modalValues.brand.map(e => e.id),
       
-   
       use_yn:"Y"
     })
     .then(res => {
-      console.log(res);
       if(res.data.status === false){
         throw res.data.error;
       }
+      setToast({
+        visible: true,
+        type: 'success',
+        text: '변경 사항이 저장되었습니다.'
+      })
+
       closeModal();
       getAccountList();
     }).catch(e=>{
@@ -127,58 +142,26 @@ function Accounts() {
     })
   }
 
-  // const cellTemplate = (container, options) => {
-  //   const noBreakSpace = '\u00A0';
-  //   const text = (options.value || []).map((element) => options.column.lookup.calculateCellValue(element)).join(', ');
-  //   container.textContent = text || noBreakSpace;
-  //   container.title = text;
-  // }
-
-  // const calculateFilterExpression = (filterValue, selectedFilterOperation, target) => {
-  //   if (target === 'search' && typeof (filterValue) === 'string') {
-  //     return [this.dataField, 'contains', filterValue];
-  //   }
-  //   return function(data) {
-  //     return (data.AssignedEmployee || []).indexOf(filterValue) !== -1;
-  //   };
-  // }
-
-  // const itemRender = (data) => {
-  //   const imageSource = `images/icons/status-${data.id}.svg`;
-  //   if (data != null) {
-  //     return <div>
-  //       <img src={imageSource} className="status-icon middle"></img>
-  //       <span className="middle">{data.name}</span>
-  //     </div>;
-  //   }
-  //   return <span>(All)</span>;
-  // }
-
   const closeModal = () => {
-    setIsModal(false)
+    document.querySelector('html').style.overflow = 'auto';
+    setIsModal(false);
   }
 
   const openModal = (data = null) => {
+    document.querySelector('html').style.overflow = 'hidden';
     setModalData(data);
     setIsModal(true);
   }
 
   // 페이지 상단 필터 박스 클릭 이벤트
   const handleClickCheckFilter = (e) => {
-    if(e.target.checked){
-      for(let i = 0; i < filterList.length; i++){
-        if(filterList[i].name === e.target.id){
-          filterList[i].visible = true;
-          break;
-        }
-      }
-    }else{
-      for(let i = 0; i < filterList.length; i++){
-        if(filterList[i].name === e.target.id ){
-          filterList[i].visible = false;
-        }
+    for(let i = 0; i < filterList.length; i++){
+      if(filterList[i].name === e.target.id){
+        filterList[i].checked = e.target.checked;
+        break;
       }
     }
+
     setFilterList([...filterList]);
   }
 
@@ -223,7 +206,7 @@ function Accounts() {
     const _filterList = params.filters;
     const _pageSize = params.pagesize || pageSize;
     const _page = params.page || page;
-
+    console.log(_page)
     setSearch(_searchText);
     setPageSize(_pageSize);
     setPage(_page);
@@ -253,14 +236,29 @@ function Accounts() {
     return obj;
   }
 
+  const options = {
+    threshold: 1.0,
+  };
+
+  const callback = () => {
+    // if(isLoading) return;
+
+    console.log('관측되었습니다')
+    // applyParams({
+    //   page: Number(_page) + 1
+    // });
+  };
+
+  const observer = new IntersectionObserver(callback, options);
+
   useEffect(() => {
+    observer.observe(target.current);
     applyParams(getParams());
   },[])
 
   return (
     <div className="Accounts">
       <FilterBox title='거래처 관리' search_title='거래처 찾기' search={search} search_placeholder='거래처명을 입력해 주세요' filter_title='필터' handleChangeSearch={handleChangeSearch} handleClickCheckFilter={handleClickCheckFilter} filterList={filterList} />
-
 
       <div className='grid-box'>
         <div className='list-button'>
@@ -293,9 +291,7 @@ function Accounts() {
           onRowDblClick={onRowDblClick}
           ref={dataGridRef}
           filterBuilder={filterBuilder}
-          // onExporting={exportExcel}
         >
-
           {/* <Export enabled={true} /> */}
           <Selection selectAllMod='allpages' showCheckBoxesMode='always' mode='multiple' />
           <HeaderFilter visible={true} allowSelectAll={true}>
@@ -332,7 +328,7 @@ function Accounts() {
           
           {
             filterList.map((e, i) => {
-              if(filterList[i].visible === false){
+              if(filterList[i].checked === false){
                 return;
               }
 
@@ -353,9 +349,17 @@ function Accounts() {
 
         </DataGrid>
 
+        {
+          !isLoading ? 
+          
+          <div>
+            {/* <div>loading</div> */}
+          </div> : <></>
+        }
+
+        <div className='empty-target' ref={target}></div>
         {/* <PageNation first={data.first} last={data.last} empty={data.empty} totalPage={data.totalPages} number={data.number} handlePageClick={handlePageClick} /> */}
       </div>
-
       {
         isModal && <AccountRegistrationModal isModal={isModal} closeModal={closeModal} addAccount={addAccount} editAccount={editAccount} setData={modalData} />
       }
@@ -366,21 +370,21 @@ function Accounts() {
 export default Accounts;
 
 const filters = [
-  {name: '업종 분류', value: 'sector', visible: true},
-  {name: '브랜드 수', value: 'brand_cnt', visible: true},
-  {name: '대표자', value: 'owener', visible: true},
-  {name: '대표자 연락처', value: 'owener_phone', visible: true},
-  {name: '담당자', value: 'manager', visible: true},
-  {name: '당담자 연락처', value: 'manager_phone', visible: true},
-  {name: '주소', value: 'l_address', visible: false},
-  {name: '현 잔액', value: 'c_account', visible: false},
-  {name: '팩스', value: 'c_fax', visible: false},
-  {name: '도매 주소', value: 'w_address', visible: false},
-  {name: '계좌 번호', value: 'bank_acc', visible: false},
-  {name: '홈페이지', value: 'homepage', visible: false},
-  {name: '비고', value: 'etc', visible: false},
-  {name: '지급 방식', value: 'pay_method', visible: false},
-  {name: '등록 일자', value: 'reg_dt_str', visible: false},
+  {name: '업종 분류', value: 'sector', checked: true},
+  {name: '브랜드 수', value: 'brand_cnt', checked: true},
+  {name: '대표자', value: 'owener', checked: true},
+  {name: '대표자 연락처', value: 'owener_phone', checked: true},
+  {name: '담당자', value: 'manager', checked: true},
+  {name: '당담자 연락처', value: 'manager_phone', checked: true},
+  {name: '주소', value: 'l_address', checked: false},
+  {name: '현 잔액', value: 'c_account', checked: false},
+  {name: '팩스', value: 'c_fax', checked: false},
+  {name: '도매 주소', value: 'w_address', checked: false},
+  {name: '계좌 번호', value: 'bank_acc', checked: false},
+  {name: '홈페이지', value: 'homepage', checked: false},
+  {name: '비고', value: 'etc', checked: false},
+  {name: '지급 방식', value: 'pay_method', checked: false},
+  {name: '등록 일자', value: 'reg_dt_str', checked: false},
 ];
 
 const filterBuilder = {

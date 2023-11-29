@@ -10,13 +10,21 @@ import Products from './page/Products/Products';
 import Orders from './page/Orders/Orders';
 import HomeLoading from './component/HomeLoading/HomeLoading';
 import Toast from './component/Toast/Toast';
+import { useRecoilValue } from 'recoil';
+import { toastState } from './recoil/status';
+import Sales from './page/Sales/Sales';
+import Calculate from './page/Calculate/Calculate';
 
 function App() {
+  const toast = useRecoilValue(toastState);
+
   return (
     <div className="App">
       {/* <HomeLoading /> */}
+      {
+        toast.visible ? <Toast /> : <></>
+      }
 
-      <Toast />
       <Menu />
 
       <div className="router">
@@ -28,6 +36,8 @@ function App() {
           <Route path='/brands?' element={<Brands/>}/>
           <Route path='/products?' element={<Products/>}/>
           <Route path='/orders?' element={<Orders/>}/>
+          <Route path='/sales?' element={<Sales/>}/>
+          <Route path='/calculate?' element={<Calculate/>}/>
         </Routes>
       </div>
     </div>
