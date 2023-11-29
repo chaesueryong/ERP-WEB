@@ -14,6 +14,7 @@ import { brandsPageState, toastState } from '../../recoil/status';
 
 import no_image_icon from '../../assets/images/no-image-icon.svg';
 
+
 function Brands() {
   const [searchParams, setSearchParams] = useSearchParams();
   const [toast, setToast] = useRecoilState(toastState);
@@ -30,7 +31,7 @@ function Brands() {
   const [brandList, setBrandList] = useState([]);
   const [search, setSearch] = useState('');
   const [filterList, setFilterList] = useState([]);
-  const [pageSize, setPageSize] = useState(30);
+  const [pageSize, setPageSize] = useState(50);
   const [page, setPage] = useState(0);
   const [data, setData] = useState({});
 
@@ -43,7 +44,7 @@ function Brands() {
     api.post(api.get_brand_list, {
       "search_text" : search_text, //검색어
       "categorys" : categorys, //카테고리
-      "orders" : ["nm_kr"], //오름차순- 내림차순 소팅 (컬럼명 적재 시 내림차순 적용)
+      "orders" : ["reg_dt_str"], //오름차순- 내림차순 소팅 (컬럼명 적재 시 내림차순 적용)
       // 브랜드 그룹 group_nm, 브랜드 명 nm_kr, 브랜드 코드 code, 거래처 코드 vendor_code, 거래처명 vendor_nm, 상품 카테고리 categorys
       // 제품유형 type, 등록일자 reg_dt_str
       
@@ -55,14 +56,8 @@ function Brands() {
       "use_yn":"Y"
     })
     .then(res => {
-      setBrandList(res.data.data.content.map((e,i)=>({
-        ...e,
-        categorys: e.categorys ? e.categorys.split(',').map(e => '#' + e).join(' ') : '',
-        brandImage: no_image_icon,
-        ID: i
-      }))
-      
-      )
+      setBrandList(res.data.data.content)
+      console.log(res.data.data.content)
       setData(res.data.data);
     }).catch(e => {
       alert('네트워크 에러')
@@ -73,57 +68,37 @@ function Brands() {
   }
 
   const addBrand = (modalValues) => {
-    api.post(api.add_brand, modalValues)
-      .then(res => {
-        if(res.data.status === false){
-          throw res.data.error;
-        }
+    console.log(modalValues.brandImage)
+    api.post(api.add_brand, {
+      ...modalValues,
+      category: modalValues['category'].map(e => e.name),
+      vendor: modalValues['vendor'].map(e => e.id),
+    })
+    .then(res => {
+      if(res.data.status === false){
+        throw res.data.error;
+      }
 
-        setToast({
-          visible: true,
-          type: 'success',
-          text: '브랜드 정보가 등록되었습니다.'
-        })
-
-        closeModal();
-        getBrandList();
-      }).catch(e=>{
-        alert('네트워크 에러')
-        console.log(e)
+      setToast({
+        visible: true,
+        type: 'success',
+        text: '브랜드 정보가 등록되었습니다.'
       })
+
+      closeModal();
+      getBrandList();
+    }).catch(e=>{
+      alert('네트워크 에러')
+      console.log(e)
+    })
   }
 
   const editBrand = (modalValues) => {
     api.post(api.put_brand, {
-      id : modalValues.id,
-
-      // nm_kr : modalValues.nm_kr,
-      // code : modalValues.code,
-      // sector: modalValues.sector,//공통 테이블 nm_en : 'SECTOR'
-      // owener: modalValues.owener,
-      // owener_phone: modalValues.owener_phone,
-      // manager: modalValues.manager,
-      // manager_phone: modalValues.manager_phone,
-      // crn: modalValues.crn, //사업자번호
-      // c_phone: modalValues.c_phone,
-      // c_fax: modalValues.c_fax,
-      // pay_method_c_id: modalValues.pay_method_c_id, //공통 테이블 nm_en : 'PAYMETHOD'
-      // c_account: modalValues.c_account,
-      // w_phone: modalValues.w_phone,
-      // w_b_phone: modalValues.w_b_phone,
-      // w_address: modalValues.w_address,
-      // bank_nm: modalValues.bank_nm, //공통 테이블 nm_en : 'BANK'
-      // bank_acc: modalValues.bank_acc,
-      // bank_owner: modalValues.bank_owner,
-      // l_address: modalValues.l_address,
-      // homepage: modalValues.homepage,
-      // descript: modalValues.descript,
-      // showOrder: modalValues.showOrder,
-      // etc: modalValues.etc,
-      
-      // brand: modalValues.brand.map(e => e.id),
-      
-      use_yn:"Y"
+      id: modalValues.id,
+      ...modalValues,
+      category: modalValues['category'].map(e => e.name),
+      vendor: modalValues['vendor'].map(e => e.id)
     })
     .then(res => {
       if(res.data.status === false){
@@ -177,7 +152,7 @@ function Brands() {
 
   // 페이지 네이션
   const handlePageClick = (number) => {
-    getBrandList(search, filterList, [], number);
+    applyParams({page: number + 1});
   }
   
   const onExporting = (e) => {
@@ -190,6 +165,7 @@ function Brands() {
   }
 
   const onRowDblClick = (e) => {
+    console.log(e.data)
     openModal(e.data);
   }
 
@@ -308,7 +284,9 @@ function Brands() {
   const observer = new IntersectionObserver(callback, options);
 
   const cellRender = (data) => {
-    return <img src={data.value} />;
+    return <img style={{width: '100%', height: '85px', objectFit: 'contain'}} src={data.value} onError={(e) => {
+      e.target.src = no_image_icon;
+    }} />;
   }
 
   const getCategory = async () => {
@@ -356,7 +334,11 @@ function Brands() {
         </div>
 
         <DataGrid
-          dataSource={brandList}
+          dataSource={brandList.map((e,i)=>({
+            ...e,
+            categorys: e.categorys ? e.categorys.split(',').map(e => '#' + e).join(' ') : '',
+            ID: i
+          }))}
           keyExpr="ID"
           allowColumnReordering={true}
           allowColumnResizing={true}
@@ -479,7 +461,7 @@ function Brands() {
           </div> : <></>
         }
         <div className='empty-target' ref={target}></div>
-        {/* <PageNation first={data.first} last={data.last} empty={data.empty} totalPage={data.totalPages} number={data.number} handlePageClick={handlePageClick} /> */}
+        <PageNation first={data.first} last={data.last} empty={data.empty} totalPage={data.totalPages} number={data.number} handlePageClick={handlePageClick} />
       </div>
 
       {

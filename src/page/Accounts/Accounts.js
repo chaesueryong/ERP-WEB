@@ -46,7 +46,7 @@ function Accounts() {
                   // 현 잔액 c_account, 팩스 c_fax, 도메주소 w_address, 
                   // 계좌번호 bank_acc, 홈페이지 homepage, 비고 etc, 
                   // 지급방식 pay_method, 등록일자 reg_dt_str
-      orders : ["manager"], //오름차순- 내림차순 소팅 (컬럼명 적재 시 내림차순 적용)
+      orders : ["nm_kr"], //오름차순- 내림차순 소팅 (컬럼명 적재 시 내림차순 적용)
                   // 업종분류 sector, 브랜드 수 brand_cnt,
                   // 대표자 owener, 대표자 연락처 owener_phone, 
                   // 담당자 manager, 담당자 연락처 manager_phone, 주소 l_address

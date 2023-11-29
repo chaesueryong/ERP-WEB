@@ -118,6 +118,7 @@
 }
 
 .options.category {
+    padding: 10px 0;
     flex-direction: row;
     justify-content: flex-start;
 }
@@ -142,4 +143,13 @@
     flex: 1;
     flex-wrap: wrap;
     overflow: hidden;
+}
+
+.item-category {
+    border: 1px solid #495057;
+    border-radius: 31px;
+    color: #495057;
+    padding: 5px;
+    font-size: 12px;
+    font-weight: 500;
 }

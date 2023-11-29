@@ -12,9 +12,9 @@ export const api = {
 
     get_brand_list: 'brand/page/get',
     get_brand: 'brand/get',
-    add_brand: 'vendor/addBrand',
-    put_brand: 'vendor/updateBrand',
-    delete_brand: 'vendor/deleteBrand',
+    add_brand: 'brand/addBrand',
+    put_brand: 'brand/updateBrand',
+    delete_brand: 'brand/deleteBrand',
 
     get_brand_category_list: 'brand/getCategory',
 

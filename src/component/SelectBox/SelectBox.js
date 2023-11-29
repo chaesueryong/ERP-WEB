@@ -107,7 +107,7 @@ function SelectBox({placeholder, emptyTitle, selectType, itemType, emptyButton, 
                         <div className='options category'  style={searchList.length !== 0 ? {display: 'flex'} : {display: 'none'}}>
                             {
                                 searchList.map((e, i) => (
-                                    <div key={i} onMouseDown={()=>handleOnClick(e)}>{e.name}</div>
+                                    <div className='item-category' key={i} onMouseDown={()=>handleOnClick(e)}>{e.name}</div>
                                 ))
                             }
                         </div>

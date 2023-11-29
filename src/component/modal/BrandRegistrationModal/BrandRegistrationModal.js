@@ -7,7 +7,6 @@ import { toastState } from '../../../recoil/status';
 import { useNavigate } from 'react-router-dom';
 import { api } from '../../../api/api';
 import UploadImage from '../../UploadImage/UploadImage';
-import { AsyncRule } from 'devextreme-react/data-grid';
 
 function BrandRegistrationModal({isModal, closeModal, addBrand, editBrand, setData}) {
   const [toast, setToast] = useRecoilState(toastState);
@@ -104,7 +103,7 @@ function BrandRegistrationModal({isModal, closeModal, addBrand, editBrand, setDa
   }
 
   const moveTo = () => {
-    navigate('/accounts?modal=open');
+    navigate('/accounts');
   }
 
   const getList = (text = '', id) => {
@@ -187,7 +186,10 @@ function BrandRegistrationModal({isModal, closeModal, addBrand, editBrand, setDa
   }
 
   const setBase64 = (base64) => {
-
+    setModalValues({
+      ...modalValues,
+      brandImage: base64
+    });
   }
 
   const handleChange = (e) => {
