@@ -1,16 +1,16 @@
 import { atom } from "recoil";
-import { recoilPersist } from "recoil-persist";
+// import { recoilPersist } from "recoil-persist";
 
-const { persistAtom } = recoilPersist({
-    key: 'localStorage',
-    storage: localStorage,
-})
+// const { persistAtom } = recoilPersist({
+//     key: 'localStorage',
+//     storage: localStorage,
+// })
 
 // example
 export const filterState = atom({
     key: "filterState",
     default: [],
-    effects_UNSTABLE: [persistAtom]
+    // effects_UNSTABLE: [persistAtom]
   })
 
 export const menuState = atom({
