@@ -12,7 +12,7 @@ function Toast() {
         setTimeout(() => {
             setToast({
                 visible: false,
-                text: '거래처 정보가 등록되었습니다.',
+                text: '',
                 type: 0
             });
         }, 1000);

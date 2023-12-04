@@ -1,6 +1,6 @@
 import '../modal.css';
 import x_button from '../../../assets/images/x-icon-1.svg';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import SelectBox from '../../SelectBox/SelectBox';
 import { Navigate, useNavigate } from 'react-router-dom';
 import { api } from '../../../api/api';
@@ -52,6 +52,11 @@ function AccountRegistrationModal({isModal, closeModal, addAccount, editAccount,
 
     const [brandList, setBrandList] = useState([]);
     const [brandInputText, setBrandInputText] = useState('');
+
+    const select1 = useRef(null);
+    const select2 = useRef(null);
+
+    const button = useRef(null);
 
     const handleOnClickButton = () => {
       if(modalValues.nm_kr === ''){
@@ -122,7 +127,7 @@ function AccountRegistrationModal({isModal, closeModal, addAccount, editAccount,
     }
 
     const moveTo = () => {
-      navigate('/brands?modal=open');
+      navigate('/brands');
     }
 
     const getList = (text = '', id) => {
@@ -175,16 +180,6 @@ function AccountRegistrationModal({isModal, closeModal, addAccount, editAccount,
       }
     }
 
-    // const brands = await Promise.all(accountBrandList.map( e=>
-    //    api.post(api.get_brand, {
-    //     "use_yn":"Y",
-    //     "size":10, 
-    //     "number":0,
-    //     "id": accountBrandList[i].brand_id
-    //   })
-    // ))
-
-    console.log(brList);
     setModalValues({
       ...setData,
       brand: brList
@@ -234,6 +229,28 @@ function AccountRegistrationModal({isModal, closeModal, addAccount, editAccount,
     setEditData();
   },[])
 
+  useEffect(() => {
+    if(select1.current.selectedIndex === 0){
+      select1.current.style.color = '#C0C7CE';
+    }else {
+      select1.current.style.color = 'black';
+    }
+
+    if(select2.current.selectedIndex === 0){
+      select2.current.style.color = '#C0C7CE';
+    }else {
+      select2.current.style.color = 'black';
+    }
+
+    if(modalValues.nm_kr === ''){
+      button.current.style.backgroundColor = '#F1F3F5';
+      button.current.style.color = '#C0C7CE';
+    }else {
+      button.current.style.backgroundColor = '#228BE6';
+      button.current.style.color = 'white';
+    }
+  },[modalValues])
+
     return (
     <div className="AccountRegistrationModal">
       <div className='modal' style={isModal ? {display: 'block'} : {display: 'none'}}>
@@ -265,7 +282,7 @@ function AccountRegistrationModal({isModal, closeModal, addAccount, editAccount,
                   </div>
                   <div className='modal-col-box'>
                     <div className='modal-col-box-title'>업종 분류</div>
-                    <select className='modal-col-box-input box-select' value={modalValues['sector']} onChange={e => {changeSelectBox(e, 'sector')}}>
+                    <select className='modal-col-box-input box-select' ref={select1} value={modalValues['sector']} onChange={e => {changeSelectBox(e, 'sector')}}>
                     <option value="" disabled>업종 선택</option>
                       {
                         sectors.map((e, i) => (
@@ -353,7 +370,7 @@ function AccountRegistrationModal({isModal, closeModal, addAccount, editAccount,
               <div className='modal-col'>
                 <div className='modal-col-box'>
                   <div className='modal-col-box-title'>입금 은행</div>
-                    <select className='modal-col-box-input box-select' value={modalValues['bank_nm']} onChange={ e => {changeSelectBox(e, 'bank_nm')}}>
+                    <select className='modal-col-box-input box-select' ref={select2} value={modalValues['bank_nm']} onChange={ e => {changeSelectBox(e, 'bank_nm')}}>
                     <option value="" disabled>거래 은행을 선택해 주세요</option>
                       {
                         banks.map((e, i) => (
@@ -438,7 +455,7 @@ function AccountRegistrationModal({isModal, closeModal, addAccount, editAccount,
             </div>
 
             <div className='modal-bottom-box'>
-              <div className='modal-button' onClick={handleOnClickButton}>{
+              <div className='modal-button' ref={button} onClick={handleOnClickButton}>{
                 setData === null ? '등록하기' : '수정하기'
               }</div>
             </div>

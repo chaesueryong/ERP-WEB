@@ -19,7 +19,8 @@ function Accounts() {
   const navigate = useNavigate();
   const [accountsPage, setAccountsPage] = useRecoilState(accountPageState);
   const [isLoading, setLoading] = useState(false);
-  const target = useRef(null);
+  const [target, setTarget] = useState('');
+  // const target = useRef(null);
 
   const [modalData, setModalData] = useState({});
 
@@ -27,7 +28,7 @@ function Accounts() {
   const [accountList, setAccountList] = useState([]);
   const [search, setSearch] = useState('');
   const [filterList, setFilterList] = useState(filters);
-  const [pageSize, setPageSize] = useState(10);
+  const [pageSize, setPageSize] = useState(20);
   const [page, setPage] = useState(0);
   const [data, setData] = useState({});
 
@@ -35,47 +36,53 @@ function Accounts() {
 
   const [isModal, setIsModal] = useState(false);
 
+  let totalPage = Infinity;
   let __page = 0;
  
-  const getAccountList = async (search_text = '', columns = [], orders = [], number = 0, pager = 50) => {
-    setLoading(true);
-    return await api.post(api.get_account_list, {
-      search_text : search_text, //검색어
-      columns : ['reg_dt_str'], //필터
-                  // 업종분류 sector, 브랜드 수 brand_cnt, 
-                  // 대표자 owener, 대표자 연락처 owener_phone, 
-                  // 담당자 manager, 담당자 연락처 manager_phone, 주소 l_address
-                  // 현 잔액 c_account, 팩스 c_fax, 도메주소 w_address, 
-                  // 계좌번호 bank_acc, 홈페이지 homepage, 비고 etc, 
-                  // 지급방식 pay_method, 등록일자 reg_dt_str
-      orders : ["reg_dt_str"], //오름차순- 내림차순 소팅 (컬럼명 적재 시 내림차순 적용)
-                  // 업종분류 sector, 브랜드 수 brand_cnt,
-                  // 대표자 owener, 대표자 연락처 owener_phone, 
-                  // 담당자 manager, 담당자 연락처 manager_phone, 주소 l_address
-                  // 거래처코드 code, 거래처 명 nm_kr 
-     
-      //"all" : "Y" // "all" :"Y" 인경우, 모든 데이터 가져오기
-      //"all" : "Y" // 넣지 않은 경우 페이징 처리.
+  const getAccountList = async (search_text = '', columns = [], orders = [], number = 0, pager = 20) => {
+    // setLoading(true);
+    try{
+      const result = await api.post(api.get_account_list, {
+        search_text : search_text, //검색어
+        columns : ['reg_dt_str'], //필터
+                    // 업종분류 sector, 브랜드 수 brand_cnt, 
+                    // 대표자 owener, 대표자 연락처 owener_phone, 
+                    // 담당자 manager, 담당자 연락처 manager_phone, 주소 l_address
+                    // 현 잔액 c_account, 팩스 c_fax, 도메주소 w_address, 
+                    // 계좌번호 bank_acc, 홈페이지 homepage, 비고 etc, 
+                    // 지급방식 pay_method, 등록일자 reg_dt_str
+        orders : ["reg_dt_str"], //오름차순- 내림차순 소팅 (컬럼명 적재 시 내림차순 적용)
+                    // 업종분류 sector, 브랜드 수 brand_cnt,
+                    // 대표자 owener, 대표자 연락처 owener_phone, 
+                    // 담당자 manager, 담당자 연락처 manager_phone, 주소 l_address
+                    // 거래처코드 code, 거래처 명 nm_kr 
+       
+        //"all" : "Y" // "all" :"Y" 인경우, 모든 데이터 가져오기
+        //"all" : "Y" // 넣지 않은 경우 페이징 처리.
+  
+        size: pager, //페이징 처리시 사이즈 크기
+        // number: number, // 페이징 인덱스(최초 0)
+        number: __page, // 페이징 인덱스(최초 0)
+        use_yn:"Y"
+      })
+      console.log(result.data.data.content)
+      const dataList = result.data.data.content;
 
-      size: pager, //페이징 처리시 사이즈 크기
-      // number: number, // 페이징 인덱스(최초 0)
-      number: __page, // 페이징 인덱스(최초 0)
-      use_yn:"Y"
-    }).then(res => {
+      setAccountList((prev) => {
+        dataList.map(e => prev.push(e))
 
-      setAccountList([...accountList, ...res.data.data.content.map((e,i)=>({
-        ...e,
-        ID: i
-      }))])
+        return prev;
+      })
 
+      console.log(accountList)
+      totalPage = result.data.data.totalPages;
+      setData(result.data.data);
+  
       __page++;
-
-    }).catch(e => {
-      alert('네트워크 에러')
-      console.log(e)
-    }).finally(()=>{
-      setLoading(false);
-    })
+    }catch(e){
+      alert(e);
+      console.log(e);
+    }
   }
 
   const addAccount = (modalValues) => {
@@ -241,36 +248,30 @@ function Accounts() {
     return obj;
   }
 
-  const callback = () => {
-    console.log(isLoading, page);
-    if(isLoading) return;
-
-    console.log('관측되었습니다')
-    // applyParams({
-    //   ...getParams(),
-    //   page: Number(page + 1)
-    // });
+  const onIntersect = async ([entry], observer) => {
+    if (entry.isIntersecting && !isLoading && totalPage > __page) {
+      console.log(totalPage, __page)
+      observer.unobserve(entry.target);
+      setLoading(true);
+      // 데이터를 가져오는 부분
+      await getAccountList();
+      setLoading(false);
+      observer.observe(entry.target);
+    }
   };
 
-  // const observer = new IntersectionObserver(callback, {
-    // threshold: 1.0,
-  // });
-
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach((entry) => {
-      if (!entry.isIntersecting) return;
-      if (isLoading) return;
-
-
-      getAccountList();  // 이렇게 해줘야 page 숫자가 올라간다.
-    });
-  });
-
   useEffect(() => {
-    observer.observe(target.current);
-
+    let observer;
+    if (target) {
+      // callback 함수, option
+      observer = new IntersectionObserver(onIntersect, {
+        threshold: 1,
+      });
+      observer.observe(target); // 타겟 엘리먼트 지정
+    }
     return () => observer && observer.disconnect();
-  },[])
+  }, [target]);
+
 
   return (
     <div className="Accounts">
@@ -307,6 +308,7 @@ function Accounts() {
           onRowDblClick={onRowDblClick}
           ref={dataGridRef}
           filterBuilder={filterBuilder}
+        
         >
           {/* <Export enabled={true} /> */}
           <Selection selectAllMod='allpages' showCheckBoxesMode='always' mode='multiple' />
@@ -353,6 +355,7 @@ function Accounts() {
                 key={i}
                 caption={e.name}
                 dataField={e.value}
+                alignment='left'
               >
                 <HeaderFilter visible={true} allowSelectAll={true}>
                   <Search enabled={true} />
@@ -372,7 +375,7 @@ function Accounts() {
           </div> : <></>
         }
 
-        <div className='empty-target' ref={target}></div>
+        <div className='empty-target' ref={setTarget}></div>
         {/* <PageNation first={data.first} last={data.last} empty={data.empty} totalPage={data.totalPages} number={data.number} handlePageClick={handlePageClick} /> */}
       </div>
       {

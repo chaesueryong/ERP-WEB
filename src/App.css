@@ -76,7 +76,7 @@
 .dx-datagrid-headers .dx-datagrid-table .dx-row > td {
   background-color: #F1F3F5;
   color: #495057;
-  font-weight: 600;
+  font-weight: 400;
 }
 
 .dx-datagrid-headers {
@@ -138,5 +138,5 @@
 .dx-datagrid .dx-row-lines > td {
   vertical-align: middle !important;
   text-align: center !important;
-  font-weight: 600;
+  font-weight: 400;
 }

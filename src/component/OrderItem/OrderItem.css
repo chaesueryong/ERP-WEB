@@ -1,0 +1,45 @@
+.OrderItem {
+    display: flex;
+    align-items: center;
+    height: 50px;
+    border: 1px solid #F1F3F5;
+    border-radius: 10px;
+    padding: 0 20px;
+    background-color: white;
+}
+
+.order-item-date {
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.order-item-image-box {
+    margin-left: 20px;
+    cursor: pointer;
+}
+
+.order-item-image {
+
+}
+
+
+.order-item-button-box {
+    display: flex;
+    gap: 15px;
+    margin-left: auto;
+}
+
+.order-item-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 10px;
+    border: 1px solid #228BE6;
+    background-color: #E7F5FF;
+    color: #228BE6;
+    font-size: 12px;
+    height: 30px;
+    font-weight: 500;
+    border-radius: 4px;
+    cursor: pointer;
+}

@@ -31,7 +31,7 @@ function ProductRegistrationModal({isModal, closeModal, addAccount}) {
       owener_phone: "",  // 대표자 연락처
       manager: "",  // 담당자 명
       manager_phone: "", // 담당자 연락처
-
+      brandImage: '',
 
   //
       w_phone: "",  // 도매 주문폰
@@ -81,6 +81,13 @@ function ProductRegistrationModal({isModal, closeModal, addAccount}) {
       }else {
           e.target.style.color = 'black';
       }
+    }
+
+    const setBase64 = (base64) => {
+      setModalValues({
+        ...modalValues,
+        brandImage: base64
+      });
     }
 
     return (
@@ -172,7 +179,7 @@ function ProductRegistrationModal({isModal, closeModal, addAccount}) {
               <div className='modal-col'>
                 <div className='modal-col-box'>
                   <div className='modal-col-box-title'>제품사진</div>
-                  <UploadImage />
+                  <UploadImage base64={modalValues['brandImage']} type={1}  setBase64={setBase64} />
                 </div>
               </div>
 

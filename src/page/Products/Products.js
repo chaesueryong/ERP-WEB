@@ -246,6 +246,7 @@ function Products() {
                 key={i}
                 caption={e.name}
                 dataField={e.value}
+                alignment='left'
               >
                 <HeaderFilter visible={true} allowSelectAll={true}>
                   <Search enabled={true} />

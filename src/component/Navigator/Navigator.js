@@ -53,6 +53,12 @@ function Navigator() {
       case '/orders':
         navigate(path + ordersPage.searchUrl);      
         break;
+      case '/sales':
+        navigate(path + ordersPage.searchUrl);    
+        break;
+      case '/calculate':
+        navigate(path + ordersPage.searchUrl);    
+        break;
       default:
         return;
     }
@@ -71,6 +77,12 @@ function Navigator() {
         break;
       case '/orders':
         current.name = '발주/반품 내역 조회';
+        break;
+      case '/sales':
+        current.name = '매출 관리';
+        break;
+      case '/calculate':
+        current.name = '정산 관리';
         break;
       default:
         return;

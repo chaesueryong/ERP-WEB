@@ -3,3 +3,31 @@
     flex-direction: column;
     flex: 1;
 }
+
+.filter-box {
+    margin: 33px 40px 0 33px;
+    padding-bottom: 30px;
+    border-bottom: 2px solid #D9D9D9;
+}
+
+.filter-title {
+    font-size: 32px;
+    font-weight: 600;
+    margin-bottom: 30px;
+}
+
+
+
+
+.grid-title {
+    font-size: 20px;
+    font-weight: 600;
+}
+
+
+
+.grid-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}

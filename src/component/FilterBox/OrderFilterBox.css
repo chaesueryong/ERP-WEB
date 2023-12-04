@@ -1,0 +1,141 @@
+.OrderFilterBox {
+    margin: 33px 40px 0 33px;
+    padding-bottom: 30px;
+    border-bottom: 2px solid #D9D9D9;
+}
+
+.order-filter-title {
+    font-size: 32px;
+    font-weight: 600;
+    margin-bottom: 30px;
+}
+
+
+.order-filter-switch-box {
+    display: flex;
+    margin-bottom: 40px;
+}
+
+.of-switch {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    height: 48px;
+    font-size: 16px;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+.of-switch-title {
+    display: flex;
+    align-items: center;
+    flex: 1;
+    padding: 0 20px;
+}
+
+.of-switch-under-bar {
+    width: 100%;
+    height: 2px;
+    background-color: black;
+}
+
+.of-bottom-box {
+    display: flex;
+    gap: 40px;
+}
+
+.of-bottom-left-box {
+
+}
+
+.ofbl-title {
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 10px;
+}
+
+.ofbl-select-box {
+    display: flex;
+    gap: 5px;
+}
+
+.ofbl-select {
+    border: 1px solid #ADB5BD;
+    border-radius: 5px;
+    width: 277px;
+    height: 45px;
+    padding: 0 10px;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.ofbl-selct-all {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid #ADB5BD;
+    border-radius: 5px;
+    width: 59px;
+    height: 45px;
+    box-sizing: border-box;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.ofbr-date-box {
+
+}
+
+.ofbr-date-box-1 {
+    display: flex;
+    flex-wrap: nowrap;
+    overflow: hidden;
+    gap: 10px;
+}
+
+.ofbr-date-title {
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 10px;
+}
+
+.ofbr-date-list-box {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.ofbr-date-list-box div {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 41px;
+    height: 34px;
+    white-space: nowrap;
+    font-size: 12px;
+    font-weight: 600;
+    border: 1px solid #ADB5BD;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+
+.ofbr-date-set-box {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    height: 45px;
+}
+
+.ofbr-date-set-box input {
+    height: 45px;
+    border: 1px solid #ADB5BD;
+    border-radius: 5px;
+    padding: 0 10px;
+    box-sizing: border-box;
+    font-size: 12px;
+    font-weight: 600;
+}

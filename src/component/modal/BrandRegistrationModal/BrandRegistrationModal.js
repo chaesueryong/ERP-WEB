@@ -1,6 +1,6 @@
 import '../modal.css';
 import x_button from '../../../assets/images/x-icon-1.svg';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import SelectBox from '../../SelectBox/SelectBox';
 import { useRecoilState } from 'recoil';
 import { toastState } from '../../../recoil/status';
@@ -36,6 +36,8 @@ function BrandRegistrationModal({isModal, closeModal, addBrand, editBrand, setDa
 
   const [customCategoryList, setCustomCategoryList] = useState([]);
 
+  const button = useRef(null);
+
   const getBrandList = (categoryText) => {
     api.post(api.get_brand_list, {
       "search_text" : '', //검색어
@@ -68,6 +70,16 @@ function BrandRegistrationModal({isModal, closeModal, addBrand, editBrand, setDa
 
   const handleOnClickButton = () => {
     if(modalValues.nm_kr === ''){
+      setToast({
+        visible: true,
+        type: 'error',
+        text: '필수 입력 항목을 입력해주세요. (* 표시)'
+      });
+
+      return;
+    }
+
+    if(modalValues.vendor.length === 0){
       setToast({
         visible: true,
         type: 'error',
@@ -299,6 +311,26 @@ function BrandRegistrationModal({isModal, closeModal, addBrand, editBrand, setDa
     setEditData();
   },[])
 
+  useEffect(() => {
+    if(modalValues.vendor.length === 0){
+      button.current.style.backgroundColor = '#F1F3F5';
+      button.current.style.color = '#C0C7CE';
+      return;
+    }else {
+      button.current.style.backgroundColor = '#228BE6';
+      button.current.style.color = 'white';
+    }
+
+    if(modalValues.nm_kr === ''){
+      button.current.style.backgroundColor = '#F1F3F5';
+      button.current.style.color = '#C0C7CE';
+      return;
+    }else {
+      button.current.style.backgroundColor = '#228BE6';
+      button.current.style.color = 'white';
+    }
+  },[modalValues])
+
     return (
     <div className="BrandRegistrationModal">
       <div className='modal' style={isModal ? {display: 'block'} : {display: 'none'}}>
@@ -363,7 +395,7 @@ function BrandRegistrationModal({isModal, closeModal, addBrand, editBrand, setDa
 
                 <div className='modal-col-box'>
                   <div className='modal-col-box-title'>&nbsp;</div>
-                  <UploadImage base64={modalValues['brandImage']} setBase64={setBase64} />
+                  <UploadImage base64={modalValues['brandImage']} leftBox={false} setBase64={setBase64} />
                 </div>
               </div>
 
@@ -387,11 +419,10 @@ function BrandRegistrationModal({isModal, closeModal, addBrand, editBrand, setDa
                 </div>
               </div>
 
-
             </div>
 
             <div className='modal-bottom-box'>
-              <div className='modal-button' onClick={handleOnClickButton}>
+              <div className='modal-button' ref={button} onClick={handleOnClickButton}>
               {
                 setData === null ? '등록하기' : '수정하기'
               }</div>

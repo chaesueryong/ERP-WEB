@@ -1,6 +1,6 @@
 import './App.css';
 import 'devextreme/dist/css/dx.light.css';
-import { Route, Routes } from 'react-router-dom';
+import { Route, Routes, useLocation } from 'react-router-dom';
 import Home from './page/Home/Home';
 import Menu from './component/Menu/Menu';
 import Navigator from './component/Navigator/Navigator';
@@ -17,10 +17,13 @@ import Calculate from './page/Calculate/Calculate';
 
 function App() {
   const toast = useRecoilValue(toastState);
+  const location = useLocation();
 
   return (
     <div className="App">
-      {/* <HomeLoading /> */}
+      {
+        location.pathname === '/' ? <HomeLoading /> : <></>
+      }
       {
         toast.visible ? <Toast /> : <></>
       }

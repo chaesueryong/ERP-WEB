@@ -31,9 +31,10 @@ function Tab({name, path, hover, search, img}) {
 
   return (
     <div className="Tab">
-        <div className={`tab ${location.pathname === '/' ? 'home' : ''} ${menu ? 'menu' : ''}`} onClick={() => {handleClick(path)}} onMouseOver={handleMouseOver} onMouseOut={handleMouseOut}>
+        {/* <div className={`tab ${location.pathname === '/' ? 'home' : ''} ${menu ? 'menu' : ''}`} onClick={() => {handleClick(path)}} onMouseOver={handleMouseOver} onMouseOut={handleMouseOut}> */}
+        <div className={`tab home`} style={menu ?  {width: 'auto'} :  {width: '100%'}} onClick={() => {handleClick(path)}} onMouseOver={handleMouseOver} onMouseOut={handleMouseOut}>
   
-          {
+          {/* {
             location.pathname === '/' ? 
             <div className='tab-img-home-box' style={!menu ? {width: '60px'} : {width: 'auto'}} >
               <div className={`tab-img-hover ${isHover ? 'hover' : ''}`}>{hover}</div>
@@ -44,7 +45,12 @@ function Tab({name, path, hover, search, img}) {
               <div className={`tab-img-hover ${isHover ? 'hover' : ''}`}>{hover}</div>
               <img className='tab-img' src={img} style={menu ? {display: 'block'} : {display: 'none'}} />
             </div>
-          }
+          } */}
+
+            <div className='tab-img-home-box' style={!menu ? {width: '60px'} : {width: 'auto'}} >
+              <div className={`tab-img-hover ${isHover ? 'hover' : ''}`}>{hover}</div>
+              <img src={img} />
+            </div>
           <div className={`tab-text ${location.pathname === '/' ? 'home' : ''} ${location.pathname === path.split('?')[0] ? 'on' : ''}`} style={menu ? {display: 'none'} : {display: 'block'}}>
             {name}
           </div>
