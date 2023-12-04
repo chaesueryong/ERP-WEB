@@ -30,7 +30,7 @@ export const toastState = atom({
 export const accountPageState = atom({
     key: 'accountPageState',
     default: {
-        searchUrl: '?page=1&pagesize=10'
+        searchUrl: ''
     }
 })
 

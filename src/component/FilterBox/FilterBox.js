@@ -19,7 +19,7 @@ function FilterBox({title, search_title, search, search_placeholder, filter_titl
                 <div className='check-title'>{filter_title}</div>
                 <div className='check-list' style={filter_box_border ? {} : {border: 'none', padding: '10px 0'}}>
                     {
-                        filterList.map((e, i)=><FilterItem key={i} name={e.name} isCheckButton={isCheckButton} defaultChecked={e.checked} handleClickCheckFilter={handleClickCheckFilter} />)
+                        filterList.filter(e => e.name !== '').map((e, i)=><FilterItem key={i} name={e.name} isCheckButton={isCheckButton} defaultChecked={e.checked} handleClickCheckFilter={handleClickCheckFilter} />)
                     }
                 </div>
             </div>

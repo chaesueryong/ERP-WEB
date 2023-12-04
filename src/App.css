@@ -5,7 +5,7 @@
 }
 
 .empty-target {
-  width: 0px;
+  width: 100%;
   overflow: hidden;
 }
 

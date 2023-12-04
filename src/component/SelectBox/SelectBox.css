@@ -121,10 +121,13 @@
     padding: 10px 0;
     flex-direction: row;
     justify-content: flex-start;
+    flex-wrap: wrap;
+    
 }
 
 .options div {
     cursor: pointer;
+    white-space: nowrap;
 }
 
 .select-box-left {

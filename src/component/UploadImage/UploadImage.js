@@ -17,14 +17,20 @@ function UploadImage({base64, setBase64}) {
 
     return (
         <div className="UploadImage">
-            <label className='upload-button' htmlFor='upload' style={base64 !== '' ? {display: 'none'} : {display: 'flex'}}>
-                <div>클릭하여</div>
-                <div>이미지 추가하기</div>
-            </label>
+            <div className='upload-image-box'>
+                <div className='image-text-box'></div>
+            </div>
+            <div className='upload-image-box'>
 
-            <img className='preview' src={base64}  style={base64 !== '' ? {display: 'inline'} : {display: 'none'}} />
+                <label className='upload-button' htmlFor='upload' style={base64 !== '' ? {display: 'none'} : {display: 'flex'}}>
+                    <div>클릭하여</div>
+                    <div>이미지 추가하기</div>
+                </label>
 
-            <input id='upload' className='upload' type='file' accept='image/*' onChange={onUploadImage} />
+                <img className='preview' src={base64}  style={base64 !== '' ? {display: 'inline'} : {display: 'none'}} />
+
+                <input id='upload' className='upload' type='file' accept='image/*' onChange={onUploadImage} />
+            </div>
         </div>
     );
 }

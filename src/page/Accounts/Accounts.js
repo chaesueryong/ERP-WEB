@@ -27,26 +27,28 @@ function Accounts() {
   const [accountList, setAccountList] = useState([]);
   const [search, setSearch] = useState('');
   const [filterList, setFilterList] = useState(filters);
-  const [pageSize, setPageSize] = useState(50);
+  const [pageSize, setPageSize] = useState(10);
   const [page, setPage] = useState(0);
   const [data, setData] = useState({});
 
   const dataGridRef = useRef(null);
 
   const [isModal, setIsModal] = useState(false);
+
+  let __page = 0;
  
-  const getAccountList = (search_text = '', columns = [], orders = [], number = 0, pager = 50) => {
+  const getAccountList = async (search_text = '', columns = [], orders = [], number = 0, pager = 50) => {
     setLoading(true);
-    api.post(api.get_account_list, {
+    return await api.post(api.get_account_list, {
       search_text : search_text, //검색어
-      columns : ['nm_kr'], //필터
+      columns : ['reg_dt_str'], //필터
                   // 업종분류 sector, 브랜드 수 brand_cnt, 
                   // 대표자 owener, 대표자 연락처 owener_phone, 
                   // 담당자 manager, 담당자 연락처 manager_phone, 주소 l_address
                   // 현 잔액 c_account, 팩스 c_fax, 도메주소 w_address, 
                   // 계좌번호 bank_acc, 홈페이지 homepage, 비고 etc, 
                   // 지급방식 pay_method, 등록일자 reg_dt_str
-      orders : ["nm_kr"], //오름차순- 내림차순 소팅 (컬럼명 적재 시 내림차순 적용)
+      orders : ["reg_dt_str"], //오름차순- 내림차순 소팅 (컬럼명 적재 시 내림차순 적용)
                   // 업종분류 sector, 브랜드 수 brand_cnt,
                   // 대표자 owener, 대표자 연락처 owener_phone, 
                   // 담당자 manager, 담당자 연락처 manager_phone, 주소 l_address
@@ -56,16 +58,18 @@ function Accounts() {
       //"all" : "Y" // 넣지 않은 경우 페이징 처리.
 
       size: pager, //페이징 처리시 사이즈 크기
-      number: number, // 페이징 인덱스(최초 0)
+      // number: number, // 페이징 인덱스(최초 0)
+      number: __page, // 페이징 인덱스(최초 0)
       use_yn:"Y"
     }).then(res => {
-      console.log(accountList)
-      setAccountList(res.data.data.content.map((e,i)=>({
+
+      setAccountList([...accountList, ...res.data.data.content.map((e,i)=>({
         ...e,
         ID: i
-      })))
+      }))])
 
-      setData(res.data.data);
+      __page++;
+
     }).catch(e => {
       alert('네트워크 에러')
       console.log(e)
@@ -193,6 +197,7 @@ function Accounts() {
   }
 
   const applyParams = (params = {}) => {
+    // console.log(params);
     for (const [key, value] of Object.entries(params)) {
       if(value === ''){
         searchParams.delete(key);
@@ -201,22 +206,22 @@ function Accounts() {
       }
     }
 
-    setSearchParams(searchParams);
+    // setSearchParams(searchParams);
     const _searchText = params.search || '';
     const _filterList = params.filters;
     const _pageSize = params.pagesize || pageSize;
-    const _page = params.page || page;
-    console.log(_page)
+    const _page = params.page || page + 1;
+    console.log(__page);
     setSearch(_searchText);
     setPageSize(_pageSize);
-    setPage(_page);
+    setPage(Number(_page));
 
     setAccountsPage({
       ...accountsPage,
       searchUrl: '?' + decodeURI(searchParams.toString())
     });
 
-    getAccountList(_searchText, [], [], _page - 1, _pageSize);
+    getAccountList(_searchText, [], [], page, pageSize);
   }
 
   const getParams = () => {
@@ -236,24 +241,35 @@ function Accounts() {
     return obj;
   }
 
-  const options = {
-    threshold: 1.0,
-  };
-
   const callback = () => {
-    // if(isLoading) return;
+    console.log(isLoading, page);
+    if(isLoading) return;
 
     console.log('관측되었습니다')
     // applyParams({
-    //   page: Number(_page) + 1
+    //   ...getParams(),
+    //   page: Number(page + 1)
     // });
   };
 
-  const observer = new IntersectionObserver(callback, options);
+  // const observer = new IntersectionObserver(callback, {
+    // threshold: 1.0,
+  // });
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      if (!entry.isIntersecting) return;
+      if (isLoading) return;
+
+
+      getAccountList();  // 이렇게 해줘야 page 숫자가 올라간다.
+    });
+  });
 
   useEffect(() => {
     observer.observe(target.current);
-    applyParams(getParams());
+
+    return () => observer && observer.disconnect();
   },[])
 
   return (
@@ -337,7 +353,6 @@ function Accounts() {
                 key={i}
                 caption={e.name}
                 dataField={e.value}
-                alignment='left'
               >
                 <HeaderFilter visible={true} allowSelectAll={true}>
                   <Search enabled={true} />

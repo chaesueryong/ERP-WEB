@@ -1,14 +1,20 @@
 import '../modal.css';
 import x_button from '../../../assets/images/x-icon-1.svg';
 import { useState } from 'react';
+import SelectBox from '../../SelectBox/SelectBox';
+import { useNavigate } from 'react-router-dom';
+import UploadImage from '../../UploadImage/UploadImage';
 
 function ProductRegistrationModal({isModal, closeModal, addAccount}) {
+  const navigate = useNavigate();
+
   const [modalValues, setModalValues] = useState({
       nm_kr: "", // 거래처명
       code: "",  // 거래처 코드
       sector: "", // 업종
 
       brand: [], //옵션
+      vendor: [],
 
       l_address: "",  // 주소
       crn: "", //사업자등록번호
@@ -42,6 +48,12 @@ function ProductRegistrationModal({isModal, closeModal, addAccount}) {
      use_yn: "Y"
     })
 
+    const [accountInputText, setAccountInputText] = useState('');
+    const [accountList, setAccountList] = useState([]);
+
+    const [brandInputText, setBrandInputText] = useState('');
+    const [brandList, setBrandList] = useState([]); 
+
     // 모달 값 변경 이벤트
     const handleOnChange = (e, target) => {
       const values = modalValues;
@@ -52,6 +64,9 @@ function ProductRegistrationModal({isModal, closeModal, addAccount}) {
       })
     }
 
+    const moveTo = () => {
+      navigate('/accounts');
+    }
     // 모달 값 변경 이벤트
     const changeSelectBox = (e, target) => {
       const values = modalValues;
@@ -89,26 +104,38 @@ function ProductRegistrationModal({isModal, closeModal, addAccount}) {
               <div className='modal-col'>
                 <div className='modal-col-box'>
                   <div className='modal-col-box-title'>*거래처</div>
-                  <input className='modal-col-box-input' placeholder='거래처 명을 검색하세요' value={modalValues['brand']} onChange={e => {
-                    handleOnChange(e, 'brand');
-                  }}/>
-                </div>
-
-                <div className='modal-col-box' style={{flexDirection: 'row', gap: '15px'}}>
-
+                  <SelectBox 
+                    placeholder='거래처 명을 검색하세요' 
+                    emptyTitle='매칭되는 거래처가 없습니다' 
+                    emptyButton='거래처 등록하기'
+                    inputText={accountInputText}
+                    // handleChange={handleChange}
+                    searchList={accountList}
+                    selectType='vendor'
+                    itemType={0}
+                    addList={modalValues['vendor']}
+                    // handleClickItem={handleClickItem}
+                    // handleDeleteItem={handleDeleteItem}
+                    handleClickButton={moveTo} />
                 </div>
               </div>
 
               <div className='modal-col'>
                 <div className='modal-col-box'>
                   <div className='modal-col-box-title'>*브랜드</div>
-                  <input className='modal-col-box-input' placeholder='브랜드 명을 검색하세요' value={modalValues['brand']} onChange={e => {
-                    handleOnChange(e, 'brand');
-                  }}/>
-                </div>
-
-                <div className='modal-col-box' style={{flexDirection: 'row', gap: '15px'}}>
-
+                  <SelectBox 
+                    placeholder='브랜드 명을 검색하세요' 
+                    emptyTitle='매칭되는 브랜드가 없습니다' 
+                    emptyButton='브랜드 등록하기'
+                    inputText={brandInputText}
+                    // handleChange={handleChange}
+                    searchList={brandList}
+                    selectType='brand'
+                    itemType={0}
+                    addList={modalValues['brand']}
+                    // handleClickItem={handleClickItem}
+                    // handleDeleteItem={handleDeleteItem}
+                    handleClickButton={moveTo} />
                 </div>
               </div>
 
@@ -145,13 +172,7 @@ function ProductRegistrationModal({isModal, closeModal, addAccount}) {
               <div className='modal-col'>
                 <div className='modal-col-box'>
                   <div className='modal-col-box-title'>제품사진</div>
-                  <input className='modal-col-box-input' value={modalValues['brand']} onChange={e => {
-                    handleOnChange(e, 'brand');
-                  }}/>
-                </div>
-
-                <div className='modal-col-box' style={{flexDirection: 'row', gap: '15px'}}>
-
+                  <UploadImage />
                 </div>
               </div>
 

@@ -5,7 +5,7 @@ function FilterItem({name, isCheckButton=true, defaultChecked, handleClickCheckF
   return (
     <div className="FilterItem">
         <input id={name} className={`${isCheckButton ? 'check-filter' : 'filter'}`} type='checkbox' style={isCheckButton ? {} : {display: 'none'}} onChange={handleClickCheckFilter} checked={defaultChecked} />
-        <label htmlFor={name} className={`${isCheckButton ? 'check-filter' : 'filter'}`}><span>{name}</span></label>
+        <label htmlFor={name} className={`${isCheckButton ? 'check-filter' : 'filter'}`}><span>{name === '' ? '빈값' : name}</span></label>
     </div>
   );
 }

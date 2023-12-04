@@ -11,7 +11,11 @@ function Tab({name, path, hover, search, img}) {
   const [isHover, setIsHover] = useState(false);
 
   const handleClick = (path) => {
-    navigate(path + search);
+    if(search === ''){
+      navigate(path + search);
+    }else{
+      navigate(path);
+    }
   }
 
   const handleMouseOver = () => {
@@ -27,21 +31,21 @@ function Tab({name, path, hover, search, img}) {
 
   return (
     <div className="Tab">
-        <div className={`tab ${location.pathname === '/' ? 'home' : ''} ${menu ? 'menu' : ''}`} onClick={() => {handleClick(path)}}>
+        <div className={`tab ${location.pathname === '/' ? 'home' : ''} ${menu ? 'menu' : ''}`} onClick={() => {handleClick(path)}} onMouseOver={handleMouseOver} onMouseOut={handleMouseOut}>
   
           {
             location.pathname === '/' ? 
-            <div className='tab-img-home-box' style={!menu ? {width: '60px'} : {width: 'auto'}}>
+            <div className='tab-img-home-box' style={!menu ? {width: '60px'} : {width: 'auto'}} >
               <div className={`tab-img-hover ${isHover ? 'hover' : ''}`}>{hover}</div>
-              <img onMouseOver={handleMouseOver} onMouseOut={handleMouseOut} src={img} />
+              <img src={img} />
             </div> 
             : 
             <div className='tab-img-box'>
               <div className={`tab-img-hover ${isHover ? 'hover' : ''}`}>{hover}</div>
-              <img className='tab-img' onMouseOver={handleMouseOver} onMouseOut={handleMouseOut} src={img} style={menu ? {display: 'block'} : {display: 'none'}} />
+              <img className='tab-img' src={img} style={menu ? {display: 'block'} : {display: 'none'}} />
             </div>
           }
-          <div className={`tab-text ${location.pathname === '/' ? 'home' : ''} ${location.pathname === path ? 'on' : ''}`} style={menu ? {display: 'none'} : {display: 'block'}}>
+          <div className={`tab-text ${location.pathname === '/' ? 'home' : ''} ${location.pathname === path.split('?')[0] ? 'on' : ''}`} style={menu ? {display: 'none'} : {display: 'block'}}>
             {name}
           </div>
         </div>

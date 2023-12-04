@@ -56,8 +56,14 @@ function Brands() {
       "use_yn":"Y"
     })
     .then(res => {
-      setBrandList(res.data.data.content)
-      console.log(res.data.data.content)
+      const _brandList = res.data.data.content.map(e => ({
+        ...e,
+        categorys: e.categorys ? e.categorys.split(',') : [],
+        vendor: e.vendor ? e.vendor : [],
+      }))
+
+      setBrandList(_brandList)
+
       setData(res.data.data);
     }).catch(e => {
       alert('네트워크 에러')
@@ -68,10 +74,10 @@ function Brands() {
   }
 
   const addBrand = (modalValues) => {
-    console.log(modalValues.brandImage)
+    console.log(modalValues)
     api.post(api.add_brand, {
       ...modalValues,
-      category: modalValues['category'].map(e => e.name),
+      categorys: modalValues['categorys'].map(e => e.name).join(","),
       vendor: modalValues['vendor'].map(e => e.id),
     })
     .then(res => {
@@ -94,10 +100,11 @@ function Brands() {
   }
 
   const editBrand = (modalValues) => {
+    console.log(modalValues);
     api.post(api.put_brand, {
       id: modalValues.id,
       ...modalValues,
-      category: modalValues['category'].map(e => e.name),
+      categorys: modalValues['categorys'].map(e => e.name).join(","),
       vendor: modalValues['vendor'].map(e => e.id)
     })
     .then(res => {
@@ -124,6 +131,7 @@ function Brands() {
 
   const openModal = (data = null) => {
     document.querySelector('html').style.overflow = 'hidden';
+    console.log(data);
     setModalData(data);
     setIsModal(true)
   }
@@ -164,9 +172,8 @@ function Brands() {
     getBrandList(search, filterList, [], 0, e.target.value);
   }
 
-  const onRowDblClick = (e) => {
-    console.log(e.data)
-    openModal(e.data);
+  const onRowDblClick = (target) => {
+    openModal(brandList.filter(e => e.id === target.data.id)[0]);
   }
 
   const applyParams = (params = {}) => {
@@ -218,7 +225,6 @@ function Brands() {
     const _pageSize = params.pagesize || pageSize;
     const _page = params.page || page;
 
-    console.log(filterList)
     setSearch(_searchText);
     setFilterList([...filterList.map((e, i) => {
 
@@ -239,6 +245,13 @@ function Brands() {
     });
 
     getBrandList(_searchText, _filterList, [], _page - 1, _pageSize);
+  }
+
+  const addCategory = (name) => {
+    setModalData({
+      ...modalData,
+      category: modalData['category']
+    })
   }
 
   const getParams = () => {
@@ -264,7 +277,6 @@ function Brands() {
       return; 
     });
 
-    console.log(obj)
     return obj;
   }
 
@@ -296,8 +308,8 @@ function Brands() {
       name: e,
       checked: false
     }));
-
-    setFilterList(arr)
+    console.log(arr);
+    setFilterList([...arr])
   }
 
   const init = async () => {
@@ -336,7 +348,7 @@ function Brands() {
         <DataGrid
           dataSource={brandList.map((e,i)=>({
             ...e,
-            categorys: e.categorys ? e.categorys.split(',').map(e => '#' + e).join(' ') : '',
+            categorys: e.categorys ? e.categorys.map(e => '#' + e).join(' ') : '',
             ID: i
           }))}
           keyExpr="ID"

@@ -23,7 +23,7 @@ function BrandRegistrationModal({isModal, closeModal, addBrand, editBrand, setDa
       showOrder: 1, //1
       etc: "",
       vendor: [], // [23,24]
-      category: [], //[15,16,17],
+      categorys: [], //[15,16,17],
 
       use_yn: "Y"
     })
@@ -33,6 +33,38 @@ function BrandRegistrationModal({isModal, closeModal, addBrand, editBrand, setDa
 
   const [categoryList, setCategoryList] = useState([]);
   const [categoryInputText, setCategoryInputText] = useState('');
+
+  const [customCategoryList, setCustomCategoryList] = useState([]);
+
+  const getBrandList = (categoryText) => {
+    api.post(api.get_brand_list, {
+      "search_text" : '', //검색어
+      "categorys" : [categoryText],
+      "orders" : ["reg_dt_str"],
+
+      "size": 10,
+      "number": 0,
+      "use_yn":"Y"
+    })
+    .then(res => {
+      const _brandList = res.data.data.content;
+      if(_brandList.length === 0){
+        setCategoryList([]);
+      }else{
+
+        // 검색 확인 중~~~~~~~~~~~~~~~~~~~~
+        // const _getCategory = _brandList.map()
+        setCategoryList([{
+          name: categoryText,
+          checked: false
+        }]);
+      }
+
+    }).catch(e => {
+      alert('네트워크 에러')
+      console.log(e)
+    })
+  }
 
   const handleOnClickButton = () => {
     if(modalValues.nm_kr === ''){
@@ -145,8 +177,21 @@ function BrandRegistrationModal({isModal, closeModal, addBrand, editBrand, setDa
       }
     });
 
-    setCategoryList(arr);
+    setCategoryList([...arr, ...customCategoryList]);
   }
+
+  const handleRegistryCategory = (name) => {
+    setCategoryInputText('');
+
+    customCategoryList.push({
+      name: name,
+      checked: false
+    })
+
+    setCustomCategoryList(customCategoryList)
+
+    getCategoryList();
+  } 
 
   const setEditData = async () => {
     if(setData === null){
@@ -177,10 +222,15 @@ function BrandRegistrationModal({isModal, closeModal, addBrand, editBrand, setDa
     }
 
     console.log(acList);
-    getCategoryList(setData.category);
+    console.log(setData)
+    getCategoryList(setData.categorys);
 
     setModalValues({
       ...setData,
+      categorys: setData['categorys'].map(e => ({
+        name: e,
+        checked: false
+      })),
       vendor: acList
     });
   }
@@ -192,17 +242,32 @@ function BrandRegistrationModal({isModal, closeModal, addBrand, editBrand, setDa
     });
   }
 
-  const handleChange = (e) => {
-    setAccountInputText(e.target.value);
+  const handleChange = (e, selectType) => {
 
-    if(e.target.value === ''){
-      setAccountInputText([]);
-    }else{
-      getList(e.target.value);
+    switch(selectType){
+      case 'vendor':
+        setAccountInputText(e.target.value)
+        if(e.target.value === ''){
+          setAccountList([]);
+        }else{
+          getList(e.target.value);
+        }
+        break;
+      case 'categorys':
+        setCategoryInputText(e.target.value)
+        if(e.target.value === ''){
+          getCategoryList([]);
+        }else{
+          getBrandList(e.target.value);
+        }
+        break;  
+      default:
+        break; 
     }
   }
 
   const handleClickItem = (e, selectType = null) => {
+
     switch(selectType){
       case 'vendor':
         setAccountInputText(e.nm_kr);
@@ -212,8 +277,8 @@ function BrandRegistrationModal({isModal, closeModal, addBrand, editBrand, setDa
           ...modalValues
         })
         break;
-      case 'category':
-        modalValues['category'].push(e);
+      case 'categorys':
+        modalValues['categorys'].push(e);
         setModalValues({
           ...modalValues
         })
@@ -312,11 +377,12 @@ function BrandRegistrationModal({isModal, closeModal, addBrand, editBrand, setDa
                     inputText={categoryInputText}
                     handleChange={handleChange}
                     searchList={categoryList}
-                    selectType='category'
+                    selectType='categorys'
                     itemType={1}
-                    addList={modalValues['category']}
+                    addList={modalValues['categorys']}
                     handleClickItem={handleClickItem}
                     handleDeleteItem={handleDeleteItem}
+                    handleRegistryCategory={handleRegistryCategory}
                     handleClickButton={moveTo} />
                 </div>
               </div>

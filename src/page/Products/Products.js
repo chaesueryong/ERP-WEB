@@ -104,31 +104,14 @@ function Products() {
 
   // 페이지 상단 필터 박스 클릭 이벤트
   const handleClickCheckFilter = (e) => {
-    const arr = filter;
-    if(e.target.checked){
-      for(let i = 0; i < filterList.length; i++){
-        if(filterList[i].name === e.target.id){
-          arr.push(filterList[i].value);
-          break;
-        }
+    for(let i = 0; i < filterList.length; i++){
+      if(filterList[i].name === e.target.id){
+        filterList[i].checked = e.target.checked;
+        break;
       }
-    }else{
-      let removeTarget = '';
-      for(let i = 0; i < filterList.length; i++){
-        if(filterList[i].name === e.target.id ){
-          removeTarget = filterList[i].value;
-        }
-      }
-
-      for(let j = 0; j < arr.length; j++){
-        if(arr[j] === removeTarget){
-          arr.splice(j, 1);
-        }
-      }
-    
     }
-    setFilter([...arr]);
-    console.log(arr)
+
+    setFilterList([...filterList]);
   }
 
   // 페이지 네이션
@@ -172,13 +155,13 @@ function Products() {
             {/* <ButtonNormal name='상품 관리 바로가기' bg_color='#E9ECEF' color='black' /> */}
           </div>
           <div className='list-button-right'>
-            <div className='render-count-title'>페이지당 항목수</div>
+            {/* <div className='render-count-title'>페이지당 항목수</div>
             <select className='render-count' onChange={changePager}>
               <option value='10'>10</option>
               <option value='30'>30</option>
               <option value='50'>50</option>
               <option value='100'>100</option>
-            </select>
+            </select> */}
             {/* <ButtonNormal name='인쇄' bg_color='#E9ECEF' color='black' /> */}
             <ButtonNormal name='엑셀 내려받기' bg_color='#20C997' color='white' handleClick={onExporting} />
           </div>
@@ -253,22 +236,18 @@ function Products() {
 
           
           {
-            filter.map((e, i) => {
-              let caption = '';
-              for(let i = 0; i < filterList.length; i++){
-                if(filterList[i].value === e){
-                  caption = filterList[i].name;
-                }
+            filterList.map((e, i) => {
+              if(filterList[i].checked === false){
+                return;
               }
 
               return (
                 <Column 
                 key={i}
-                caption={caption}
-                dataField={e}
-                alignment='left'
+                caption={e.name}
+                dataField={e.value}
               >
-                <HeaderFilter visible={true} allowSelectAll={false}>
+                <HeaderFilter visible={true} allowSelectAll={true}>
                   <Search enabled={true} />
                 </HeaderFilter>
               </Column>
@@ -294,15 +273,15 @@ function Products() {
 export default Products;
 
 const filters = [
-  {name: '제품사진', value: 'sector', default: true},
-  {name: '컬러', value: 'brand_cnt', default: true},
-  {name: '사이즈', value: 'owener', default: true},
-  {name: '시즌', value: 'owener_phone', default: true},
-  {name: '마지막 입고일자', value: 'manager', default: true},
-  {name: '상품 분류', value: 'manager_phone', default: true},
-  {name: '원가', value: 'l_address'},
-  {name: '공급가', value: 'c_account'},
-  {name: '부가세', value: 'c_fax'},
-  {name: '소비자가', value: 'w_address'},
-  {name: '기타', value: 'bank_acc'},
+  {name: '제품사진', value: 'sector', checked: true},
+  {name: '컬러', value: 'brand_cnt', checked: true},
+  {name: '사이즈', value: 'owener', checked: true},
+  {name: '시즌', value: 'owener_phone', checked: true},
+  {name: '마지막 입고일자', value: 'manager', checked: true},
+  {name: '상품 분류', value: 'manager_phone', checked: true},
+  {name: '원가', value: 'l_address', checked: false},
+  {name: '공급가', value: 'c_account', checked: false},
+  {name: '부가세', value: 'c_fax', checked: false},
+  {name: '소비자가', value: 'w_address', checked: false},
+  {name: '기타', value: 'bank_acc', checked: false},
 ];
