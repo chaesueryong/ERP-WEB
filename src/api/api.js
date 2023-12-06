@@ -9,6 +9,7 @@ export const api = {
     add_account: 'vendor/addVendor',
     put_account: 'vendor/updateVendor',
     delete_account: 'vendor/deleteVendor',
+    account_excel_download: '/vendor/excel/download',
 
     get_brand_list: 'brand/page/get',
     get_brand: 'brand/get',
@@ -26,8 +27,9 @@ export const api = {
     post: (url, data, config) => {
         return axios.post(baseUrl + url, data, {
             headers: {
-                jwt_token
-            }
+                jwt_token,
+            },
+            ...config
           });
     }
 }

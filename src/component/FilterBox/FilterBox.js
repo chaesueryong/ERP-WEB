@@ -12,7 +12,7 @@ function FilterBox({title, search_title, search, search_placeholder, filter_titl
         <div className='filter'>
             <div className='search-box' style={search_title ? {} : {display: 'none'}}>
                 <div className='input-title'>{search_title}</div>
-                <input className='input-box' value={search} placeholder={search_placeholder} onChange={handleChangeSearch}></input>
+                <input className='input-box' defaultValue={search} placeholder={search_placeholder} onKeyUp={handleChangeSearch}></input>
             </div>
 
             <div className='check-box'>

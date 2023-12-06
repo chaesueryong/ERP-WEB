@@ -146,16 +146,17 @@ function Brands() {
     }
 
     setFilterList([...filterList]);
-
+    console.log(search)
     applyParams({
-      filters: filterList.filter(e => e.checked)
+      search: search,
+      filters: filterList.filter(e => e.checked).map(e => e.name)
     });
   }
 
 
   const handleChangeSearch = (e) => {
     setSearch(e.target.value);
-    getBrandList(e.target.value, filterList, [], 0, pageSize)
+    getBrandList(e.target.value, filterList.filter(e => e.checked).map(e => e.name), [], 0, pageSize)
   }
 
   // 페이지 네이션
@@ -186,16 +187,16 @@ function Brands() {
           }else{
             const _value = value.reduce((a, c, i) => {
               if(i === 0){
-                if(c.name === undefined){
+                if(c === undefined){
                   return c;
                 }else {
-                  return c.name;
+                  return c;
                 }
               }else {
-                if(c.name === undefined){
+                if(c === undefined){
                   return a + '_' + c;
                 }else {
-                  return a + '_' + c.name;
+                  return a + '_' + c;
                 }
               }
             }, '')
@@ -315,6 +316,7 @@ function Brands() {
   const init = async () => {
     observer.observe(target.current);
     getCategory();
+
     applyParams(getParams());
   }
 
@@ -377,7 +379,6 @@ function Brands() {
           <Column 
             caption="로고"
             dataField="brandImage"
-            fixed={true}
             width={100}
             cellRender={cellRender}
           >
@@ -389,7 +390,6 @@ function Brands() {
           <Column 
             caption="브랜드 그룹"
             dataField="group_nm"
-            fixed={true}
           >
             <HeaderFilter visible={true} allowSelectAll={false}>
               <Search enabled={true} />

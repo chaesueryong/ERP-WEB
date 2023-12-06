@@ -150,11 +150,11 @@ function BrandRegistrationModal({isModal, closeModal, addBrand, editBrand, setDa
     navigate('/accounts');
   }
 
-  const getList = (text = '', id) => {
+  const getAccountList = (text = '', id) => {
     api.post(api.get_account_list, {
         search_text : text, //검색어
         columns : ['nm_kr'], //카테고리
-        orders : ["manager"], //오름차순- 내림차순 소팅 (컬럼명 적재 시 내림차순 적용)
+        orders : ["reg_dt_str"], //오름차순- 내림차순 소팅 (컬럼명 적재 시 내림차순 적용)
                     // 브랜드 그룹 group_nm, 브랜드 명 nm_kr, 브랜드 코드 code, 거래처 코드 vendor_code, 거래처명 vendor_nm, 상품 카테고리 categorys
                     // 제품유형 type, 등록일자 reg_dt_str
     
@@ -262,7 +262,7 @@ function BrandRegistrationModal({isModal, closeModal, addBrand, editBrand, setDa
         if(e.target.value === ''){
           setAccountList([]);
         }else{
-          getList(e.target.value);
+          getAccountList(e.target.value);
         }
         break;
       case 'categorys':

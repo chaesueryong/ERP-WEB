@@ -113,16 +113,28 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    gap: 10px;
     padding: 20px;
 }
+
+.option {
+    padding: 5px;
+    width: 100%;
+    text-align: center;
+}
+
+.option.focus {
+    background-color: gray;
+}
+
+/* .option:hover {
+    background-color: gray;
+} */
 
 .options.category {
     padding: 10px 0;
     flex-direction: row;
     justify-content: flex-start;
     flex-wrap: wrap;
-    
 }
 
 .options div {
