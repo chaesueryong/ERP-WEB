@@ -8,6 +8,9 @@ function SelectBox({placeholder, emptyTitle, selectType, itemType, emptyButton, 
     const [inputFocus, setInputFocus] = useState(false);
 
     const [categoryInput, setCategoryInput] = useState('');
+    const [focusIndex, setFocusIndex] = useState(-1);
+
+    const inputRef = useRef(null);
 
     const optionBoxRef = useRef(null);
 
@@ -18,16 +21,43 @@ function SelectBox({placeholder, emptyTitle, selectType, itemType, emptyButton, 
     }
 
     // const handleOnBlur = (e) => {
+    //     console.log(e);
     //     setInputFocus(false);
     // }
 
     const handleOnClick = (e) => {
-        handleClickItem(e, selectType);
+        inputRef.current.blur();
         setInputFocus(false);
+        handleClickItem(e, selectType);
     }
 
     const handleOnChange = (e) => {
         handleChange(e, selectType);
+        console.log(e.key);
+
+        if(e.key === 'Enter'){
+            handleOnClick(searchList[focusIndex]);
+        }
+
+        if(e.key === 'ArrowUp'){
+            setFocusIndex(prev => {
+                if(prev <= 0){
+                    return searchList.length - 1;
+                }else{
+                    return prev - 1;
+                }
+            });
+        }
+
+        if(e.key === 'ArrowDown'){
+            setFocusIndex(prev => {
+                if(prev >= searchList.length - 1){
+                    return 0;
+                }else{
+                    return prev + 1;
+                }
+            });
+        }
     }
 
     const handleOnDeleteItem = (e) => {
@@ -63,10 +93,20 @@ function SelectBox({placeholder, emptyTitle, selectType, itemType, emptyButton, 
     }
 
     const handleClickOutside = (e) => {
+
+        if(e.target.id === 'option'){
+            return;
+        }
+
+        if(e.target.className === 'select-input-box'){
+            return;
+        }
+
         if (optionBoxRef && !optionBoxRef.current.contains(e.target)) {
             setInputFocus(false);
         }else {
             setInputFocus(true);
+            console.log(true)
         }
     }
 
@@ -84,8 +124,9 @@ function SelectBox({placeholder, emptyTitle, selectType, itemType, emptyButton, 
                 defaultValue={inputText} 
                 // onBlur={handleOnBlur}
                 onFocus={handleOnFocus}
+                ref={inputRef}
                 placeholder={placeholder}
-                onChange={handleOnChange} />
+                onKeyUp={handleOnChange} />
             {
                 selectType !== 'categorys' ?
                 <div className='options-box' ref={optionBoxRef} style={inputFocus ? {display: 'block'}: {display: 'none'}}>
@@ -98,7 +139,7 @@ function SelectBox({placeholder, emptyTitle, selectType, itemType, emptyButton, 
                         <div className='options'  style={searchList.length !== 0 ? {display: 'flex'} : {display: 'none'}}>
                             {
                                 searchList.map((e, i) => (
-                                    <div key={i} onMouseDown={()=>handleOnClick(e)}>{e.nm_kr}</div>
+                                    <div id='option' className={`option ${focusIndex === i ? 'focus': ''}`} key={i} onMouseDown={()=>handleOnClick(e)}>{e.nm_kr}</div>
                                 ))
                             }
                         </div>
@@ -117,7 +158,7 @@ function SelectBox({placeholder, emptyTitle, selectType, itemType, emptyButton, 
                         <div className='options category'  style={searchList.length !== 0 ? {display: 'flex'} : {display: 'none'}}>
                             {
                                 searchList.filter(e => e.name !== '').map((e, i) => (
-                                    <div className='item-category' key={i} onMouseDown={()=>handleOnClick(e)}>{e.name}</div>
+                                    <div className={`item-category ${e.checked ? 'checked': ''}`} key={i} onMouseDown={()=>handleOnClick(e)}>{e.name}</div>
                                 ))
                             }
                         </div>

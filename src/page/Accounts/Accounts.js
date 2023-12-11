@@ -8,9 +8,16 @@ import { api } from '../../api/api';
 import PageNation from '../../component/PageNation/PageNation';
 import AccountRegistrationModal from '../../component/modal/AccountRegistrationModal/AccountRegistrationModal';
 import { useLocation, useNavigate, useSearchParams } from 'react-router-dom';
-import { common } from '../../utils/common';
 import { useRecoilState } from 'recoil';
 import { accountPageState, toastState } from '../../recoil/status';
+import { debounce } from 'lodash';
+
+let totalPage = Infinity;
+
+let _isLoading = false;
+let _accountList = [];
+let _search = '';
+let _page = 0;
 
 function Accounts() {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -18,9 +25,7 @@ function Accounts() {
   const location = useLocation();
   const navigate = useNavigate();
   const [accountsPage, setAccountsPage] = useRecoilState(accountPageState);
-  const [isLoading, setLoading] = useState(false);
   const [target, setTarget] = useState('');
-  // const target = useRef(null);
 
   const [modalData, setModalData] = useState({});
 
@@ -28,23 +33,20 @@ function Accounts() {
   const [accountList, setAccountList] = useState([]);
   const [search, setSearch] = useState('');
   const [filterList, setFilterList] = useState(filters);
-  const [pageSize, setPageSize] = useState(20);
+  const [pageSize, setPageSize] = useState(10);
+  const [orders, setOrders] = useState([]);
   const [page, setPage] = useState(0);
   const [data, setData] = useState({});
 
   const dataGridRef = useRef(null);
 
   const [isModal, setIsModal] = useState(false);
-
-  let totalPage = Infinity;
-  let __page = 0;
  
-  const getAccountList = async (search_text = '', columns = [], orders = [], number = 0, pager = 20) => {
-    // setLoading(true);
+  const getAccountList = async (columns = [], orders = []) => {
     try{
       const result = await api.post(api.get_account_list, {
-        search_text : search_text, //검색어
-        columns : ['reg_dt_str'], //필터
+        search_text : _search, //검색어
+        columns : ['nm_kr'], //필터
                     // 업종분류 sector, 브랜드 수 brand_cnt, 
                     // 대표자 owener, 대표자 연락처 owener_phone, 
                     // 담당자 manager, 담당자 연락처 manager_phone, 주소 l_address
@@ -60,27 +62,24 @@ function Accounts() {
         //"all" : "Y" // "all" :"Y" 인경우, 모든 데이터 가져오기
         //"all" : "Y" // 넣지 않은 경우 페이징 처리.
   
-        size: pager, //페이징 처리시 사이즈 크기
-        // number: number, // 페이징 인덱스(최초 0)
-        number: __page, // 페이징 인덱스(최초 0)
+        size: pageSize, //페이징 처리시 사이즈 크기
+        number: _page, // 페이징 인덱스(최초 0)
         use_yn:"Y"
       })
-      console.log(result.data.data.content)
+
       const dataList = result.data.data.content;
+    
+      dataList.map((e,i) => _accountList.push({
+        ...e,
+        ID: i + _page * pageSize
+      }))
 
-      setAccountList((prev) => {
-        dataList.map(e => prev.push(e))
+      setAccountList([..._accountList]);
 
-        return prev;
-      })
-
-      console.log(accountList)
       totalPage = result.data.data.totalPages;
-      setData(result.data.data);
   
-      __page++;
+      _page++;
     }catch(e){
-      alert(e);
       console.log(e);
     }
   }
@@ -98,8 +97,10 @@ function Accounts() {
         text: '거래처 정보가 등록되었습니다.'
       })
       closeModal();
+      _page = 0;
+      _accountList = [];
       getAccountList();
-    }).catch(e=>{
+    }).catch(e => {
       console.log(e)
     })
   }
@@ -110,7 +111,7 @@ function Accounts() {
 
       nm_kr : modalValues.nm_kr,
       code : modalValues.code,
-      sector: modalValues.sector,//공통 테이블 nm_en : 'SECTOR'
+      sector: modalValues.sector,
       owener: modalValues.owener,
       owener_phone: modalValues.owener_phone,
       manager: modalValues.manager,
@@ -118,12 +119,12 @@ function Accounts() {
       crn: modalValues.crn, //사업자번호
       c_phone: modalValues.c_phone,
       c_fax: modalValues.c_fax,
-      pay_method_c_id: modalValues.pay_method_c_id, //공통 테이블 nm_en : 'PAYMETHOD'
+      pay_method_c_id: modalValues.pay_method_c_id, 
       c_account: modalValues.c_account,
       w_phone: modalValues.w_phone,
       w_b_phone: modalValues.w_b_phone,
       w_address: modalValues.w_address,
-      bank_nm: modalValues.bank_nm, //공통 테이블 nm_en : 'BANK'
+      bank_nm: modalValues.bank_nm, 
       bank_acc: modalValues.bank_acc,
       bank_owner: modalValues.bank_owner,
       l_address: modalValues.l_address,
@@ -140,6 +141,9 @@ function Accounts() {
       if(res.data.status === false){
         throw res.data.error;
       }
+      _page = 0;
+      _accountList = [];
+
       setToast({
         visible: true,
         type: 'success',
@@ -148,7 +152,7 @@ function Accounts() {
 
       closeModal();
       getAccountList();
-    }).catch(e=>{
+    }).catch(e => {
       console.log(e)
     })
   }
@@ -177,90 +181,139 @@ function Accounts() {
   }
 
   const onExporting = (e) => {
-    common.exportExcel(e, dataGridRef);
-  }
+    // common.exportExcel(e, dataGridRef);
+    api.post(api.account_excel_download, {
+      "search_text" : search, //검색어
+      "columns" : filterList.filter(e => e.checked).map(e => e.value), //필터
+                  // 업종분류 sector, 브랜드 수 brand_cnt, 대표자 owener, 대표자 연락처 owener_phone, 담당자 manager, 담당자 연락처 manager_phone, 주소 l_address
+                  // 현 잔액 c_account, 팩스 c_fax, 도메주소 w_address, 계좌번호 bank_acc, 홈페이지 homepage, 비고 etc, 지급방식 pay_method, 등록일자 reg_dt_str
+      "orders" : [], //오름차순- 내림차순 소팅 (컬럼명 적재 시 내림차순 적용)
+                  // 업종분류 sector, 브랜드 수 brand_cnt, 대표자 owener, 대표자 연락처 owener_phone, 담당자 manager, 담당자 연락처 manager_phone, 주소 l_address
+                  // 거래처코드 code, 거래처 명 nm_kr 
+      "use_yn":"Y"
+    }, {
+      responseType: "blob",
+    })
+    .then(res => {
+      if(res.data.status === false){
+        throw res.data.error;
+      }
+  
+      const url = window.URL.createObjectURL(new Blob([res.data]));
+      const link = document.createElement("a");
+      link.href = url;
+      link.setAttribute("download", res.headers['excel-name']);
+      link.style.cssText = "display:none";
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
 
-  const handleChangeSearch = (e) => {
-    applyParams({
-      search: e.target.value,
-      page: 1
-    });
-  }
-
-  // 페이지 네이션
-  const handlePageClick = (number) => {
-    applyParams({page: number + 1});
-  }  
-
-  const changePageSize = (e) => {
-    applyParams({
-      page: 1,
-      pagesize: e.target.value
+    }).catch(e => {
+      console.log(e)
     })
   }
+
+  const handleChangeSearch = debounce((e) => {
+    setSearch(e.target.value);
+    _search = e.target.value;
+    _page = 0;
+    _accountList = [];
+    getAccountList();
+  }, 500)
+
+  // // 페이지 네이션
+  // const handlePageClick = (number) => {
+  //   applyParams({page: number + 1});
+  // }  
+
+  // const changePageSize = (e) => {
+  //   applyParams({
+  //     page: 1,
+  //     pagesize: e.target.value
+  //   })
+  // }
 
   const onRowDblClick = (e) => {
     openModal(e.data);
   }
 
-  const applyParams = (params = {}) => {
-    // console.log(params);
-    for (const [key, value] of Object.entries(params)) {
-      if(value === ''){
-        searchParams.delete(key);
-      }else{
-        searchParams.set(key, value);
-      }
-    }
-
-    // setSearchParams(searchParams);
-    const _searchText = params.search || '';
-    const _filterList = params.filters;
-    const _pageSize = params.pagesize || pageSize;
-    const _page = params.page || page + 1;
-    console.log(__page);
-    setSearch(_searchText);
-    setPageSize(_pageSize);
-    setPage(Number(_page));
-
-    setAccountsPage({
-      ...accountsPage,
-      searchUrl: '?' + decodeURI(searchParams.toString())
-    });
-
-    getAccountList(_searchText, [], [], page, pageSize);
+  const onCellClick = (e) => {
+    console.log(e)
   }
 
-  const getParams = () => {
-    let searchString;
-    if(location.search === ''){
-      searchString = accountsPage.searchUrl.substring(1);
-    }else {
-      searchString = location.search.substring(1);
-    }
+  // const applyParams = (params = {}) => {
+  //   // console.log(params);
+  //   for (const [key, value] of Object.entries(params)) {
+  //     if(value === ''){
+  //       searchParams.delete(key);
+  //     }else{
+  //       searchParams.set(key, value);
+  //     }
+  //   }
 
-    const obj = {};
-    searchString.split('&').map(e => {
-      const keyValue = e.split('=');
-      obj[keyValue[0]] = keyValue[1];
-    });
+  //   // setSearchParams(searchParams);
+  //   const _searchText = params.search || '';
+  //   const _filterList = params.filters;
+  //   const _pageSize = params.pagesize || pageSize;
+  //   const _page = params.page || page + 1;
+  //   console.log(__page);
+  //   setSearch(_searchText);
+  //   setPageSize(_pageSize);
+  //   setPage(Number(_page));
 
-    return obj;
+  //   setAccountsPage({
+  //     ...accountsPage,
+  //     searchUrl: '?' + decodeURI(searchParams.toString())
+  //   });
+
+  //   getAccountList(_searchText, [], [], page, pageSize);
+  // }
+
+  // const getParams = () => {
+  //   let searchString;
+  //   if(location.search === ''){
+  //     searchString = accountsPage.searchUrl.substring(1);
+  //   }else {
+  //     searchString = location.search.substring(1);
+  //   }
+
+  //   const obj = {};
+  //   searchString.split('&').map(e => {
+  //     const keyValue = e.split('=');
+  //     obj[keyValue[0]] = keyValue[1];
+  //   });
+
+  //   return obj;
+  // }
+
+  const onPositionSortingChanged = (e) => {
+    console.log(e)
   }
 
   const onIntersect = async ([entry], observer) => {
-    if (entry.isIntersecting && !isLoading && totalPage > __page) {
-      console.log(totalPage, __page)
+    if (entry.isIntersecting && !_isLoading && totalPage > _page) {
       observer.unobserve(entry.target);
-      setLoading(true);
+      _isLoading = true;
       // 데이터를 가져오는 부분
       await getAccountList();
-      setLoading(false);
+      _isLoading = false;
       observer.observe(entry.target);
     }
   };
 
+  const setDefault = () => {
+    totalPage = Infinity;
+
+    _isLoading = false;
+    _accountList = [];
+    _search = '';
+    _page = 0;
+  }
+
   useEffect(() => {
+    if(search !== ''){
+      return;
+    }
     let observer;
     if (target) {
       // callback 함수, option
@@ -269,8 +322,11 @@ function Accounts() {
       });
       observer.observe(target); // 타겟 엘리먼트 지정
     }
-    return () => observer && observer.disconnect();
-  }, [target]);
+    return () => {
+      observer && observer.disconnect()
+      setDefault();
+    };
+  }, [target, search]);
 
 
   return (
@@ -306,9 +362,9 @@ function Accounts() {
           showRowLines={true}
           hoverStateEnabled={true}
           onRowDblClick={onRowDblClick}
+          onCellClick={onCellClick}
           ref={dataGridRef}
           filterBuilder={filterBuilder}
-        
         >
           {/* <Export enabled={true} /> */}
           <Selection selectAllMod='allpages' showCheckBoxesMode='always' mode='multiple' />
@@ -319,8 +375,8 @@ function Accounts() {
           {/* <FilterRow visible={true} /> */}
           {/* <FilterPanel visible={true} /> */}
 
-          <Pager visible={false} />
-          <Paging pageSize={pageSize} />
+          {/* <Pager visible={false} /> */}
+          <Paging pageSize={accountList.length} />
           <Sorting mode="multiple" />
           <ColumnFixing enabled={true} />
 
@@ -330,13 +386,13 @@ function Accounts() {
             <Column
               caption="코드"
               dataField="code"
-              sortOrder=""
+              allowSorting={onPositionSortingChanged}
             >
             </Column>
             <Column
               caption="거래처명"
               dataField="nm_kr"
-              sortOrder=""
+              allowSorting={onPositionSortingChanged}
             >
               <HeaderFilter visible={true} allowSelectAll={true}>
                 <Search enabled={true} />
@@ -356,6 +412,7 @@ function Accounts() {
                 caption={e.name}
                 dataField={e.value}
                 alignment='left'
+                allowSorting={onPositionSortingChanged}
               >
                 <HeaderFilter visible={true} allowSelectAll={true}>
                   <Search enabled={true} />
@@ -368,7 +425,7 @@ function Accounts() {
         </DataGrid>
 
         {
-          !isLoading ? 
+          !_isLoading ? 
           
           <div>
             {/* <div>loading</div> */}

@@ -163,3 +163,93 @@
 /* ******** */
 /* 모달 CSS */
 /* ******** */
+
+
+.order-item {
+    margin: 20px 0 50px 0;
+}
+
+.order-item div {
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.order-list {
+
+}
+
+.total-data-box {
+    display: flex;
+    align-items: center;
+    height: 25px;
+    background-color: #E9ECEF;
+}
+
+.note-box {
+    display: flex;
+    align-items: center;
+    height: 50px;
+    padding: 0 10px;
+}
+
+.note-text {
+    font-size: 12px;
+    font-weight: 500;
+    margin: 0 20px;
+}
+
+.note-input {
+    border: none ;
+    font-size: 12px;
+    padding: 10px 10px;
+    flex: 1;
+    height: 36px;
+    background-color: #F8F9FA;
+    box-sizing: border-box;
+}
+
+.order-button {
+   background-color: #228BE6;
+   color: white;
+}
+
+.order-success-image {
+    width: 45px;
+}
+
+.order-text {
+    font-size: 24px;
+    font-weight: 600;
+    margin: 20px 0 30px 0;
+}
+
+.order-button-box {
+    display: flex;
+    gap: 20px;
+    height: 45px;
+}
+
+.order-cancel {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    font-weight: 400;
+    border: 1px solid black;
+    border-radius: 10px;
+    width: 104px;
+    cursor: pointer;
+}
+
+.order-shortcuts {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    font-weight: 400;
+    background-color: #228BE6;
+    color: white;
+    border-radius: 10px;
+    width: 134px;
+    cursor: pointer;
+}

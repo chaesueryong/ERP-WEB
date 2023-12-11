@@ -19,8 +19,6 @@ function Menu() {
   const productsPage = useRecoilValue(productsPageState);
   const ordersPage = useRecoilValue(ordersPageState);
 
-  const pageSize = 10;
-
   return (
     <div className="Menu">
       <div className={`menu-left ${menu ? 'on' : ''}`}>
@@ -29,9 +27,9 @@ function Menu() {
           window.location.href = '/';
         }}/>
 
-        <Tab name="거래처 관리" hover='거래처 관리' path={`/accounts`} search={accountsPage.searchUrl} img={account_icon} />
-        <Tab name="브랜드 관리" hover='브랜드 관리' path={`/brands?page=1&pagesize=${pageSize}`} search={brandsPage.searchUrl} img={brand_icon} />
-        <Tab name="상품관리" hover='상품 관리' path={`/products?page=1&pagesize=${pageSize}`} search={productsPage.searchUrl} img={good_icon} />
+        <Tab name="거래처 관리" hover='거래처 관리' path='/accounts' search={accountsPage.searchUrl} img={account_icon} />
+        <Tab name="브랜드 관리" hover='브랜드 관리' path='/brands' search={brandsPage.searchUrl} img={brand_icon} />
+        <Tab name="상품관리" hover='상품 관리' path='/products' search={productsPage.searchUrl} img={good_icon} />
         <Tab name='발주/반품 내역' hover='발주/반품 내역' path='/orders' search={ordersPage.searchUrl} img={order_icon} />
         <Tab name="매출관리" hover='매출 관리' path='/sales' search={ordersPage.searchUrl} img={sales_icon} />
         <Tab name="정산관리" hover='정산' path='/calculate' search={ordersPage.searchUrl} img={calculate_icon} />

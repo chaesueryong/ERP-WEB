@@ -134,7 +134,7 @@ function AccountRegistrationModal({isModal, closeModal, addAccount, editAccount,
       api.post(api.get_brand_list, {
           "search_text" : text, //검색어
           "categorys" : [], //카테고리
-          "orders" : ["nm_kr"], //오름차순- 내림차순 소팅 (컬럼명 적재 시 내림차순 적용)
+          "orders" : ["reg_dt_str"], //오름차순- 내림차순 소팅 (컬럼명 적재 시 내림차순 적용)
                       // 브랜드 그룹 group_nm, 브랜드 명 nm_kr, 브랜드 코드 code, 거래처 코드 vendor_code, 거래처명 vendor_nm, 상품 카테고리 categorys
                       // 제품유형 type, 등록일자 reg_dt_str
       
