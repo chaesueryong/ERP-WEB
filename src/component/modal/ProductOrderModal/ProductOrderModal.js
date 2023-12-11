@@ -1,125 +1,243 @@
 import '../modal.css';
 import x_button from '../../../assets/images/x-icon-1.svg';
+import success_icon from '../../../assets/images/success-check-icon.svg';
+import extension_icon from '../../../assets/images/extension-icon.svg';
 import { useState } from 'react';
+import ProductOrderItem from '../../ProductOrderItem/ProductOrderItem';
 
-function ProductOrderModal({isModal, closeModal, addAccount}) {
-  const [modalValues, setModalValues] = useState({
-      nm_kr: "", // 거래처명
-      code: "",  // 거래처 코드
-      sector: "", // 업종
+function ProductOrderModal({isModal, isConfirmModal, closeModal, closeConfirmModal, registrationOrder, orderShortCut}) {
+    const [orderList, setOrderList] = useState([]);
 
-      brand: [], //옵션
+    const [extension, setExtension] = useState(false);
 
-      l_address: "",  // 주소
-      crn: "", //사업자등록번호
-      c_phone: "",// 사업자 전화번호
-      c_fax: "",  // 사업자 택스번호
-
-      pay_method: "계좌이체",   // 지급방식
-      c_account: "",  // 현재잔액
-      bank_nm: "",  // 입금은행명
-      bank_acc: "",   // 계좌번호
-      bank_owner: "",  // 예금주
-
-      owener: "",  // 대표자 명
-      owener_phone: "",  // 대표자 연락처
-      manager: "",  // 담당자 명
-      manager_phone: "", // 담당자 연락처
-
-
-  //
-      w_phone: "",  // 도매 주문폰
-      w_b_phone: "", // 도매 계산서 전화번호
-      w_address: "",  // 도매주소
-
-      homepage: "",  // 홈페이지
-      descript: "",  // 비고
-  //
-
-      showOrder: 1,
-
-      etc: "",  // 비고
-     use_yn: "Y"
-    })
-
-    // 모달 값 변경 이벤트
-    const handleOnChange = (e, target) => {
-      const values = modalValues;
-
-      values[target] = e.target.value;
-      setModalValues({
-        ...values,
-      })
-    }
-
-    // 모달 값 변경 이벤트
-    const changeSelectBox = (e, target) => {
-      const values = modalValues;
-
-      values[target] = e.target.value;
-      setModalValues({
-        ...values,
-      })
-
-      if(e.target.selectedIndex === 0){
-          e.target.style.color = '#C0C7CE';
-      }else {
-          e.target.style.color = 'black';
-      }
+    const toggleExtension = () => {
+      setExtension(prev => !prev);
     }
 
     return (
         <div className="ProductOrderModal">
-      <div className='modal' style={isModal ? {display: 'block'} : {display: 'none'}}>
-        <div className='modal-bg'></div>
-        <div className='modal-content-box'>
-          <div className='modal-content'>
+          <div className='modal' style={isModal ? {display: 'block'} : {display: 'none'}}>
+            <div className='modal-bg' onClick={closeModal}></div>
+            <div className='modal-content-box' style={extension ? {width: '1000px'} : {width: '600px'}}>
+              <div className='modal-content'>
 
-            <div className='modal-top-box'>
-              <div className='modal-title'>상품 발주</div>
-              <img style={{cursor: 'pointer'}} src={x_button} onClick={closeModal} />
-            </div>
+                <div className='modal-top-box'>
+                  <div className='modal-title'>상품 발주</div>
+                  <img style={{cursor: 'pointer'}} src={extension_icon} onClick={toggleExtension} />
+                </div>
 
-            <div className='modal-middle-box'>
+                <div className='modal-middle-box'>
+                  {
+                    !extension ? 
+                    <>
+                      <div className='order-item'>
+                        <div>
+                          1.상품명상품명상품명상품명상품명상품명상품명상품명
+                        </div>
+                        <div>black / XL</div>
+                      </div>
 
+                      <div className='order-item'>
+                        <div>
+                          1.상품명상품명상품명상품명상품명상품명상품명상품명
+                        </div>
+                        <div>black / XL</div>
+                      </div>
 
-            </div>
+                      <div className='order-item'>
+                        <div>
+                          1.상품명상품명상품명상품명상품명상품명상품명상품명
+                        </div>
+                        <div>black / XL</div>
+                      </div>
+                    </>
+                    :
+                    <div className='order-list'>
+                      {
+                        _orderList.map((e, i) => (
+                          <ProductOrderItem key={i} data={e} />
+                        ))
+                      }
+                    </div>
+                  }
+                  
+                </div>
 
-            <div className='modal-bottom-box'>
-              <div className='modal-button' onClick={()=>{
-                addAccount(modalValues);
-              }}>발주 등록</div>
+                <div className='modal-bottom-box' style={{height: 'auto'}}>
+                  <div style={extension ? {display: 'block'} : {display: 'none'}}>
+                    <div className='total-data-box'>
+                      <div className='total-text'>총 합계</div>
+                      <div className='total-order'>600</div>
+                      <div className='total-price'>2001165416843</div>
+                    </div>
+
+                    <div className='note-box'>
+                      <div className='note-text'>비고</div>
+                      <input className='note-input' />
+                    </div>
+                  </div>
+
+                  <div className='modal-button order-button' onClick={registrationOrder}>발주 등록</div>
+                </div>
+              </div>
             </div>
           </div>
-        </div>
-      </div>
+
+          <div className='modal' style={isConfirmModal ? {display: 'block'} : {display: 'none'}}>
+            <div className='modal-bg' style={{opacity: '0'}}></div>
+            <div className='modal-content-box' style={{width: '680px', height: '257px'}}>
+              <div className='modal-content' style={{alignItems: 'center', justifyContent: 'center'}}>
+
+                <img className='order-success-image' alt='' src={success_icon} />
+                <div className='order-text'>상품 발주가 완료되었습니다.</div>
+                <div className='order-button-box'>
+                  <div className='order-cancel' onClick={closeConfirmModal}>닫기</div>
+                  <div className='order-shortcuts' onClick={orderShortCut}>발주내역 바로가기</div>
+                </div>  
+
+              </div>
+            </div>
+          </div>
         </div>
     );
 }
 
 export default ProductOrderModal;
 
-const sectors = [
-  {name: '도매', value: '도매'},
-  {name: '소매', value: '소매'},
-  {name: '수입', value: '수입'},
-]
 
-const banks = [
-  {name: 'NH농협', value: 'NH농협'},
-  {name: '카카오뱅크', value: '카카오뱅크'},
-  {name: 'KB국민', value: 'KB국민'},
-  {name: '신한', value: '신한'},
-  {name: '토스뱅크', value: '토스뱅크'},
-  {name: '우리', value: '우리'},
-  {name: 'IBK기업', value: 'IBK기업'},
-  {name: '하나', value: '하나'},
-  {name: '새마을', value: '새마을'},
-  {name: '케이뱅크', value: '케이뱅크'},
-  {name: '신협', value: '신협'},
-  {name: '우체국', value: '우체국'},
-  {name: 'SC제일', value: 'SC제일'},
-  {name: '씨티은행', value: '씨티은행'},
-  {name: 'KDB산업은행', value: 'KDB산업은행'},
-  {name: 'SBI저축은행', value: 'SBI저축은행'},
+const _orderList = [
+  {
+    name: '애프터 컴퍼니',
+    amount: '261,100',
+    list: [
+      {
+        ID: 1,
+        name: '상품명품명품명품명',
+        season: 'SS',
+        color: 'Black',
+        size: 'Free',
+        rhdrmq: '30000',
+        gusworh: '0',
+        orderCount: 100,
+        amount: 38000000
+      },
+      {
+        ID: 1,
+        name: '상품명품명품명품명',
+        season: 'SS',
+        color: 'Black',
+        size: 'Free',
+        rhdrmq: '30000',
+        gusworh: '0',
+        orderCount: 100,
+        amount: 38000000
+      },
+      {
+        ID: 1,
+        name: '상품명품명품명품명',
+        season: 'SS',
+        color: 'Black',
+        size: 'Free',
+        rhdrmq: '30000',
+        gusworh: '0',
+        orderCount: 100,
+        amount: 38000000
+      },
+      {
+        ID: 1,
+        name: '상품명품명품명품명',
+        season: 'SS',
+        color: 'Black',
+        size: 'Free',
+        rhdrmq: '30000',
+        gusworh: '0',
+        orderCount: 100,
+        amount: 38000000
+      },
+    ]
+  },
+  {
+    name: '애프터 컴퍼니',
+    amount: '261,100',
+    list: [
+      {
+        ID: 1,
+        name: '상품명품명품명품명',
+        season: 'SS',
+        color: 'Black',
+        size: 'Free',
+        rhdrmq: '30000',
+        gusworh: '0',
+        orderCount: 100,
+        amount: 38000000
+      },
+      {
+        ID: 1,
+        name: '상품명품명품명품명',
+        season: 'SS',
+        color: 'Black',
+        size: 'Free',
+        rhdrmq: '30000',
+        gusworh: '0',
+        orderCount: 100,
+        amount: 38000000
+      },
+    ]
+  },
+  {
+    name: '애프터 컴퍼니',
+    amount: '261,100',
+    list: [
+      {
+        ID: 1,
+        name: '상품명품명품명품명',
+        season: 'SS',
+        color: 'Black',
+        size: 'Free',
+        rhdrmq: '30000',
+        gusworh: '0',
+        orderCount: 100,
+        amount: 38000000
+      },
+      {
+        ID: 1,
+        name: '상품명품명품명품명',
+        season: 'SS',
+        color: 'Black',
+        size: 'Free',
+        rhdrmq: '30000',
+        gusworh: '0',
+        orderCount: 100,
+        amount: 38000000
+      },
+    ]
+  },
+  {
+    name: '애프터 컴퍼니',
+    amount: '261,100',
+    list: [
+      {
+        ID: 1,
+        name: '상품명품명품명품명',
+        season: 'SS',
+        color: 'Black',
+        size: 'Free',
+        rhdrmq: '30000',
+        gusworh: '0',
+        orderCount: 100,
+        amount: 38000000
+      },
+      {
+        ID: 1,
+        name: '상품명품명품명품명',
+        season: 'SS',
+        color: 'Black',
+        size: 'Free',
+        rhdrmq: '30000',
+        gusworh: '0',
+        orderCount: 100,
+        amount: 38000000
+      },
+    ]
+  }
 ]

@@ -27,7 +27,6 @@ function Accounts() {
   const [accountsPage, setAccountsPage] = useRecoilState(accountPageState);
   const [target, setTarget] = useState('');
 
-
   const [modalData, setModalData] = useState({});
 
     // 페이지 데이터
@@ -43,7 +42,7 @@ function Accounts() {
 
   const [isModal, setIsModal] = useState(false);
  
-  const getAccountList = async (columns = [], orders = [], number = 0) => {
+  const getAccountList = async (columns = [], orders = []) => {
     try{
       const result = await api.post(api.get_account_list, {
         search_text : _search, //검색어
@@ -64,7 +63,6 @@ function Accounts() {
         //"all" : "Y" // 넣지 않은 경우 페이징 처리.
   
         size: pageSize, //페이징 처리시 사이즈 크기
-        // number: number, // 페이징 인덱스(최초 0)
         number: _page, // 페이징 인덱스(최초 0)
         use_yn:"Y"
       })
@@ -79,11 +77,9 @@ function Accounts() {
       setAccountList([..._accountList]);
 
       totalPage = result.data.data.totalPages;
-      setData(result.data.data);
   
       _page++;
     }catch(e){
-      alert(e);
       console.log(e);
     }
   }

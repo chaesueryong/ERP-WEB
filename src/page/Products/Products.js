@@ -24,6 +24,7 @@ function Products() {
 
   const [registrationModal, setRegistrationModal] = useState(false);
   const [orderModal, setOrderModal] = useState(false);
+  const [isConfirmModal, setIsConfirmModal] = useState(false);
  
   const getAccountList = (search_text = '', columns = [], orders = [], number = 0, pager = 10) => {
     api.post(api.get_account_list, {
@@ -75,6 +76,10 @@ function Products() {
     })
   }
 
+  const registrationOrder = () => {
+    setIsConfirmModal(true);
+  }
+
   
   const closeModal = (type) => {
     switch(type){
@@ -84,7 +89,16 @@ function Products() {
       case 'order':
         setOrderModal(false);
         break;
+      case 'orderconfirm':
+        setIsConfirmModal(false);
+        setOrderModal(false);
+        break;
     }
+  }
+
+  const orderShortCut = () => {
+    setIsConfirmModal(false);
+    setOrderModal(false);
   }
 
   const openModal = (type) => {
@@ -265,7 +279,7 @@ function Products() {
         registrationModal && <ProductRegistrationModal isModal={registrationModal} closeModal={()=>closeModal('registration')} addAccount={addAccount} />
       }
       {
-        orderModal && <ProductOrderModal isModal={orderModal} closeModal={()=>closeModal('order')} addAccount={addAccount} />
+        orderModal && <ProductOrderModal isModal={orderModal} registrationOrder={registrationOrder} closeModal={()=>closeModal('order')} isConfirmModal={isConfirmModal} closeConfirmModal={()=>closeModal('orderconfirm')} orderShortCut={orderShortCut}  />
       }
     </div>
   );

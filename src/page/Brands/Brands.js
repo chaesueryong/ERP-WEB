@@ -13,7 +13,15 @@ import { useRecoilState } from 'recoil';
 import { brandsPageState, toastState } from '../../recoil/status';
 
 import no_image_icon from '../../assets/images/no-image-icon.svg';
+import { debounce } from 'lodash';
 
+
+let totalPage = Infinity;
+
+let _isLoading = false;
+let _brandList = [];
+let _search = '';
+let _page = 0;
 
 function Brands() {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -21,8 +29,8 @@ function Brands() {
   const location = useLocation();
   const navigate = useNavigate();
   const [brandsPage, setBrandsPage] = useRecoilState(brandsPageState);
-  const [isLoading, setLoading] = useState(false);
-  const target = useRef(null);
+
+  const [target, setTarget] = useState('');
 
   const [modalData, setModalData] = useState({});
 
@@ -31,7 +39,7 @@ function Brands() {
   const [brandList, setBrandList] = useState([]);
   const [search, setSearch] = useState('');
   const [filterList, setFilterList] = useState([]);
-  const [pageSize, setPageSize] = useState(50);
+  const [pageSize, setPageSize] = useState(10);
   const [page, setPage] = useState(0);
   const [data, setData] = useState({});
 
@@ -39,42 +47,43 @@ function Brands() {
 
   const [isModal, setIsModal] = useState(false);
 
-  const getBrandList = (search_text = '', categorys = [], orders = [], number = 0, pager = 10) => {
-    setLoading(true);
-    api.post(api.get_brand_list, {
-      "search_text" : search_text, //검색어
-      "categorys" : categorys, //카테고리
-      "orders" : ["reg_dt_str"], //오름차순- 내림차순 소팅 (컬럼명 적재 시 내림차순 적용)
-      // 브랜드 그룹 group_nm, 브랜드 명 nm_kr, 브랜드 코드 code, 거래처 코드 vendor_code, 거래처명 vendor_nm, 상품 카테고리 categorys
-      // 제품유형 type, 등록일자 reg_dt_str
-      
-      //"all" : "Y" // "all" :"Y" 인경우, 모든 데이터 가져오기
-      //"all" : "Y" // 넣지 않은 경우 페이징 처리.
-
-      "size": pager, //페이징 처리시 사이즈 크기
-      "number": number, // 페이징 인덱스(최초 0)
-      "use_yn":"Y"
-    })
-    .then(res => {
-      const _brandList = res.data.data.content.map(e => ({
+  const getBrandList = async (orders = []) => {
+    try{
+      const result = await api.post(api.get_brand_list, {
+        "search_text" : _search, //검색어
+        "categorys" : filterList.filter(e => e.checked).map(e => e.name), //카테고리
+        "orders" : ["reg_dt_str"], //오름차순- 내림차순 소팅 (컬럼명 적재 시 내림차순 적용)
+        // 브랜드 그룹 group_nm, 브랜드 명 nm_kr, 브랜드 코드 code, 거래처 코드 vendor_code, 거래처명 vendor_nm, 상품 카테고리 categorys
+        // 제품유형 type, 등록일자 reg_dt_str
+        
+        //"all" : "Y" // "all" :"Y" 인경우, 모든 데이터 가져오기
+        //"all" : "Y" // 넣지 않은 경우 페이징 처리.
+  
+        "size": pageSize, //페이징 처리시 사이즈 크기
+        "number": _page, // 페이징 인덱스(최초 0)
+        "use_yn":"Y"
+      })
+      const dataList = result.data.data.content;
+    
+      dataList.map((e,i) => _brandList.push({
         ...e,
+        ID: i + _page * pageSize,
         categorys: e.categorys ? e.categorys.split(',') : [],
         vendor: e.vendor ? e.vendor : [],
       }))
 
-      setBrandList(_brandList)
+      setBrandList([..._brandList]);
 
-      setData(res.data.data);
-    }).catch(e => {
-      alert('네트워크 에러')
-      console.log(e)
-    }).finally(() => {
-      setLoading(false);
-    })
+      totalPage = result.data.data.totalPages;
+  
+      _page++;
+    }catch(e) {
+      console.log(e);
+    }
+
   }
 
   const addBrand = (modalValues) => {
-    console.log(modalValues)
     api.post(api.add_brand, {
       ...modalValues,
       categorys: modalValues['categorys'].map(e => e.name).join(","),
@@ -92,15 +101,16 @@ function Brands() {
       })
 
       closeModal();
+
+      _page = 0;
+      _brandList = [];
       getBrandList();
     }).catch(e=>{
-      alert('네트워크 에러')
       console.log(e)
     })
   }
 
   const editBrand = (modalValues) => {
-    console.log(modalValues);
     api.post(api.put_brand, {
       id: modalValues.id,
       ...modalValues,
@@ -111,6 +121,10 @@ function Brands() {
       if(res.data.status === false){
         throw res.data.error;
       }
+
+      _page = 0;
+      _brandList = [];
+
       setToast({
         visible: true,
         type: 'success',
@@ -131,7 +145,6 @@ function Brands() {
 
   const openModal = (data = null) => {
     document.querySelector('html').style.overflow = 'hidden';
-    console.log(data);
     setModalData(data);
     setIsModal(true)
   }
@@ -145,156 +158,65 @@ function Brands() {
       }
     }
 
-    setFilterList([...filterList]);
-    console.log(search)
-    applyParams({
-      search: search,
-      filters: filterList.filter(e => e.checked).map(e => e.name)
-    });
+    _page = 0;
+    _brandList = [];
+
+    setFilterList(prev => [...filterList]);
+
+    getBrandList();
   }
 
-
-  const handleChangeSearch = (e) => {
-    setSearch(e.target.value);
-    getBrandList(e.target.value, filterList.filter(e => e.checked).map(e => e.name), [], 0, pageSize)
-  }
-
-  // 페이지 네이션
-  const handlePageClick = (number) => {
-    applyParams({page: number + 1});
-  }
-  
   const onExporting = (e) => {
-    common.exportExcel(e, dataGridRef);
+    // common.exportExcel(e, dataGridRef);
+    api.post(api.brand_excel_download, {
+      "search_text" : search, //검색어
+      "columns" : filterList.filter(e => e.checked).map(e => e.value), //필터
+                  // 업종분류 sector, 브랜드 수 brand_cnt, 대표자 owener, 대표자 연락처 owener_phone, 담당자 manager, 담당자 연락처 manager_phone, 주소 l_address
+                  // 현 잔액 c_account, 팩스 c_fax, 도메주소 w_address, 계좌번호 bank_acc, 홈페이지 homepage, 비고 etc, 지급방식 pay_method, 등록일자 reg_dt_str
+      "orders" : [], //오름차순- 내림차순 소팅 (컬럼명 적재 시 내림차순 적용)
+                  // 업종분류 sector, 브랜드 수 brand_cnt, 대표자 owener, 대표자 연락처 owener_phone, 담당자 manager, 담당자 연락처 manager_phone, 주소 l_address
+                  // 거래처코드 code, 거래처 명 nm_kr 
+      "use_yn":"Y"
+    }, {
+      responseType: "blob",
+    })
+    .then(res => {
+      if(res.data.status === false){
+        throw res.data.error;
+      }
+  
+      const url = window.URL.createObjectURL(new Blob([res.data]));
+      const link = document.createElement("a");
+      link.href = url;
+      link.setAttribute("download", res.headers['excel-name']);
+      link.style.cssText = "display:none";
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+
+    }).catch(e => {
+      console.log(e)
+    })
   }
 
-  const changePager = (e) => {
-    setPageSize(e.target.value);
-    getBrandList(search, filterList, [], 0, e.target.value);
-  }
+
+  const handleChangeSearch = debounce((e) => {
+    setSearch(e.target.value);
+    _search = e.target.value;
+    _page = 0;
+    _brandList = [];
+    getBrandList();
+  }, 500)
+
 
   const onRowDblClick = (target) => {
     openModal(brandList.filter(e => e.id === target.data.id)[0]);
   }
 
-  const applyParams = (params = {}) => {
-    for (const [key, value] of Object.entries(params)) {
-
-      switch(key){
-        case 'filters':
-          if(value.length === 0){
-            searchParams.delete(key);
-          }else{
-            const _value = value.reduce((a, c, i) => {
-              if(i === 0){
-                if(c === undefined){
-                  return c;
-                }else {
-                  return c;
-                }
-              }else {
-                if(c === undefined){
-                  return a + '_' + c;
-                }else {
-                  return a + '_' + c;
-                }
-              }
-            }, '')
-
-            searchParams.set(key, _value);
-          }
-          break;
-        default:
-          if(value === 0){
-            searchParams.delete(key);
-          }else{
-            searchParams.set(key, value);
-          }
-          break;
-      }
-    }
-
-    setSearchParams(searchParams);
-    const _searchText = params.search || '';
-    const _filterList = params.filters === undefined ? [] : params.filters.map(e => {
-      if(e != null && e.constructor.name === "Object"){
-        return e.name;
-      }else {
-        return e;
-      }
-    });
-    const _pageSize = params.pagesize || pageSize;
-    const _page = params.page || page;
-
-    setSearch(_searchText);
-    setFilterList([...filterList.map((e, i) => {
-
-      for(let j = 0; j < _filterList.length; j++){
-        if(_filterList[j] === e.name){
-          e.checked = true;
-          break;
-        }
-      }
-      return e;
-    })])
-    setPageSize(_pageSize);
-    setPage(_page);
-
-    setBrandsPage({
-      ...brandsPage,
-      searchUrl: '?' + decodeURI(searchParams.toString())
-    });
-
-    getBrandList(_searchText, _filterList, [], _page - 1, _pageSize);
+  const onCellClick = (e) => {
+    console.log(e)
   }
 
-  const addCategory = (name) => {
-    setModalData({
-      ...modalData,
-      category: modalData['category']
-    })
-  }
-
-  const getParams = () => {
-    let searchString;
-    if(location.search === ''){
-      searchString = brandsPage.searchUrl.substring(1);
-    }else {
-      searchString = location.search.substring(1);
-    }
-
-    const obj = {};
-
-    searchString.split('&').map(e => {
-      const keyValue = e.split('=');
-      switch(keyValue[0]){
-        case 'filters':
-          obj[keyValue[0]] = decodeURI(keyValue[1]).split('_');
-          break;
-        default:
-          obj[keyValue[0]] = keyValue[1];
-          break;  
-      }
-      return; 
-    });
-
-    return obj;
-  }
-
-  const options = {
-    threshold: 1.0,
-  };
-
-  const callback = () => {
-    // if(isLoading) return;
-
-    console.log('관측되었습니다')
-    // applyParams({
-    //   page: Number(_page) + 1
-    // });
-  };
-
-  const observer = new IntersectionObserver(callback, options);
 
   const cellRender = (data) => {
     return <img style={{width: '100%', height: '85px', objectFit: 'contain'}} src={data.value} onError={(e) => {
@@ -309,20 +231,51 @@ function Brands() {
       name: e,
       checked: false
     }));
-    console.log(arr);
+
     setFilterList([...arr])
   }
 
-  const init = async () => {
-    observer.observe(target.current);
-    getCategory();
+  const onIntersect = async ([entry], observer) => {
+    if (entry.isIntersecting && !_isLoading && totalPage > _page) {
+      observer.unobserve(entry.target);
+      _isLoading = true;
+      // 데이터를 가져오는 부분
+      await getBrandList();
+      _isLoading = false;
+      observer.observe(entry.target);
+    }
+  };
 
-    applyParams(getParams());
+  const setDefault = () => {
+    totalPage = Infinity;
+
+    _isLoading = false;
+    _brandList = [];
+    _search = '';
+    _page = 0;
   }
 
   useEffect(() => {
-    init();
-  },[])
+    getCategory();
+  }, []);
+
+  useEffect(() => {
+    if(search !== ''){
+      return;
+    }
+    let observer;
+    if (target) {
+      // callback 함수, option
+      observer = new IntersectionObserver(onIntersect, {
+        threshold: 1,
+      });
+      observer.observe(target); // 타겟 엘리먼트 지정
+    }
+    return () => {
+      observer && observer.disconnect()
+      setDefault();
+    };
+  }, [target, search, filterList]);
 
   return (
     <div className="Brands">      
@@ -361,6 +314,7 @@ function Brands() {
           showRowLines={true}
           hoverStateEnabled={true}
           onRowDblClick={onRowDblClick}
+          onCellClick={onCellClick}
           ref={dataGridRef}
           filterBuilder={filterBuilder}
         >
@@ -372,7 +326,7 @@ function Brands() {
           </HeaderFilter>
 
           <Pager visible={false} />
-          <Paging pageSize={pageSize} />
+          <Paging pageSize={brandList.length} />
           <Sorting mode="multiple" />
           <ColumnFixing enabled={true} />
 
@@ -466,14 +420,14 @@ function Brands() {
 
         </DataGrid>
         {
-          !isLoading ? 
+          !_isLoading ? 
           
           <div>
             {/* <div>loading</div> */}
           </div> : <></>
         }
-        <div className='empty-target' ref={target}></div>
-        <PageNation first={data.first} last={data.last} empty={data.empty} totalPage={data.totalPages} number={data.number} handlePageClick={handlePageClick} />
+        <div className='empty-target' ref={setTarget}></div>
+        {/* <PageNation first={data.first} last={data.last} empty={data.empty} totalPage={data.totalPages} number={data.number} handlePageClick={handlePageClick} /> */}
       </div>
 
       {

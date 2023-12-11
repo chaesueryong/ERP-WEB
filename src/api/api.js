@@ -16,6 +16,7 @@ export const api = {
     add_brand: 'brand/addBrand',
     put_brand: 'brand/updateBrand',
     delete_brand: 'brand/deleteBrand',
+    brand_excel_download: '/brand/excel/download',
 
     get_brand_category_list: 'brand/getCategory',
 

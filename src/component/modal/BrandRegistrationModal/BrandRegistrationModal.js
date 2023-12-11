@@ -50,16 +50,40 @@ function BrandRegistrationModal({isModal, closeModal, addBrand, editBrand, setDa
     })
     .then(res => {
       const _brandList = res.data.data.content;
+
+      let _arr = [];
+
+      for(let i = 0; i < _brandList.length; i++){
+        const _categoryList = _brandList[i].categorys.split(',');
+
+        for(let j = 0; j < _categoryList.length; j++){
+          if(_categoryList[j].includes(categoryText)){
+            _arr.push(_categoryList[j]);
+          }
+        }
+      }
+
+      const uniqueArr = _arr.filter((element, index) => {
+        return _arr.indexOf(element) === index;
+      });
+
       if(_brandList.length === 0){
         setCategoryList([]);
       }else{
-
-        // 검색 확인 중~~~~~~~~~~~~~~~~~~~~
-        // const _getCategory = _brandList.map()
-        setCategoryList([{
-          name: categoryText,
+        const _list = uniqueArr.map(e => ({
+          name: e,
           checked: false
-        }]);
+        }))
+
+        for(let i = 0; i < _list.length; i++){
+          for(let j = 0; j < modalValues['categorys'].length; j++){
+            if(_list.name === modalValues['categorys'].name){
+              _list.checked = true;
+            }
+          }
+        }
+        console.log(modalValues['categorys'], categoryList);
+        setCategoryList(_list);
       }
 
     }).catch(e => {
@@ -172,27 +196,18 @@ function BrandRegistrationModal({isModal, closeModal, addBrand, editBrand, setDa
     })
   }
 
-  const getCategoryList = async () => {
+  const getCategoryList = async (list) => {
     const _categoryList = (await api.post(api.get_brand_category_list, {})).data.data;
 
-    const arr = _categoryList.map(e => {
-      if(setData === null){
-        return {
-          name: e,
-          checked: false
-        };
-      }else {
-        return {
-          name: e,
-          checked: false
-        };
-      }
-    });
+    const arr = _categoryList.map(e => ({
+      name: e,
+      checked: false
+    }));
 
-    setCategoryList([...arr, ...customCategoryList]);
+    return arr;
   }
 
-  const handleRegistryCategory = (name) => {
+  const handleRegistryCategory = async (name) => {
     setCategoryInputText('');
 
     customCategoryList.push({
@@ -202,12 +217,31 @@ function BrandRegistrationModal({isModal, closeModal, addBrand, editBrand, setDa
 
     setCustomCategoryList(customCategoryList)
 
-    getCategoryList();
+    const _categoryList = await getCategoryList();
+    
+    const __categoryList = _categoryList.map(e => {
+      for(let i = 0; i < setData['categorys'].length; i++){
+        if(setData['categorys'][i] === e.name){
+          return {
+            ...e,
+            checked: true
+          }
+        }
+      }
+
+      return {
+        ...e,
+        checked: false
+      }
+    })
+
+    setCategoryList([...__categoryList, ...customCategoryList]);
   } 
 
   const setEditData = async () => {
     if(setData === null){
-      getCategoryList();
+      const _categoryList = await getCategoryList();
+      setCategoryList([..._categoryList, ...customCategoryList]);
       return;
     }
 
@@ -235,14 +269,35 @@ function BrandRegistrationModal({isModal, closeModal, addBrand, editBrand, setDa
 
     console.log(acList);
     console.log(setData)
-    getCategoryList(setData.categorys);
+
+    const _categoryList = await getCategoryList();
+    
+    const __categoryList = _categoryList.map(e => {
+      for(let i = 0; i < setData['categorys'].length; i++){
+        if(setData['categorys'][i] === e.name){
+          return {
+            ...e,
+            checked: true
+          }
+        }
+      }
+
+      return {
+        ...e,
+        checked: false
+      }
+    })
+
+    setCategoryList([...__categoryList, ...customCategoryList]);
 
     setModalValues({
       ...setData,
-      categorys: setData['categorys'].map(e => ({
-        name: e,
-        checked: false
-      })),
+      categorys: setData['categorys'].map(e => {
+        return {
+          name: e,
+          checked: false
+        }
+      }),
       vendor: acList
     });
   }
@@ -254,7 +309,7 @@ function BrandRegistrationModal({isModal, closeModal, addBrand, editBrand, setDa
     });
   }
 
-  const handleChange = (e, selectType) => {
+  const handleChange = async (e, selectType) => {
 
     switch(selectType){
       case 'vendor':
@@ -268,7 +323,26 @@ function BrandRegistrationModal({isModal, closeModal, addBrand, editBrand, setDa
       case 'categorys':
         setCategoryInputText(e.target.value)
         if(e.target.value === ''){
-          getCategoryList([]);
+          const _categoryList = await getCategoryList();
+   
+          const __categoryList = _categoryList.map(e => {
+            for(let i = 0; i < modalValues['categorys'].length; i++){
+              if(modalValues['categorys'][i].name === e.name){
+                return {
+                  ...e,
+                  checked: true
+                }
+              }
+            }
+      
+            return {
+              ...e,
+              checked: false
+            }
+          })
+      
+          setCategoryList([...__categoryList, ...customCategoryList]);
+
         }else{
           getBrandList(e.target.value);
         }
@@ -279,10 +353,12 @@ function BrandRegistrationModal({isModal, closeModal, addBrand, editBrand, setDa
   }
 
   const handleClickItem = (e, selectType = null) => {
-
     switch(selectType){
       case 'vendor':
-        setAccountInputText(e.nm_kr);
+        if(modalValues['vendor'].length > 0){
+          return;
+        }
+
 
         modalValues['vendor'].push(e);
         setModalValues({
@@ -290,10 +366,26 @@ function BrandRegistrationModal({isModal, closeModal, addBrand, editBrand, setDa
         })
         break;
       case 'categorys':
+        for(let i = 0; i < modalValues['categorys'].length; i++){
+          if(modalValues['categorys'][i].name === e.name){
+            return;
+          }
+        }
+
+        for(let j = 0; j < categoryList.length; j++){
+          if(categoryList[j].name === e.name){
+            categoryList[j].checked = true;
+          }
+        }
+
         modalValues['categorys'].push(e);
+
+        setCategoryList([...categoryList, ...customCategoryList]);
+
         setModalValues({
           ...modalValues
         })
+
         break;  
       default:
         break; 
@@ -301,10 +393,41 @@ function BrandRegistrationModal({isModal, closeModal, addBrand, editBrand, setDa
   }
 
   const handleDeleteItem = (index, selectType = null) => {
-    modalValues[selectType].splice(index, 1);
-    setModalValues({
-      ...modalValues
-    })
+    switch(selectType){
+      case 'vendor':
+        modalValues[selectType].splice(index, 1);
+        setModalValues({
+          ...modalValues
+        })
+        break;
+      case 'categorys':
+        modalValues[selectType].splice(index, 1);
+
+        const _categoryList = categoryList.map(e => {
+          for(let i = 0; i < modalValues[selectType].length; i++){
+            if(modalValues[selectType][i].name === e.name){
+              return {
+                ...e,
+                checked: true
+              }
+            }
+          }
+    
+          return {
+            ...e,
+            checked: false
+          }
+        })
+    
+        setCategoryList([..._categoryList, ...customCategoryList]);
+
+        setModalValues({
+          ...modalValues
+        })
+        break;  
+      default:
+        break; 
+    }
   }
 
   useEffect(() => {

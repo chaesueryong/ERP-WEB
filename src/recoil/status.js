@@ -37,20 +37,20 @@ export const accountPageState = atom({
 export const brandsPageState = atom({
     key: 'brandsPageState',
     default: {
-        searchUrl: '?page=1&pagesize=10'
+        searchUrl: ''
     }
 })
 
 export const productsPageState = atom({
     key: 'productsPageState',
     default: {
-        searchUrl: '?page=1&pagesize=10'
+        searchUrl: ''
     }
 })
 
 export const ordersPageState = atom({
     key: 'ordersPageState',
     default: {
-        searchUrl: '?page=1&pagesize=10'
+        searchUrl: ''
     }
 })

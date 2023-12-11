@@ -18,10 +18,10 @@ function SelectBox({placeholder, emptyTitle, selectType, itemType, emptyButton, 
 
     const handleOnFocus = (e) => {
         setInputFocus(true);
-        console.log(e);
     }
 
     // const handleOnBlur = (e) => {
+    //     console.log(e);
     //     setInputFocus(false);
     // }
 
@@ -158,7 +158,7 @@ function SelectBox({placeholder, emptyTitle, selectType, itemType, emptyButton, 
                         <div className='options category'  style={searchList.length !== 0 ? {display: 'flex'} : {display: 'none'}}>
                             {
                                 searchList.filter(e => e.name !== '').map((e, i) => (
-                                    <div className='item-category' key={i} onMouseDown={()=>handleOnClick(e)}>{e.name}</div>
+                                    <div className={`item-category ${e.checked ? 'checked': ''}`} key={i} onMouseDown={()=>handleOnClick(e)}>{e.name}</div>
                                 ))
                             }
                         </div>
