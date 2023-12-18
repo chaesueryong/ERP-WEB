@@ -1,4 +1,8 @@
 .OrderItem {
+
+}
+
+.order-top {
     display: flex;
     align-items: center;
     height: 50px;
@@ -6,6 +10,7 @@
     border-radius: 10px;
     padding: 0 20px;
     background-color: white;
+    cursor: pointer;
 }
 
 .order-item-date {
@@ -42,4 +47,110 @@
     font-weight: 500;
     border-radius: 4px;
     cursor: pointer;
+    gap: 10px;
+}
+
+.order-bottom {
+    padding: 10px;
+    background-color: white;
+    border-radius: 10px;
+}
+
+.order-table-box {
+    display: flex;
+}
+
+.order-table-arrow-box {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 58px;
+    height: 50px;
+    border: 1px solid black;
+    border-radius: 10px;
+    align-self: flex-end;
+    cursor: pointer;
+}
+
+
+.order-table {
+    width: 100%;
+    text-align: center;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.order-table-header {
+    height: 50px;
+}
+
+.order-table-header td:first-child {
+    width: 58px;
+    visibility: hidden;
+}
+
+.order-table-header td {
+    height: 50px;
+    border-radius: 10px;
+    background-color: #F1F3F5;
+}
+
+.order-table-body {
+    height: 50px;
+    border: 1px solid black;
+    border-radius: 10px;
+}
+
+.order-table-body td:first-child {
+    cursor: pointer;
+    border: 1px solid black;
+    border-radius: 10px;
+}
+
+.order-table-grid {
+
+}
+
+.table-grid {
+    margin: 10px 0 20px 0;
+}
+
+.table-grid-left {
+    flex: 1;
+}
+
+.table-grid-right {
+    width: 70px;
+}
+
+.table-grid-right-button-box {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 34px;
+}
+
+.table-grid-right-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10px;
+    color: #228BE6;
+    background-color: #E7F5FF;
+    font-weight: 400;
+    font-size: 14px;
+    width: 68px;
+    height: 29px;
+    cursor: pointer;
+}
+
+.dx-datagrid-content .dx-datagrid-table .dx-row .dx-command-select {
+    padding: 0;
+    width: 58px !important;
+    min-width: 58px !important;
+    max-width: 58px !important;
+}
+
+.dx-datagrid-headers .dx-datagrid-table .dx-row > td {
+    border-bottom: none;
 }
