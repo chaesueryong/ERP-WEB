@@ -12,7 +12,7 @@ function OrderFilterBox({filterTitle, tapList, dateType, selectTitle, handleClic
         <div className='order-filter-switch-box'>
             {
                 tapList.map((e, i) => (
-                    <div className='of-switch' onClick={() => handleClickTap(i, 'tap')}>
+                    <div key={i} className='of-switch' onClick={() => handleClickTap(i, 'tap')}>
                         <div className='of-switch-title' style={e.checked ? { color: 'black'} : { color: '#ADB5BD'}}>{e.name}</div>
                         <div className='of-switch-under-bar' style={e.checked ? {backgroundColor: 'black'} : {backgroundColor: 'white'}}></div>
                     </div>
@@ -39,7 +39,7 @@ function OrderFilterBox({filterTitle, tapList, dateType, selectTitle, handleClic
                 <div className='ofbr-date-list-box'>
                     {
                         dateType.map((e, i) => (
-                            <div onClick={() => handleClickTap(i, 'date')} style={e.checked ? {color: 'white', backgroundColor: 'black'} : {color: 'black', backgroundColor: 'white'}}>
+                            <div key={i} onClick={() => handleClickTap(i, 'date')} style={e.checked ? {color: 'white', backgroundColor: 'black'} : {color: 'black', backgroundColor: 'white'}}>
                                 {e.name}
                             </div>
                         ))

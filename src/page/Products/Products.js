@@ -93,6 +93,8 @@ function Products() {
         setIsConfirmModal(false);
         setOrderModal(false);
         break;
+      default:
+        break;  
     }
   }
 
@@ -109,6 +111,8 @@ function Products() {
       case 'order':
         setOrderModal(true);
         break;
+      default: 
+        break;  
     }
   }
   const handleChangeSearch = (e) => {
@@ -135,11 +139,6 @@ function Products() {
 
   const onExporting = (e) => {
     common.exportExcel(e, dataGridRef);
-  }
-
-  const changePager = (e) => {
-    setPageSize(e.target.value);
-    getAccountList(search, filter, [], 0, e.target.value);
   }
 
   const defaultColumn = () => {

@@ -1,14 +1,13 @@
 import './Orders.css';
-import FilterBox from '../../component/FilterBox/FilterBox';
 import ButtonNormal from '../../component/ButtonNormal/ButtonNormal';
-import DataGrid, { Column, Selection, HeaderFilter, Paging, Pager, Sorting, Search } from 'devextreme-react/data-grid';
 import { useState } from 'react';
-import { common } from '../../utils/common';
 import OrderItem from '../../component/OrderItem/OrderItem';
 import OrderFilterBox from '../../component/FilterBox/OrderFilterBox';
+import ConfirmModal from '../../component/modal/ConfirmModal/ConfirmModal';
 
 function Orders() {
   const [modal, setModal] = useState(false);
+  const [orderCancelModal, setOrderCancelModal] = useState(false);
 
   const [tapList, setTapList] = useState([
     {name: '발주', checked: true},
@@ -23,12 +22,12 @@ function Orders() {
     {name: '당년', checked: false},
   ]);
 
-  const toggleModal = () => {
-    setModal(!modal);
+  const openModal = () => {
+    setOrderCancelModal(true);
   }  
 
   const closeModal = () => {
-    setModal(false);
+    setOrderCancelModal(false);
   }
 
   const exportExcel = () => {
@@ -76,6 +75,11 @@ function Orders() {
     }
   }
 
+  const orderCancel = () => {
+    alert('주문취소');
+    closeModal('ordercancel');
+  }
+
   return (
     <div className="Orders">
       <OrderFilterBox filterTitle="발주/반품 내역 조회" tapList={tapList} dateType={dateType} selectTitle='거래처 선택' handleClickTap={handleClickTap} />
@@ -83,12 +87,16 @@ function Orders() {
       <div className='grid-box'>
         <div className='list-button'>
           <div className='list-button-left'>
-            <div className='grid-title'>발주내역</div>
+            <div className='grid-title'>          
+            {
+              tapList.filter(e => e.checked)[0].name + ' 내역'
+            }
+            </div>
             {/* <ButtonNormal name='거래처 등록' bg_color='#E7F5FF' font_weight='400' icon={true} color='#0099FF' handleClick={()=>openModal()} paddingTop='2' /> */}
             {/* <ButtonNormal name='상품 관리 바로가기' bg_color='#E9ECEF' color='black' /> */}
           </div>
           <div className='list-button-right'>
-            <ButtonNormal name='주문 취소' bg_color='#DEE2E6' color='#495057' />
+            <ButtonNormal name='주문 취소' bg_color='#DEE2E6' color='#495057' handleClick={()=>openModal('ordercancel')} />
             {/* <ButtonNormal name='인쇄' bg_color='#E9ECEF' color='black' /> */}
             <ButtonNormal name='엑셀 내려받기' bg_color='#20C997' color='white' handleClick={onExporting} />
           </div>
@@ -96,16 +104,31 @@ function Orders() {
 
         <div className='grid-list'>
           {
-            list.map((e,i) => (
-              <OrderItem key={i} />
+            tapList[0].checked ? _orderList.map((e,i) => (
+              <OrderItem key={i} data={e} />
             ))
+            :
+            <></>
           }
-          
+          {
+            tapList[1].checked ? _orderList.map((e,i) => (
+              <OrderItem key={i} data={e} />
+            ))
+            :
+            <></>
+          }
         </div>
       </div>
 
       {
-
+        orderCancelModal ? 
+        <ConfirmModal 
+          isConfirmModal={orderCancelModal} 
+          text_1='주문 취소시 등록된 정보는 모두 사라집니다.' 
+          text_2='정말 주문을 취소하시겠습니까?' 
+          closeModal={()=>closeModal('ordercancel')}
+          handleConfirm={orderCancel}
+        /> : <></>
       }
     </div>
   );
@@ -113,6 +136,154 @@ function Orders() {
 
 export default Orders;
 
-const list = [
-  0,1,2,3,4,5
+const _orderList = [
+  {
+    code: '001-01',
+    name: '애프터',
+    orderNumber: '100',
+    orderCount: 10,
+    returnCount: 10,
+    purchasePrice: 38000,
+    qlrh: '비고내용',
+    list: [
+      {
+        ID: 1,
+        code: '001-01',
+        name: '상품명품명품명품명',
+        season: 'SS',
+        color: 'Black',
+        size: 'Free',
+        rhdrmq: '30000',
+        gusworh: '0',
+        orderCount: 100,
+        amount: 38000000
+      },
+      {
+        ID: 1,
+        code: '001-01',
+        name: '상품명품명품명품명',
+        season: 'SS',
+        color: 'Black',
+        size: 'Free',
+        rhdrmq: '30000',
+        gusworh: '0',
+        orderCount: 100,
+        amount: 38000000
+      },
+      {
+        ID: 1,
+        code: '001-01',
+        name: '상품명품명품명품명',
+        season: 'SS',
+        color: 'Black',
+        size: 'Free',
+        rhdrmq: '30000',
+        gusworh: '0',
+        orderCount: 100,
+        amount: 38000000
+      },
+      {
+        ID: 1,
+        code: '001-01',
+        name: '상품명품명품명품명',
+        season: 'SS',
+        color: 'Black',
+        size: 'Free',
+        rhdrmq: '30000',
+        gusworh: '0',
+        orderCount: 100,
+        amount: 38000000
+      },
+    ]
+  },
+  {
+    name: '애프터 컴퍼니',
+    amount: '261,100',
+    list: [
+      {
+        ID: 1,
+        code: '001-01',
+        name: '상품명품명품명품명',
+        season: 'SS',
+        color: 'Black',
+        size: 'Free',
+        rhdrmq: '30000',
+        gusworh: '0',
+        orderCount: 100,
+        amount: 38000000
+      },
+      {
+        ID: 1,
+        code: '001-01',
+        name: '상품명품명품명품명',
+        season: 'SS',
+        color: 'Black',
+        size: 'Free',
+        rhdrmq: '30000',
+        gusworh: '0',
+        orderCount: 100,
+        amount: 38000000
+      },
+    ]
+  },
+  {
+    name: '애프터 컴퍼니',
+    amount: '261,100',
+    list: [
+      {
+        ID: 1,
+        code: '001-01',
+        name: '상품명품명품명품명',
+        season: 'SS',
+        color: 'Black',
+        size: 'Free',
+        rhdrmq: '30000',
+        gusworh: '0',
+        orderCount: 100,
+        amount: 38000000
+      },
+      {
+        ID: 1,
+        code: '001-01',
+        name: '상품명품명품명품명',
+        season: 'SS',
+        color: 'Black',
+        size: 'Free',
+        rhdrmq: '30000',
+        gusworh: '0',
+        orderCount: 100,
+        amount: 38000000
+      },
+    ]
+  },
+  {
+    name: '애프터 컴퍼니',
+    amount: '261,100',
+    list: [
+      {
+        ID: 1,
+        code: '001-01',
+        name: '상품명품명품명품명',
+        season: 'SS',
+        color: 'Black',
+        size: 'Free',
+        rhdrmq: '30000',
+        gusworh: '0',
+        orderCount: 100,
+        amount: 38000000
+      },
+      {
+        ID: 1,
+        code: '001-01',
+        name: '상품명품명품명품명',
+        season: 'SS',
+        color: 'Black',
+        size: 'Free',
+        rhdrmq: '30000',
+        gusworh: '0',
+        orderCount: 100,
+        amount: 38000000
+      },
+    ]
+  }
 ]
