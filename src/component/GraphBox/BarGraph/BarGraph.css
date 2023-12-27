@@ -1,0 +1,26 @@
+.BarGraph {
+    display: flex;
+    flex-direction: column;
+    height: 414px;
+    border: 1px solid #F8F9FA;
+    border-radius: 10px;
+    box-shadow: 1px 1px 1px #868E960F;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.bg-title {
+    font-size: 12px;
+    font-weight: 600;
+    margin-bottom: 20px;
+}
+
+.bg-chart-box {
+    flex: auto;
+    overflow: hidden;
+}
+
+.bg-chart-box .dx-visibility-change-handler {
+    width: 100%;
+    height: 100%;
+}

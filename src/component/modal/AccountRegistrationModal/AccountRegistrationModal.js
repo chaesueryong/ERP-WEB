@@ -290,9 +290,12 @@ function AccountRegistrationModal({isModal, closeModal, addAccount, editAccount,
               <div className='modal-col'>
                 <div className='modal-col-box'>
                   <div className='modal-col-box-title'>
-                  <input className={`custom-check-box hidden ${customToggle ? '' : 'none'}`} type='checkbox' />*거래처 명</div>
-                  <div className='modal-col-box-inner'>
-                    <input onChange={e => changeCustomInput(e, 'nm_kr')} defaultChecked={customInput['nm_kr']} className={`custom-check-box ${customToggle ? '' : 'none'}`} type='checkbox' />
+                  <input className={`custom-check-box ${customToggle ? 'nonevisible' : ''}`} type='checkbox' />*거래처 명</div>
+                  <div className={`modal-col-box-inner ${customToggle ? 'hidden' : ''}`}>
+                    <div className={`check-box ${customToggle ? 'hidden' : ''}`}>
+                      <input id='nm_kr' onChange={e => changeCustomInput(e, 'nm_kr')} defaultChecked={customInput['nm_kr']} className='custom-check-box' type='checkbox' />
+                      <label htmlFor='nm_kr' className={`custom-check-box ${customToggle ? 'visible' : ''}`}></label>
+                    </div>
                     <input className='modal-col-box-input' placeholder='거래처 명을 입력하세요' value={modalValues['nm_kr']} onChange={e => {
                       handleOnChange(e, 'nm_kr');
                     }} />
@@ -302,9 +305,12 @@ function AccountRegistrationModal({isModal, closeModal, addAccount, editAccount,
                 <div className='modal-col-box' style={{flexDirection: 'row', gap: '10px'}}>
                   <div className='modal-col-box'>
                     <div className='modal-col-box-title'>
-                    <input className={`custom-check-box hidden ${customToggle ? '' : 'none'}`} type='checkbox' />거래처 코드</div>
-                    <div className='modal-col-box-inner'>
-                      <input onChange={e => changeCustomInput(e, 'code')} defaultChecked={customInput['code']} className={`custom-check-box ${customToggle ? '' : 'none'}`} type='checkbox' />
+                    <input className={`custom-check-box ${customToggle ? 'nonevisible' : ''}`} type='checkbox' />거래처 코드</div>
+                    <div className={`modal-col-box-inner ${customToggle ? 'hidden' : ''}`}>
+                      <div className={`check-box ${customToggle ? 'hidden' : ''}`}>
+                        <input id='code' onChange={e => changeCustomInput(e, 'code')} defaultChecked={customInput['code']} className='custom-check-box' type='checkbox' />
+                        <label htmlFor='code' className={`custom-check-box ${customToggle ? 'visible' : ''}`}></label>
+                      </div>
                       <input className='modal-col-box-input' value={modalValues['code']} onChange={e => {
                         handleOnChange(e, 'code');
                       }} />
@@ -313,9 +319,12 @@ function AccountRegistrationModal({isModal, closeModal, addAccount, editAccount,
                   </div>
                   <div className='modal-col-box'>
                     <div className='modal-col-box-title'>
-                    <input className={`custom-check-box hidden ${customToggle ? '' : 'none'}`} type='checkbox' />업종 분류</div>
-                    <div className='modal-col-box-inner'>
-                      <input onChange={e => changeCustomInput(e, 'sector')} defaultChecked={customInput['sector']} className={`custom-check-box ${customToggle ? '' : 'none'}`} type='checkbox' />
+                    <input className={`custom-check-box ${customToggle ? 'nonevisible' : ''}`} type='checkbox' />업종 분류</div>
+                    <div className={`modal-col-box-inner ${customToggle ? 'hidden' : ''}`}>
+                      <div className={`check-box ${customToggle ? 'hidden' : ''}`}>
+                        <input id='sector' onChange={e => changeCustomInput(e, 'sector')} defaultChecked={customInput['sector']} className='custom-check-box' type='checkbox' />
+                        <label htmlFor='sector' className={`custom-check-box ${customToggle ? 'visible' : ''}`}></label>
+                      </div>
                       <select className='modal-col-box-input box-select' ref={select1} value={modalValues['sector']} onChange={e => {changeSelectBox(e, 'sector')}}>
                       <option value="" disabled>업종 선택</option>
                         {
@@ -333,9 +342,12 @@ function AccountRegistrationModal({isModal, closeModal, addAccount, editAccount,
               <div className='modal-col'>
                 <div className='modal-col-box'>
                   <div className='modal-col-box-title'>
-                  <input className={`custom-check-box hidden ${customToggle ? '' : 'none'}`} type='checkbox' />브랜드 명</div>
-                  <div className='modal-col-box-inner'>
-                    <input onChange={e => changeCustomInput(e, 'brand')} defaultChecked={customInput['brand']} className={`custom-check-box ${customToggle ? '' : 'none'}`} type='checkbox' />
+                  <input className={`custom-check-box ${customToggle ? 'nonevisible' : ''}`} type='checkbox' />브랜드 명</div>
+                  <div className={`modal-col-box-inner ${customToggle ? 'hidden' : ''}`}>
+                    <div className={`check-box ${customToggle ? 'hidden' : ''}`}>
+                      <input id='brand' onChange={e => changeCustomInput(e, 'brand')} defaultChecked={customInput['brand']} className='custom-check-box' type='checkbox' />
+                      <label htmlFor='brand' className={`custom-check-box ${customToggle ? 'visible' : ''}`}></label>
+                    </div>
                     <SelectBox 
                     placeholder='브랜드 명을 검색하세요' 
                     emptyTitle='매칭되는 브랜드가 없습니다' 
@@ -356,9 +368,12 @@ function AccountRegistrationModal({isModal, closeModal, addAccount, editAccount,
               <div className='modal-col'>
                 <div className='modal-col-box'>
                   <div className='modal-col-box-title'>
-                  <input className={`custom-check-box hidden ${customToggle ? '' : 'none'}`} type='checkbox' />주소</div>
-                  <div className='modal-col-box-inner'>
-                    <input onChange={e => changeCustomInput(e, 'l_address')} defaultChecked={customInput['l_address']} className={`custom-check-box ${customToggle ? '' : 'none'}`} type='checkbox' />
+                  <input className={`custom-check-box ${customToggle ? 'nonevisible' : ''}`} type='checkbox' />주소</div>
+                  <div className={`modal-col-box-inner ${customToggle ? 'hidden' : ''}`}>
+                    <div className={`check-box ${customToggle ? 'hidden' : ''}`}>
+                      <input id='l_address' onChange={e => changeCustomInput(e, 'l_address')} defaultChecked={customInput['l_address']} className='custom-check-box' type='checkbox' />
+                      <label htmlFor='l_address' className={`custom-check-box ${customToggle ? 'visible' : ''}`}></label>
+                    </div>
                     <input className='modal-col-box-input' placeholder='입력' value={modalValues['l_address']} onChange={e => {
                       handleOnChange(e, 'l_address');
                     }}/>
@@ -370,9 +385,12 @@ function AccountRegistrationModal({isModal, closeModal, addAccount, editAccount,
               <div className='modal-col'>
                 <div className='modal-col-box'>
                   <div className='modal-col-box-title'>
-                  <input className={`custom-check-box hidden ${customToggle ? '' : 'none'}`} type='checkbox' />사업자 등록번호</div>
-                  <div className='modal-col-box-inner'>
-                    <input onChange={e => changeCustomInput(e, 'crn')} defaultChecked={customInput['crn']} className={`custom-check-box ${customToggle ? '' : 'none'}`} type='checkbox' />
+                  <input className={`custom-check-box  ${customToggle ? 'nonevisible' : ''}`} type='checkbox' />사업자 등록번호</div>
+                  <div className={`modal-col-box-inner ${customToggle ? 'hidden' : ''}`}>
+                    <div className={`check-box ${customToggle ? 'hidden' : ''}`}>
+                      <input id='crn' onChange={e => changeCustomInput(e, 'crn')} defaultChecked={customInput['crn']} className='custom-check-box' type='checkbox' />
+                      <label htmlFor='crn' className={`custom-check-box ${customToggle ? 'visible' : ''}`}></label>
+                    </div>
                     <input className='modal-col-box-input' placeholder='입력' maxLength='12' value={modalValues['crn']} onChange={e => {
                       handleOnChange(e, 'crn');
                     }}/>
@@ -381,9 +399,12 @@ function AccountRegistrationModal({isModal, closeModal, addAccount, editAccount,
 
                 <div className='modal-col-box'>
                   <div className='modal-col-box-title'>
-                  <input className={`custom-check-box hidden ${customToggle ? '' : 'none'}`} type='checkbox' />전화번호</div>
-                  <div className='modal-col-box-inner'>
-                    <input onChange={e => changeCustomInput(e, 'c_phone')} defaultChecked={customInput['c_phone']} className={`custom-check-box ${customToggle ? '' : 'none'}`} type='checkbox' />
+                  <input className={`custom-check-box ${customToggle ? 'nonevisible' : ''}`} type='checkbox' />전화번호</div>
+                  <div className={`modal-col-box-inner ${customToggle ? 'hidden' : ''}`}>
+                    <div className={`check-box ${customToggle ? 'hidden' : ''}`}>
+                      <input id='c_phone' onChange={e => changeCustomInput(e, 'c_phone')} defaultChecked={customInput['c_phone']} className='custom-check-box' type='checkbox' />
+                      <label htmlFor='c_phone' className={`custom-check-box ${customToggle ? 'visible' : ''}`}></label>
+                    </div>
                     <input className='modal-col-box-input' placeholder='숫자만 입력해주세요' value={modalValues['c_phone']} onChange={e => {
                       handleOnChange(e, 'c_phone');
                     }}/>
@@ -397,9 +418,12 @@ function AccountRegistrationModal({isModal, closeModal, addAccount, editAccount,
 
                 <div className='modal-col-box'>
                   <div className='modal-col-box-title'>
-                  <input className={`custom-check-box hidden ${customToggle ? '' : 'none'}`} type='checkbox' />팩스 번호</div>
-                  <div className='modal-col-box-inner'>
-                    <input onChange={e => changeCustomInput(e, 'c_fax')} defaultChecked={customInput['c_fax']} className={`custom-check-box ${customToggle ? '' : 'none'}`} type='checkbox' />
+                  <input className={`custom-check-box ${customToggle ? 'nonevisible' : ''}`} type='checkbox' />팩스 번호</div>
+                  <div className={`modal-col-box-inner ${customToggle ? 'hidden' : ''}`}>
+                    <div className={`check-box ${customToggle ? 'hidden' : ''}`}>
+                      <input id='c_fax' onChange={e => changeCustomInput(e, 'c_fax')} defaultChecked={customInput['c_fax']} className='custom-check-box' type='checkbox' />
+                      <label htmlFor='c_fax' className={`custom-check-box ${customToggle ? 'visible' : ''}`}></label>
+                    </div>
                     <input className='modal-col-box-input' placeholder='숫자만 입력해주세요' value={modalValues['c_fax']} onChange={e => {
                       handleOnChange(e, 'c_fax');
                     }}/>
@@ -410,9 +434,12 @@ function AccountRegistrationModal({isModal, closeModal, addAccount, editAccount,
               <div className='modal-col'>
                 <div className='modal-col-box'>
                   <div className='modal-col-box-title'>
-                  <input className={`custom-check-box hidden ${customToggle ? '' : 'none'}`} type='checkbox' />지급 방식</div>
-                  <div className='modal-col-box-inner'>
-                    <input onChange={e => changeCustomInput(e, 'pay_method')} defaultChecked={customInput['pay_method']} className={`custom-check-box ${customToggle ? '' : 'none'}`} type='checkbox' />
+                  <input className={`custom-check-box ${customToggle ? 'nonevisible' : ''}`} type='checkbox' />지급 방식</div>
+                  <div className={`modal-col-box-inner ${customToggle ? 'hidden' : ''}`}>
+                    <div className={`check-box ${customToggle ? 'hidden' : ''}`}>
+                      <input id='pay_method' onChange={e => changeCustomInput(e, 'pay_method')} defaultChecked={customInput['pay_method']} className='custom-check-box' type='checkbox' />
+                      <label htmlFor='pay_method' className={`custom-check-box ${customToggle ? 'visible' : ''}`}></label>
+                    </div>
                     <select className='modal-col-box-input' style={{color: 'black'}} value={modalValues['pay_method']} onChange={e => {changeSelectBox(e, 'pay_method')}}>
                       <option defaultValue="계좌이체">계좌이체</option>
                     </select>
@@ -421,9 +448,12 @@ function AccountRegistrationModal({isModal, closeModal, addAccount, editAccount,
 
                 <div className='modal-col-box'>
                   <div className='modal-col-box-title'>
-                  <input className={`custom-check-box hidden ${customToggle ? '' : 'none'}`} type='checkbox' />현 잔액</div>
-                  <div className='modal-col-box-inner'>
-                    <input onChange={e => changeCustomInput(e, 'c_account')} defaultChecked={customInput['c_account']} className={`custom-check-box ${customToggle ? '' : 'none'}`} type='checkbox' />
+                  <input className={`custom-check-box ${customToggle ? 'nonevisible' : ''}`} type='checkbox' />현 잔액</div>
+                  <div className={`modal-col-box-inner ${customToggle ? 'hidden' : ''}`}>
+                    <div className={`check-box ${customToggle ? 'hidden' : ''}`}>
+                      <input id='c_account' onChange={e => changeCustomInput(e, 'c_account')} defaultChecked={customInput['c_account']} className='custom-check-box' type='checkbox' />
+                      <label htmlFor='c_account' className={`custom-check-box ${customToggle ? 'visible' : ''}`}></label>
+                    </div>
                     <input className='modal-col-box-input' placeholder='숫자만 입력해 주세요' value={modalValues['c_account']} onChange={e => {
                       handleOnChange(e, 'c_account');
                     }}/>
@@ -434,9 +464,13 @@ function AccountRegistrationModal({isModal, closeModal, addAccount, editAccount,
               <div className='modal-col'>
                 <div className='modal-col-box'>
                   <div className='modal-col-box-title'>
-                  <input className={`custom-check-box hidden ${customToggle ? '' : 'none'}`} type='checkbox' />입금 은행</div>
-                    <div className='modal-col-box-inner'>
-                      <input onChange={e => changeCustomInput(e, 'bank_nm')} defaultChecked={customInput['bank_nm']} className={`custom-check-box ${customToggle ? '' : 'none'}`} type='checkbox' />
+                  <input className={`custom-check-box ${customToggle ? 'nonevisible' : ''}`} type='checkbox' />입금 은행</div>
+                    <div className={`modal-col-box-inner ${customToggle ? 'hidden' : ''}`}>
+                      
+                      <div className={`check-box ${customToggle ? 'hidden' : ''}`}>
+                        <input id='bank_nm' onChange={e => changeCustomInput(e, 'bank_nm')} defaultChecked={customInput['bank_nm']} className='custom-check-box' type='checkbox' />
+                        <label htmlFor='bank_nm' className={`custom-check-box ${customToggle ? 'visible' : ''}`}></label>
+                      </div>
                       <select className='modal-col-box-input box-select' ref={select2} value={modalValues['bank_nm']} onChange={ e => {changeSelectBox(e, 'bank_nm')}}>
                         <option value="" disabled>거래 은행을 선택해 주세요</option>
                           {
@@ -450,9 +484,12 @@ function AccountRegistrationModal({isModal, closeModal, addAccount, editAccount,
 
                 <div className='modal-col-box'>
                   <div className='modal-col-box-title'>
-                  <input className={`custom-check-box hidden ${customToggle ? '' : 'none'}`} type='checkbox' />계좌 번호</div>
-                  <div className='modal-col-box-inner'>
-                    <input onChange={e => changeCustomInput(e, 'bank_acc')} defaultChecked={customInput['bank_acc']} className={`custom-check-box ${customToggle ? '' : 'none'}`} type='checkbox' />
+                  <input className={`custom-check-box ${customToggle ? 'nonevisible' : ''}`} type='checkbox' />계좌 번호</div>
+                  <div className={`modal-col-box-inner ${customToggle ? 'hidden' : ''}`}>
+                    <div className={`check-box ${customToggle ? 'hidden' : ''}`}>
+                      <input id='bank_acc' onChange={e => changeCustomInput(e, 'bank_acc')} defaultChecked={customInput['bank_acc']} className='custom-check-box' type='checkbox' />
+                      <label htmlFor='bank_acc' className={`custom-check-box ${customToggle ? 'visible' : ''}`}></label>
+                    </div>
                     <input className='modal-col-box-input' placeholder='숫자만 입력해 주세요' value={modalValues['bank_acc']} onChange={e => {
                       handleOnChange(e, 'bank_acc');
                     }}/>
@@ -466,9 +503,12 @@ function AccountRegistrationModal({isModal, closeModal, addAccount, editAccount,
 
                 <div className='modal-col-box'>
                   <div className='modal-col-box-title'>
-                  <input className={`custom-check-box hidden ${customToggle ? '' : 'none'}`} type='checkbox' />예금주</div>
-                  <div className='modal-col-box-inner'>
-                    <input onChange={e => changeCustomInput(e, 'bank_owner')} defaultChecked={customInput['bank_owner']} className={`custom-check-box ${customToggle ? '' : 'none'}`} type='checkbox' />
+                  <input className={`custom-check-box ${customToggle ? 'nonevisible' : ''}`} type='checkbox' />예금주</div>
+                  <div className={`modal-col-box-inner ${customToggle ? 'hidden' : ''}`}>
+                    <div className={`check-box ${customToggle ? 'hidden' : ''}`}>
+                      <input id='bank_owner' onChange={e => changeCustomInput(e, 'bank_owner')} defaultChecked={customInput['bank_owner']} className='custom-check-box' type='checkbox' />
+                      <label htmlFor='bank_owner' className={`custom-check-box ${customToggle ? 'visible' : ''}`}></label>
+                    </div>
                     <input className='modal-col-box-input' placeholder='입력' value={modalValues['bank_owner']} onChange={e => {
                       handleOnChange(e, 'bank_owner');
                     }}/>
@@ -479,9 +519,13 @@ function AccountRegistrationModal({isModal, closeModal, addAccount, editAccount,
               <div className='modal-col'>
                 <div className='modal-col-box'>
                   <div className='modal-col-box-title'>
-                  <input className={`custom-check-box hidden ${customToggle ? '' : 'none'}`} type='checkbox' />대표자</div>
-                  <div className='modal-col-box-inner'>
-                    <input onChange={e => changeCustomInput(e, 'owener')} defaultChecked={customInput['owener']} className={`custom-check-box ${customToggle ? '' : 'none'}`} type='checkbox' />
+                  <input className={`custom-check-box ${customToggle ? 'nonevisible' : ''}`} type='checkbox' />대표자</div>
+                  <div className={`modal-col-box-inner ${customToggle ? 'hidden' : ''}`}>
+                    
+                    <div className={`check-box ${customToggle ? 'hidden' : ''}`}>
+                      <input id='owener' onChange={e => changeCustomInput(e, 'owener')} defaultChecked={customInput['owener']} className='custom-check-box' type='checkbox' />
+                      <label htmlFor='owener' className={`custom-check-box ${customToggle ? 'visible' : ''}`}></label>
+                    </div>
                     <input className='modal-col-box-input' placeholder='입력' value={modalValues['owener']} onChange={e => {
                       handleOnChange(e, 'owener');
                     }}/>
@@ -490,9 +534,12 @@ function AccountRegistrationModal({isModal, closeModal, addAccount, editAccount,
 
                 <div className='modal-col-box'>
                   <div className='modal-col-box-title'>
-                  <input className={`custom-check-box hidden ${customToggle ? '' : 'none'}`} type='checkbox' />대표자 연락처</div>
-                  <div className='modal-col-box-inner'>
-                    <input onChange={e => changeCustomInput(e, 'owener_phone')} defaultChecked={customInput['owener_phone']} className={`custom-check-box ${customToggle ? '' : 'none'}`} type='checkbox' />
+                  <input className={`custom-check-box ${customToggle ? 'nonevisible' : ''}`} type='checkbox' />대표자 연락처</div>
+                  <div className={`modal-col-box-inner ${customToggle ? 'hidden' : ''}`}>                    
+                    <div className={`check-box ${customToggle ? 'hidden' : ''}`}>
+                      <input id='owener_phone' onChange={e => changeCustomInput(e, 'owener_phone')} defaultChecked={customInput['owener_phone']} className='custom-check-box' type='checkbox' />
+                      <label htmlFor='owener_phone' className={`custom-check-box ${customToggle ? 'visible' : ''}`}></label>
+                    </div>
                     <input className='modal-col-box-input' placeholder='숫자만 입력해주세요' value={modalValues['owener_phone']} onChange={e => {
                       handleOnChange(e, 'owener_phone');
                     }}/>
@@ -503,9 +550,12 @@ function AccountRegistrationModal({isModal, closeModal, addAccount, editAccount,
               <div className='modal-col'>
                 <div className='modal-col-box'>
                   <div className='modal-col-box-title'>
-                  <input className={`custom-check-box hidden ${customToggle ? '' : 'none'}`} type='checkbox' />담당자</div>
-                  <div className='modal-col-box-inner'>
-                    <input onChange={e => changeCustomInput(e, 'manager')} defaultChecked={customInput['manager']} className={`custom-check-box ${customToggle ? '' : 'none'}`} type='checkbox' />
+                  <input className={`custom-check-box ${customToggle ? 'nonevisible' : ''}`} type='checkbox' />담당자</div>
+                  <div className={`modal-col-box-inner ${customToggle ? 'hidden' : ''}`}>
+                    <div className={`check-box ${customToggle ? 'hidden' : ''}`}>
+                      <input id='manager' onChange={e => changeCustomInput(e, 'manager')} defaultChecked={customInput['manager']} className='custom-check-box' type='checkbox' />
+                      <label htmlFor='manager' className={`custom-check-box ${customToggle ? 'visible' : ''}`}></label>
+                    </div>
                     <input className='modal-col-box-input' placeholder='입력' value={modalValues['manager']} onChange={e => {
                       handleOnChange(e, 'manager');
                     }}/>
@@ -514,9 +564,12 @@ function AccountRegistrationModal({isModal, closeModal, addAccount, editAccount,
 
                 <div className='modal-col-box'>
                   <div className='modal-col-box-title'>
-                  <input className={`custom-check-box hidden ${customToggle ? '' : 'none'}`} type='checkbox' />담당자 연락처</div>
-                  <div className='modal-col-box-inner'>
-                    <input onChange={e => changeCustomInput(e, 'manager_phone')} defaultChecked={customInput['manager_phone']} className={`custom-check-box ${customToggle ? '' : 'none'}`} type='checkbox' />
+                  <input className={`custom-check-box ${customToggle ? 'nonevisible' : ''}`} type='checkbox' />담당자 연락처</div>
+                  <div className={`modal-col-box-inner ${customToggle ? 'hidden' : ''}`}>                    
+                    <div className={`check-box ${customToggle ? 'hidden' : ''}`}>
+                      <input id='manager_phone' onChange={e => changeCustomInput(e, 'manager_phone')} defaultChecked={customInput['manager_phone']} className='custom-check-box' type='checkbox' />
+                      <label htmlFor='manager_phone' className={`custom-check-box ${customToggle ? 'visible' : ''}`}></label>
+                    </div>
                     <input className='modal-col-box-input' placeholder='숫자만 입력해주세요' value={modalValues['manager_phone']} onChange={e => {
                       handleOnChange(e, 'manager_phone');
                     }}/>
@@ -530,9 +583,12 @@ function AccountRegistrationModal({isModal, closeModal, addAccount, editAccount,
 
                 <div className='modal-col-box'>
                   <div className='modal-col-box-title'>
-                  <input className={`custom-check-box hidden ${customToggle ? '' : 'none'}`} type='checkbox' />계산서 전화번호</div>
-                  <div className='modal-col-box-inner'>
-                    <input onChange={e => changeCustomInput(e, 'w_b_phone')} defaultChecked={customInput['w_b_phone']} className={`custom-check-box ${customToggle ? '' : 'none'}`} type='checkbox' />
+                  <input className={`custom-check-box ${customToggle ? 'nonevisible' : ''}`} type='checkbox' />계산서 전화번호</div>
+                  <div className={`modal-col-box-inner ${customToggle ? 'hidden' : ''}`}>
+                    <div className={`check-box ${customToggle ? 'hidden' : ''}`}>
+                      <input id='w_b_phone' onChange={e => changeCustomInput(e, 'w_b_phone')} defaultChecked={customInput['w_b_phone']} className='custom-check-box' type='checkbox' />
+                      <label htmlFor='w_b_phone' className={`custom-check-box ${customToggle ? 'visible' : ''}`}></label>
+                    </div>
                     <input className='modal-col-box-input' placeholder='숫자만 입력해주세요' value={modalValues['w_b_phone']} onChange={e => {
                       handleOnChange(e, 'w_b_phone');
                     }}/>
@@ -543,9 +599,12 @@ function AccountRegistrationModal({isModal, closeModal, addAccount, editAccount,
               <div className='modal-col'>
                 <div className='modal-col-box'>
                   <div className='modal-col-box-title'>
-                  <input className={`custom-check-box hidden ${customToggle ? '' : 'none'}`} type='checkbox' />비고</div>
-                  <div className='modal-col-box-inner'>
-                    <input onChange={e => changeCustomInput(e, 'etc')} defaultChecked={customInput['etc']} className={`custom-check-box ${customToggle ? '' : 'none'}`} type='checkbox' />
+                  <input className={`custom-check-box ${customToggle ? 'nonevisible' : ''}`} type='checkbox' />비고</div>
+                  <div className={`modal-col-box-inner ${customToggle ? 'hidden' : ''}`}>
+                    <div className={`check-box ${customToggle ? 'hidden' : ''}`}>
+                      <input id='etc' onChange={e => changeCustomInput(e, 'etc')} defaultChecked={customInput['etc']} className='custom-check-box' type='checkbox' />
+                      <label htmlFor='etc' className={`custom-check-box ${customToggle ? 'visible' : ''}`}></label>
+                    </div>
                     <input className='modal-col-box-input' placeholder='입력' value={modalValues['etc']} onChange={e => {
                       handleOnChange(e, 'etc');
                     }}/>

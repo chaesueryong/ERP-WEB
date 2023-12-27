@@ -1,10 +1,8 @@
 import './Sales.css';
-import FilterBox from '../../component/FilterBox/FilterBox';
-import ButtonNormal from '../../component/ButtonNormal/ButtonNormal';
-import DataGrid, { Column, Selection, HeaderFilter, Paging, Pager, Sorting, Search } from 'devextreme-react/data-grid';
 import { useState } from 'react';
 import { common } from '../../utils/common';
 import OrderFilterBox from '../../component/FilterBox/OrderFilterBox';
+import Summary from './subpage/Summary/Summary';
 
 function Sales() {
   const [modal, setModal] = useState(false);
@@ -80,7 +78,12 @@ function Sales() {
   return (
     <div className="Sales">
       <OrderFilterBox filterTitle="매출관리" tapList={tapList} dateType={dateType} selectTitle='매장 선택' handleClickTap={handleClickTap} />
-
+          {
+            tapList[0].checked ? <Summary /> : <></>
+          }
+          {
+            tapList[1].checked ? <Summary /> : <></>
+          }
     </div>
   );
 }

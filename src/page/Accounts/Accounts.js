@@ -291,8 +291,10 @@ function Accounts() {
   }
 
   const onIntersect = async ([entry], observer) => {
+    console.log(entry.isIntersecting)
     if (entry.isIntersecting && !_isLoading && totalPage > _page) {
       observer.unobserve(entry.target);
+      
       _isLoading = true;
       // 데이터를 가져오는 부분
       await getAccountList();

@@ -5,7 +5,7 @@ function OrderFilterBox({filterTitle, tapList, dateType, selectTitle, handleClic
 
   return (
     <div className="OrderFilterBox">
-         <div className='order-filter-title'>
+        <div className='order-filter-title'>
           {filterTitle}
         </div>
 
