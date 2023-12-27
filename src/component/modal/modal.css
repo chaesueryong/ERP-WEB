@@ -108,6 +108,7 @@
 .modal-col {
     display: flex;
     justify-content: space-between;
+    align-items: flex-start;
     gap: 15px;
     margin: 20px 0;
 }
