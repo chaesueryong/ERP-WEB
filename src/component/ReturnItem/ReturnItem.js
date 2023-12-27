@@ -32,11 +32,7 @@ function ReturnItem({data}) {
                 </div>
 
                 <div className='return-item-button-box'>
-                    <div className='return-item-button' onClick={tagOutPut}>택 출력</div>
-                    <div className='return-item-button' onClick={addOrderProduct}>
-                        발주상품 추가
-                        <img src={blue_plus_icon} alt='' />
-                    </div>
+
                 </div>
             </div>
 
