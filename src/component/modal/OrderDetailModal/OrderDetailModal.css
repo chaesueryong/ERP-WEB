@@ -1,0 +1,23 @@
+.odm-bottom-box {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    padding: 45px 0;
+}
+
+.odm-button {
+    font-size: 14px;
+    font-weight: 400;
+    padding: 10px 12px;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+.odm-button.cancel {
+    border: 1px solid black;
+}
+
+.odm-button.shortcut {
+    background-color: #228BE6;
+    color: white;
+}

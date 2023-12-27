@@ -4,6 +4,7 @@ import { useState } from 'react';
 import OrderItem from '../../component/OrderItem/OrderItem';
 import OrderFilterBox from '../../component/FilterBox/OrderFilterBox';
 import ConfirmModal from '../../component/modal/ConfirmModal/ConfirmModal';
+import ReturnItem from '../../component/ReturnItem/ReturnItem';
 
 function Orders() {
   const [modal, setModal] = useState(false);
@@ -111,8 +112,8 @@ function Orders() {
             <></>
           }
           {
-            tapList[1].checked ? _orderList.map((e,i) => (
-              <OrderItem key={i} data={e} />
+            tapList[1].checked ? _returnList.map((e,i) => (
+              <ReturnItem key={i} data={e} />
             ))
             :
             <></>
@@ -137,6 +138,157 @@ function Orders() {
 export default Orders;
 
 const _orderList = [
+  {
+    code: '001-01',
+    name: '애프터',
+    orderNumber: '100',
+    orderCount: 10,
+    returnCount: 10,
+    purchasePrice: 38000,
+    qlrh: '비고내용',
+    list: [
+      {
+        ID: 1,
+        code: '001-01',
+        name: '상품명품명품명품명',
+        season: 'SS',
+        color: 'Black',
+        size: 'Free',
+        rhdrmq: '30000',
+        gusworh: '0',
+        orderCount: 100,
+        amount: 38000000
+      },
+      {
+        ID: 1,
+        code: '001-01',
+        name: '상품명품명품명품명',
+        season: 'SS',
+        color: 'Black',
+        size: 'Free',
+        rhdrmq: '30000',
+        gusworh: '0',
+        orderCount: 100,
+        amount: 38000000
+      },
+      {
+        ID: 1,
+        code: '001-01',
+        name: '상품명품명품명품명',
+        season: 'SS',
+        color: 'Black',
+        size: 'Free',
+        rhdrmq: '30000',
+        gusworh: '0',
+        orderCount: 100,
+        amount: 38000000
+      },
+      {
+        ID: 1,
+        code: '001-01',
+        name: '상품명품명품명품명',
+        season: 'SS',
+        color: 'Black',
+        size: 'Free',
+        rhdrmq: '30000',
+        gusworh: '0',
+        orderCount: 100,
+        amount: 38000000
+      },
+    ]
+  },
+  {
+    name: '애프터 컴퍼니',
+    amount: '261,100',
+    list: [
+      {
+        ID: 1,
+        code: '001-01',
+        name: '상품명품명품명품명',
+        season: 'SS',
+        color: 'Black',
+        size: 'Free',
+        rhdrmq: '30000',
+        gusworh: '0',
+        orderCount: 100,
+        amount: 38000000
+      },
+      {
+        ID: 1,
+        code: '001-01',
+        name: '상품명품명품명품명',
+        season: 'SS',
+        color: 'Black',
+        size: 'Free',
+        rhdrmq: '30000',
+        gusworh: '0',
+        orderCount: 100,
+        amount: 38000000
+      },
+    ]
+  },
+  {
+    name: '애프터 컴퍼니',
+    amount: '261,100',
+    list: [
+      {
+        ID: 1,
+        code: '001-01',
+        name: '상품명품명품명품명',
+        season: 'SS',
+        color: 'Black',
+        size: 'Free',
+        rhdrmq: '30000',
+        gusworh: '0',
+        orderCount: 100,
+        amount: 38000000
+      },
+      {
+        ID: 1,
+        code: '001-01',
+        name: '상품명품명품명품명',
+        season: 'SS',
+        color: 'Black',
+        size: 'Free',
+        rhdrmq: '30000',
+        gusworh: '0',
+        orderCount: 100,
+        amount: 38000000
+      },
+    ]
+  },
+  {
+    name: '애프터 컴퍼니',
+    amount: '261,100',
+    list: [
+      {
+        ID: 1,
+        code: '001-01',
+        name: '상품명품명품명품명',
+        season: 'SS',
+        color: 'Black',
+        size: 'Free',
+        rhdrmq: '30000',
+        gusworh: '0',
+        orderCount: 100,
+        amount: 38000000
+      },
+      {
+        ID: 1,
+        code: '001-01',
+        name: '상품명품명품명품명',
+        season: 'SS',
+        color: 'Black',
+        size: 'Free',
+        rhdrmq: '30000',
+        gusworh: '0',
+        orderCount: 100,
+        amount: 38000000
+      },
+    ]
+  }
+]
+const _returnList = [
   {
     code: '001-01',
     name: '애프터',

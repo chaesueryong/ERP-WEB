@@ -132,46 +132,49 @@
     gap: 2px;
 }
 
-.custom-check-box {
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    appearance: none;
 
-    border-radius: 2px;
-    width: 18px;
-    height: 18px;
-    border: 2px solid #DEE2E6;
+
+.modal-col-box-inner.hidden > *:not(:first-child){
+    pointer-events: none;
+}
+
+.custom-check-box.nonevisible {
+    visibility: hidden;
+    display: inline;
+    margin-right: 7px;
+}
+
+input.custom-check-box, label.custom-check-box {
+    display: none;
+}
+
+label.custom-check-box.visible {
+    display: inline;
+}
+
+input.custom-check-box + label.custom-check-box{
     cursor: pointer;
 }
 
-.custom-check-box.hidden {
-    height: 0;
-    visibility: hidden;
+/* label:before에 체크하기 전 상태 CSS */
+input.custom-check-box + label.custom-check-box:before {
+    content: "";
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    border: 2px solid #DEE2E6;
+    border-radius: 2px;
+    vertical-align: middle;
 }
 
-.custom-check-box.none {
-    display: none;
-}
-
-.custom-check-box::after {
-    border: solid #fff;
-    border-width: 0 2px 2px 0;
-    content: '';
-    display: none;
-    height: 40%;
-    left: 40%;
-    position: relative;
-    top: 20%;
-    transform: rotate(45deg);
-    width: 15%;
-}
-
-.custom-check-box:checked {
-    background: #505bf0;
-}
-
-.custom-check-box:checked::after {
-    display: block;
+/* label:before에 체크 된 상태 CSS */  
+input.custom-check-box:checked + label.custom-check-box:before {
+    content: "";
+    background-color: black;
+    border-color: black;
+    background-image: url('../../assets/images/check-1-icon.svg');
+    background-repeat: no-repeat;
+    background-position: 50%;
 }
 
 .modal-col-box-input {

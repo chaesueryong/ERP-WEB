@@ -1,0 +1,155 @@
+.ReturnItem {
+
+}
+
+.return-top {
+    display: flex;
+    align-items: center;
+    height: 50px;
+    border: 1px solid #F1F3F5;
+    border-radius: 10px;
+    padding: 0 20px;
+    background-color: white;
+    cursor: pointer;
+}
+
+.return-item-date {
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.return-item-image-box {
+    margin-left: 20px;
+    cursor: pointer;
+}
+
+.return-item-image {
+
+}
+
+
+.return-item-button-box {
+    display: flex;
+    gap: 15px;
+    margin-left: auto;
+}
+
+.return-item-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 10px;
+    border: 1px solid #228BE6;
+    background-color: #E7F5FF;
+    color: #228BE6;
+    font-size: 12px;
+    height: 30px;
+    font-weight: 500;
+    border-radius: 4px;
+    cursor: pointer;
+    gap: 10px;
+}
+
+.return-bottom {
+    padding: 10px;
+    background-color: white;
+    border-radius: 10px;
+}
+
+.return-table-box {
+    display: flex;
+}
+
+.return-table-arrow-box {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 58px;
+    height: 50px;
+    border: 1px solid black;
+    border-radius: 10px;
+    align-self: flex-end;
+    cursor: pointer;
+}
+
+
+.return-table {
+    width: 100%;
+    text-align: center;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.return-table-header {
+    height: 50px;
+}
+
+.return-table-header td:first-child {
+    width: 58px;
+    visibility: hidden;
+}
+
+.return-table-header td {
+    height: 50px;
+    border-radius: 10px;
+    background-color: #F1F3F5;
+}
+
+.return-table-body {
+    height: 50px;
+    border: 1px solid black;
+    border-radius: 10px;
+}
+
+.return-table-body td:first-child {
+    cursor: pointer;
+    border: 1px solid black;
+    border-radius: 10px;
+}
+
+.return-table-grid {
+
+}
+
+.ReturnItem .table-grid {
+    margin: 10px 0 20px 0;
+}
+
+.ReturnItem .table-grid-left {
+    flex: 1;
+}
+
+.ReturnItem .table-grid-right {
+    width: 150px;
+}
+
+.ReturnItem .table-grid-right-button-box {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 34px;
+}
+
+.ReturnItem .table-grid-right-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10px;
+    color: #707C87;
+    font-weight: 400;
+    font-size: 14px;
+    width: 98px;
+    height: 29px;
+    cursor: pointer;
+}
+
+.ReturnItem .dx-datagrid-content .dx-datagrid-table .dx-row .dx-command-select {
+    padding: 0;
+    width: 58px !important;
+    min-width: 58px !important;
+    max-width: 58px !important;
+}
+
+.ReturnItem .dx-datagrid-headers .dx-datagrid-table .dx-row > td {
+    border-bottom: none;
+}

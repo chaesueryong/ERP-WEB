@@ -111,26 +111,26 @@
 
 }
 
-.table-grid {
+.OrderItem .table-grid {
     margin: 10px 0 20px 0;
 }
 
-.table-grid-left {
+.OrderItem .table-grid-left {
     flex: 1;
 }
 
-.table-grid-right {
+.OrderItem .table-grid-right {
     width: 70px;
 }
 
-.table-grid-right-button-box {
+.OrderItem .table-grid-right-button-box {
     display: flex;
     align-items: center;
     justify-content: center;
     height: 34px;
 }
 
-.table-grid-right-button {
+.OrderItem .table-grid-right-button {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -144,13 +144,13 @@
     cursor: pointer;
 }
 
-.dx-datagrid-content .dx-datagrid-table .dx-row .dx-command-select {
+.OrderItem .dx-datagrid-content .dx-datagrid-table .dx-row .dx-command-select {
     padding: 0;
     width: 58px !important;
     min-width: 58px !important;
     max-width: 58px !important;
 }
 
-.dx-datagrid-headers .dx-datagrid-table .dx-row > td {
+.OrderItem .dx-datagrid-headers .dx-datagrid-table .dx-row > td {
     border-bottom: none;
 }

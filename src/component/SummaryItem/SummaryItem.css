@@ -1,0 +1,76 @@
+.SummaryItem {
+    display: flex;
+    flex-direction: column;
+    height: 185px;
+    border: 1px solid #F8F9FA;
+    border-radius: 10px;
+    box-shadow: 1px 1px 1px #868E960F;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.summaryitem-top {
+    display: flex;
+    gap: 10px;
+    margin-bottom: auto;
+}
+
+.summaryitem-inner {
+    font-weight: 600;
+}
+
+.achievement {
+    display: flex;
+    align-items: center;
+    font-weight: 600;
+    font-size: 20px;
+}
+
+.percent {
+    font-size: 16px;
+}
+
+.compare-standard {
+    font-size: 10px;
+}
+
+.blue {
+    color: #228BE6;
+}
+
+.red {
+    color: #FA5252;
+}
+
+.gray {
+    color: #495057;
+}
+
+.black {
+    color: black;
+}
+
+.summaryitem-bottom {
+    display: flex;
+    font-weight: 600;
+}
+
+.summaryitem-bottom-text-1 {
+    font-size: 12px;
+}
+.summaryitem-bottom-text-2 {
+    font-size: 24px;
+}
+.summaryitem-bottom-text-3 {
+    font-size: 10px;
+    color: #ADB5BD;
+}
+
+.achievement-rate {
+    display: flex;
+    font-size: 48px;
+    color: #20C997;
+    font-weight: 600;
+    margin-left: auto;
+    line-height: 1;
+}

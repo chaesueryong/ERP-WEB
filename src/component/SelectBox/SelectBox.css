@@ -1,5 +1,6 @@
 .SelectBox {
     display: flex;
+    flex: 1;
     gap: 15px;
 }
 
