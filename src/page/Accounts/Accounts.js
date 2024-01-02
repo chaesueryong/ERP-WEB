@@ -3,9 +3,8 @@ import './Accounts.css';
 import FilterBox from '../../component/FilterBox/FilterBox';
 import ButtonNormal from '../../component/ButtonNormal/ButtonNormal';
 
-import DataGrid, { Column, Selection, HeaderFilter, Paging, Pager, Sorting, Search, SearchPanel, Export, ColumnFixing, ColumnChooser, FilterRow, FilterPanel } from 'devextreme-react/data-grid';
+import DataGrid, { Column, Selection, HeaderFilter, Paging, Sorting, Search, ColumnFixing } from 'devextreme-react/data-grid';
 import { api } from '../../api/api';
-import PageNation from '../../component/PageNation/PageNation';
 import AccountRegistrationModal from '../../component/modal/AccountRegistrationModal/AccountRegistrationModal';
 import { useLocation, useNavigate, useSearchParams } from 'react-router-dom';
 import { useRecoilState } from 'recoil';
@@ -374,10 +373,6 @@ function Accounts() {
             <Search enabled={true} editorOptions={searchEditorOptions} />
           </HeaderFilter>
 
-          {/* <FilterRow visible={true} /> */}
-          {/* <FilterPanel visible={true} /> */}
-
-          {/* <Pager visible={false} /> */}
           <Paging pageSize={accountList.length} />
           <Sorting mode="multiple" />
           <ColumnFixing enabled={true} />

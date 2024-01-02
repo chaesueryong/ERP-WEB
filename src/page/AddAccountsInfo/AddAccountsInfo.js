@@ -1,13 +1,12 @@
 import { useEffect, useRef, useState } from 'react';
-import './Products.css';
-import FilterBox from '../../component/FilterBox/FilterBox';
-import ButtonNormal from '../../component/ButtonNormal/ButtonNormal';
-
-import DataGrid, { Column, Selection, HeaderFilter, Paging, Pager, Sorting, Search } from 'devextreme-react/data-grid';
+import './AddAccountsInfo.css';
+import DataGrid, { Column, Selection, HeaderFilter, Paging, Sorting, Search, ColumnFixing } from 'devextreme-react/data-grid';
 import { api } from '../../api/api';
-import ProductRegistrationModal from '../../component/modal/ProductRegistrationModal/ProductRegistrationModal';
-import ProductOrderModal from '../../component/modal/ProductOrderModal/ProductOrderModal';
-import { common } from '../../utils/common';
+import { useRecoilState } from 'recoil';
+import { toastState } from '../../recoil/status';
+import { debounce } from 'lodash';
+import long_back_icon from '../../assets/images/long-back-icon.svg';
+import { useNavigate } from 'react-router-dom';
 
 let totalPage = Infinity;
 
@@ -16,25 +15,28 @@ let _accountList = [];
 let _search = '';
 let _page = 0;
 
-function Products() {
-  const [filterList, setFilterList] = useState(filters);
+function AddAccountsInfo() {
+    const navigate = useNavigate();
+
+  const [toast, setToast] = useRecoilState(toastState);
+  const [target, setTarget] = useState('');
+  const [selectionArr, setSelectionArr] = useState([]);
+  const [selectedAccount, setSelectedAccount] = useState('');
+
+  const [modalData, setModalData] = useState({});
 
     // 페이지 데이터
   const [accountList, setAccountList] = useState([]);
   const [search, setSearch] = useState('');
-  const [filter, setFilter] = useState([]);
+  const [filterList, setFilterList] = useState(filters);
   const [pageSize, setPageSize] = useState(10);
-  const [data, setData] = useState({});
-
-  const [target, setTarget] = useState('');
 
   const dataGridRef = useRef(null);
+  const buttonRef = useRef(null);
 
-  const [registrationModal, setRegistrationModal] = useState(false);
-  const [orderModal, setOrderModal] = useState(false);
-  const [isConfirmModal, setIsConfirmModal] = useState(false);
+  const [isModal, setIsModal] = useState(false);
  
-  const getAccountList = async(columns = [], orders = []) => {
+  const getAccountList = async (columns = [], orders = []) => {
     try{
       const result = await api.post(api.get_account_list, {
         search_text : _search, //검색어
@@ -76,75 +78,57 @@ function Products() {
     }
   }
 
-  const addAccount = (modalValues) => {
-    api.post(api.add_account, modalValues)
-    .then(res => {
-      alert('추가 되었습니다');
-      closeModal();
-      getAccountList();
-    }).catch(e=>{
-      alert('네트워크 에러')
-      console.log(e)
-    })
+  const openModal = (data = null) => {
+    document.querySelector('html').style.overflow = 'hidden';
+    setModalData(data);
+    setIsModal(true);
   }
 
-  const registrationOrder = () => {
-    setIsConfirmModal(true);
+  const onRowDblClick = (e) => {
+    // openModal(e.data);
   }
 
-  
-  const closeModal = (type) => {
-    switch(type){
-      case 'registration':
-        setRegistrationModal(false);
-        break;
-      case 'order':
-        setOrderModal(false);
-        break;
-      case 'orderconfirm':
-        setIsConfirmModal(false);
-        setOrderModal(false);
-        break;
-      default:
-        break;  
-    }
+  const onCellClick = (e) => {
+    console.log(e)
   }
 
-  const orderShortCut = () => {
-    setIsConfirmModal(false);
-    setOrderModal(false);
+  const onPositionSortingChanged = (e) => {
+    console.log(e)
   }
 
-  const openModal = (type) => {
-    switch(type){
-      case 'registration':
-        setRegistrationModal(true);
-        break;
-      case 'order':
-        setOrderModal(true);
-        break;
-      default: 
-        break;  
-    }
+  const goBack = () => {
+    navigate(-1);
   }
 
-  // 페이지 상단 필터 박스 클릭 이벤트
-  const handleClickCheckFilter = (e) => {
-    for(let i = 0; i < filterList.length; i++){
-      if(filterList[i].name === e.target.id){
-        filterList[i].checked = e.target.checked;
-        break;
+
+  const onSelectionChanged = ({selectedRowKeys}) => {
+    console.log(selectedRowKeys);
+    if(selectedRowKeys.length === 0){
+      buttonRef.current.style.color = '#ADB5BD';
+      buttonRef.current.style.backgroundColor = '#E9ECEF';
+    }else {
+      if(selectedAccount !== ''){
+        buttonRef.current.style.color = 'white';
+        buttonRef.current.style.backgroundColor = '#20C997';
       }
     }
-
-    setFilterList([...filterList]);
+    setSelectionArr(selectedRowKeys);
   }
 
-  const onExporting = (e) => {
-    common.exportExcel(e, dataGridRef);
+  const changeSelectBox = (e) => {
+    setSelectedAccount(e.target.value)
+
+    if(e.target.selectedIndex === 0){
+        e.target.style.color = '#C0C7CE';
+    }else {
+        e.target.style.color = 'black';
+        buttonRef.current.style.color = 'white';
+        buttonRef.current.style.backgroundColor = '#20C997';
+    }
   }
 
   const onIntersect = async ([entry], observer) => {
+    console.log(entry.isIntersecting)
     if (entry.isIntersecting && !_isLoading && totalPage > _page) {
       observer.unobserve(entry.target);
       
@@ -183,57 +167,74 @@ function Products() {
     };
   }, [target, search]);
 
-  return (
-    <div className="Products">
-      <FilterBox title='상품 관리' filter_box_border={false} handleClickCheckFilter={handleClickCheckFilter} filterList={filterList} />
 
-      <div className='grid-box'>
-        <div className='list-button'>
-          <div className='list-button-left'>
-            <ButtonNormal name='상품 등록' bg_color='#E7F5FF' font_weight='400' icon={false} color='#0099FF' handleClick={()=>openModal('registration')} />
-            <ButtonNormal name='상품 발주' bg_color='#E7F5FF' font_weight='400' icon={false} color='#0099FF' handleClick={()=>openModal('order')} />
-            {/* <ButtonNormal name='상품 관리 바로가기' bg_color='#E9ECEF' color='black' /> */}
-          </div>
-          <div className='list-button-right'>
-            <ButtonNormal name='엑셀 내려받기' bg_color='#20C997' color='white' handleClick={onExporting} />
-          </div>
+  return (
+    <div className="AddAccountsInfo">
+        <div className="FilterBox" style={{border: 'none'}}>
+            <div className='filter-back-box' onClick={() => goBack()}>
+                <img src={long_back_icon} alt='' />
+                <div>뒤로가기</div>
+            </div>
+            <div className='filter-title'>
+                거래처 정보 추가하기
+            </div>
+
+            <div className='filter-select-box' style={selectionArr.length === 0 ? {pointerEvents: 'none'} : {pointerEvents: 'auto'}}>
+                <select className='filter-select' value={selectedAccount} onChange={changeSelectBox}>
+                    <option value='' disabled>거래처 선택</option>
+                    <option className='opt' value='1'>asdf</option>
+                </select>
+                <div ref={buttonRef}>
+                    거래처 정보 일괄 등록
+                </div>
+            </div>
         </div>
+      <div className='grid-box'>
 
         <DataGrid
           dataSource={accountList}
           keyExpr="ID"
+          allowColumnReordering={true}
+          allowColumnResizing={true}
+          columnAutoWidth={true}
           showBorders={true}
           showRowLines={true}
+          hoverStateEnabled={true}
+          onRowDblClick={onRowDblClick}
+          onCellClick={onCellClick}
+          onSelectionChanged={onSelectionChanged}
           ref={dataGridRef}
+          filterBuilder={filterBuilder}
         >
+
           <Selection selectAllMod='allpages' showCheckBoxesMode='always' mode='multiple' />
-          <HeaderFilter visible={true} allowSelectAll={false}>
-            <Search enabled={true} />
+          <HeaderFilter visible={true} allowSelectAll={true}>
+            <Search enabled={true} editorOptions={searchEditorOptions} />
           </HeaderFilter>
 
-          <Pager visible={false} />
           <Paging pageSize={accountList.length} />
           <Sorting mode="multiple" />
+          <ColumnFixing enabled={true} />
 
-
-          <Column caption="*거래처명">
+          <Column 
+            caption="*거래처명" 
+            fixed={true}>
             <Column
               caption="코드"
               dataField="code"
-              sortOrder=""
+              allowSorting={onPositionSortingChanged}
             >
             </Column>
             <Column
               caption="거래처명"
               dataField="nm_kr"
-              sortOrder=""
+              allowSorting={onPositionSortingChanged}
             >
-              <HeaderFilter visible={true} allowSelectAll={false}>
+              <HeaderFilter visible={true} allowSelectAll={true}>
                 <Search enabled={true} />
               </HeaderFilter>
             </Column>
           </Column>
-
           
           <Column caption="*브랜드명">
             <Column
@@ -252,17 +253,6 @@ function Products() {
               </HeaderFilter>
             </Column>
           </Column>
-
-          <Column 
-            caption="*상품 명"
-            dataField="categorys"
-            alignment='left'
-          >
-            <HeaderFilter visible={true} allowSelectAll={false}>
-              <Search enabled={true} />
-            </HeaderFilter>
-          </Column>
-
           
           {
             filterList.map((e, i) => {
@@ -286,6 +276,7 @@ function Products() {
           }
 
         </DataGrid>
+
         {
           !_isLoading ? 
           
@@ -297,28 +288,35 @@ function Products() {
         <div className='empty-target' ref={setTarget}></div>
       </div>
 
-      {
-        registrationModal && <ProductRegistrationModal isModal={registrationModal} closeModal={()=>closeModal('registration')} addAccount={addAccount} />
-      }
-      {
-        orderModal && <ProductOrderModal isModal={orderModal} registrationOrder={registrationOrder} closeModal={()=>closeModal('order')} isConfirmModal={isConfirmModal} closeConfirmModal={()=>closeModal('orderconfirm')} orderShortCut={orderShortCut}  />
-      }
     </div>
   );
 }
 
-export default Products;
+export default AddAccountsInfo;
 
 const filters = [
   {name: '제품사진', value: 'sector', checked: true},
-  {name: '컬러', value: 'brand_cnt', checked: true},
-  {name: '사이즈', value: 'owener', checked: true},
-  {name: '시즌', value: 'owener_phone', checked: true},
-  {name: '마지막 입고일자', value: 'manager', checked: true},
+  {name: '*상품 명', value: 'brand_cnt', checked: true},
+  {name: '상품 분류', value: 'owener', checked: true},
+  {name: '컬러', value: 'owener_phone', checked: true},
+  {name: '사이즈', value: 'manager', checked: true},
   {name: '상품 분류', value: 'manager_phone', checked: true},
-  {name: '원가', value: 'l_address', checked: false},
-  {name: '공급가', value: 'c_account', checked: false},
-  {name: '부가세', value: 'c_fax', checked: false},
-  {name: '소비자가', value: 'w_address', checked: false},
-  {name: '기타', value: 'bank_acc', checked: false},
+  {name: '시즌', value: 'l_address', checked: true},
+  {name: '입고 수량', value: 'c_account', checked: true},
+  {name: '판매 수량', value: 'c_fax', checked: true},
+  {name: '현재 재고', value: 'w_address', checked: true},
+  {name: '중복 여부', value: 'bank_acc', checked: true},
 ];
+
+const filterBuilder = {
+  customOperations: [{
+    name: 'weekends',
+    caption: 'Weekends',
+    dataTypes: ['date'],
+    icon: 'check',
+    hasValue: false,
+  }],
+  allowHierarchicalFields: true,
+};
+
+const searchEditorOptions = { placeholder: '' };
