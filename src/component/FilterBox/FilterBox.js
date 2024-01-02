@@ -2,7 +2,7 @@ import FilterItem from '../FilterItem/FilterItem';
 import './FilterBox.css';
 
 function FilterBox({title, search_title, search, search_placeholder, filter_title, isCheckButton=true, handleChangeSearch, handleClickCheckFilter, filterList=[], filter_box_border=true}) {
-  // console.log(filterList)
+
   return (
     <div className="FilterBox">
         <div className='filter-title'>

@@ -14,6 +14,7 @@ import { useRecoilValue } from 'recoil';
 import { toastState } from './recoil/status';
 import Sales from './page/Sales/Sales';
 import Calculate from './page/Calculate/Calculate';
+import AddAccountsInfo from './page/AddAccountsInfo/AddAccountsInfo';
 
 function App() {
   const toast = useRecoilValue(toastState);
@@ -41,6 +42,7 @@ function App() {
           <Route path='/orders?' element={<Orders/>}/>
           <Route path='/sales?' element={<Sales/>}/>
           <Route path='/calculate?' element={<Calculate/>}/>
+          <Route path='/addaccountinfo?' element={<AddAccountsInfo/>}/>
         </Routes>
       </div>
     </div>
