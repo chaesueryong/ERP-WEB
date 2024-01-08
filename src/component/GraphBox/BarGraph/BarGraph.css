@@ -17,7 +17,7 @@
 
 .bg-chart-box {
     flex: auto;
-    overflow: hidden;
+    display: flex;
 }
 
 .bg-chart-box .dx-visibility-change-handler {

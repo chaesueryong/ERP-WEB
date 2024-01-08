@@ -39,17 +39,19 @@ function ReturnItem({data}) {
 
             <div className='return-bottom' style={isVisible ? {display: 'block'} : {display: 'none'}}>
                 <table className='return-table'>
-                    <tr className='return-table-header'>
-                        <td></td>
-                        <td>거래처 코드</td>
-                        <td>거래처명</td>
-                        <td>발주수량</td>
-                        <td>반품수량</td>
-                        <td>반품금액</td>
-                        <td>현 잔금</td>
-                        <td>확정후 잔금</td>
-                        <td>비고</td>
-                    </tr>
+                    <thead>
+                        <tr className='return-table-header'>
+                            <td></td>
+                            <td>거래처 코드</td>
+                            <td>거래처명</td>
+                            <td>발주수량</td>
+                            <td>반품수량</td>
+                            <td>반품금액</td>
+                            <td>현 잔금</td>
+                            <td>확정후 잔금</td>
+                            <td>비고</td>
+                        </tr>
+                    </thead>
                     {
                         arr.map((e, i) => (
                             <GridBox key={i} itemData={
@@ -83,6 +85,7 @@ function GridBox({itemData}) {
 
     return (
         <>
+            <tbody>
             <tr className='return-table-body'>
                 <td onClick={toggleGridBox}><img className='return-item-image' alt='' src={down_arrow_icon} /></td>
                 <td>{itemData.code}</td>
@@ -161,6 +164,8 @@ function GridBox({itemData}) {
                     </div>
                 </td>
             </tr>
+            </tbody>
+
 
             <OrderDetailModal isModal={detailModal} closeModal={closeDetailModal} />
         </>

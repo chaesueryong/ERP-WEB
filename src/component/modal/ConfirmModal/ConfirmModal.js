@@ -9,7 +9,9 @@ function ConfirmModal({isConfirmModal, text_1, text_2, closeModal, handleConfirm
               <div className='modal-content' style={{alignItems: 'center', justifyContent: 'center'}}>
 
                 <div className='order-text-1'>{
-                  () => (text_1)
+                  text_1.split('\n').map( line => {
+                    return (<span>{line}<br/></span>)
+                  })
                 }</div>
                 <div className='order-text-2'>{text_2}</div>
                 <div className='order-button-box'>

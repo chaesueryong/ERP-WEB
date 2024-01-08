@@ -3,6 +3,9 @@ import { useState } from 'react';
 import { common } from '../../utils/common';
 import OrderFilterBox from '../../component/FilterBox/OrderFilterBox';
 import Summary from './subpage/Summary/Summary';
+import Account from './subpage/Account/Account';
+import Product from './subpage/Product/Product';
+import ProductDetail from './subpage/ProductDetail/ProductDetail';
 
 function Sales() {
   const [modal, setModal] = useState(false);
@@ -82,7 +85,13 @@ function Sales() {
             tapList[0].checked ? <Summary /> : <></>
           }
           {
-            tapList[1].checked ? <Summary /> : <></>
+            tapList[1].checked ? <Account /> : <></>
+          }
+          {
+            tapList[2].checked ? <Product /> : <></>
+          }
+          {
+            tapList[3].checked ? <ProductDetail /> : <></>
           }
     </div>
   );

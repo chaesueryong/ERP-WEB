@@ -1,0 +1,83 @@
+.BarDayItem {
+    display: flex;
+    justify-content: center;
+    width: 100px;
+}
+
+.bdi-box {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: center;
+}
+
+.bdi-hover {
+    display: none;
+    flex-direction: column;
+    position: absolute;
+    top: -5px;
+    left: 50%;
+    width: 125px;
+    height: 70px;
+    background-color: #000000CC;
+    border-radius: 5px;
+    transform: translate(-50%, -100%);
+    color: white;
+    font-weight: 600;
+    padding: 7px;
+}
+
+.bdi-hover:after {
+    content: " ";
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    margin-left: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: #000000CC transparent transparent transparent;
+
+}
+
+.bdi-hover-date {
+    font-size: 8px;
+}
+
+.bdi-hover-price {
+    font-size: 14px;
+}
+
+.bdi-hover-late-price {
+    font-size: 8px;
+}
+
+.bdi-hover-percent-box {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: auto;
+}
+
+.bdi-hover-box {
+    width: 10px;
+    height: 10px;
+    border-radius: 2px;
+    background-color: #E7F5FF;
+}
+
+.bdi-hover-percent {
+    font-size: 8px;
+    color: #E7F5FF;
+}
+
+.bdi-bar {
+    position: relative;
+    width: 37px;
+    height: 30px;
+    background-color: #228BE6;
+    border-radius: 10px;
+}
+
+.bdi-legend-text {
+    font-weight: 600;
+    margin-top: 10px;
+}

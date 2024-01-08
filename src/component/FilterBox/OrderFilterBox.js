@@ -1,3 +1,4 @@
+import { DateBox, DateRangeBox } from 'devextreme-react';
 import './OrderFilterBox.css';
 
 function OrderFilterBox({filterTitle, tapList, dateType, selectTitle, handleClickTap}) {
@@ -47,9 +48,18 @@ function OrderFilterBox({filterTitle, tapList, dateType, selectTitle, handleClic
                 </div>
 
                 <div className='ofbr-date-set-box'>
-                <input value={'2023.23.12'} />
-                <span>~</span>
-                <input value={'2023.23.12'} />
+                  <DateBox 
+                    type="date" 
+                    applyValueMode="useButtons"
+                    inputAttr={{ 'aria-label': 'Birth Date' }} 
+                    displayFormat={"yyyy-MM-dd"}
+                    />
+                  <span>~</span>
+                  <DateBox 
+                    type="date" 
+                    applyValueMode="useButtons"
+                    inputAttr={{ 'aria-label': 'Birth Date' }} 
+                    displayFormat={"yyyy-MM-dd"}/>
                 </div>
             </div>
           </div>

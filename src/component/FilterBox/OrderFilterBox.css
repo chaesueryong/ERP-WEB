@@ -129,13 +129,3 @@
     gap: 10px;
     height: 45px;
 }
-
-.ofbr-date-set-box input {
-    height: 45px;
-    border: 1px solid #ADB5BD;
-    border-radius: 5px;
-    padding: 0 10px;
-    box-sizing: border-box;
-    font-size: 12px;
-    font-weight: 600;
-}

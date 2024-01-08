@@ -56,7 +56,7 @@ const _orderList = [
         amount: 38000000
       },
       {
-        ID: 1,
+        ID: 2,
         name: '상품명품명품명품명',
         season: 'SS',
         color: 'Black',
@@ -67,7 +67,7 @@ const _orderList = [
         amount: 38000000
       },
       {
-        ID: 1,
+        ID: 3,
         name: '상품명품명품명품명',
         season: 'SS',
         color: 'Black',
@@ -78,35 +78,7 @@ const _orderList = [
         amount: 38000000
       },
       {
-        ID: 1,
-        name: '상품명품명품명품명',
-        season: 'SS',
-        color: 'Black',
-        size: 'Free',
-        rhdrmq: '30000',
-        gusworh: '0',
-        orderCount: 100,
-        amount: 38000000
-      },
-    ]
-  },
-  {
-    name: '애프터 컴퍼니',
-    amount: '261,100',
-    list: [
-      {
-        ID: 1,
-        name: '상품명품명품명품명',
-        season: 'SS',
-        color: 'Black',
-        size: 'Free',
-        rhdrmq: '30000',
-        gusworh: '0',
-        orderCount: 100,
-        amount: 38000000
-      },
-      {
-        ID: 1,
+        ID: 4,
         name: '상품명품명품명품명',
         season: 'SS',
         color: 'Black',
@@ -134,7 +106,35 @@ const _orderList = [
         amount: 38000000
       },
       {
-        ID: 1,
+        ID: 2,
+        name: '상품명품명품명품명',
+        season: 'SS',
+        color: 'Black',
+        size: 'Free',
+        rhdrmq: '30000',
+        gusworh: '0',
+        orderCount: 100,
+        amount: 38000000
+      },
+    ]
+  },
+  {
+    name: '애프터 컴퍼니',
+    amount: '261,100',
+    list: [
+      {
+        ID: 3,
+        name: '상품명품명품명품명',
+        season: 'SS',
+        color: 'Black',
+        size: 'Free',
+        rhdrmq: '30000',
+        gusworh: '0',
+        orderCount: 100,
+        amount: 38000000
+      },
+      {
+        ID: 4,
         name: '상품명품명품명품명',
         season: 'SS',
         color: 'Black',
@@ -162,7 +162,7 @@ const _orderList = [
         amount: 38000000
       },
       {
-        ID: 1,
+        ID: 2,
         name: '상품명품명품명품명',
         season: 'SS',
         color: 'Black',

@@ -59,6 +59,9 @@ function Navigator() {
       case '/calculate':
         navigate(path + ordersPage.searchUrl);    
         break;
+      case '/inventory_management':
+        navigate(path + ordersPage.searchUrl);    
+        break;
       default:
         return;
     }
@@ -83,6 +86,9 @@ function Navigator() {
         break;
       case '/calculate':
         current.name = '정산 관리';
+        break;
+      case '/inventory_management':
+        current.name = '재고 관리';
         break;
       default:
         return;

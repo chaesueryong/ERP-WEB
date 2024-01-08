@@ -27,14 +27,14 @@ function Summary() {
           <LineGraph title={'매출 그래프'} />
         </div>
         <div className='item'>
-          <BarGraph title={'스토어 별 매출 비교'} />
+          <BarGraph title={'스토어 별 매출 비교'} type={1} />
         </div>        
 
         <div className='item'>
           <LineGraph title={'매출 건수 그래프'} />
         </div>
         <div className='item'>
-          <BarGraph title={'요일 별 매출 비교'} />
+          <BarGraph title={'요일 별 매출 비교'} type={0} />
         </div>
       
     </div>
