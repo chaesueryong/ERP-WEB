@@ -1,0 +1,45 @@
+.EmptyBarItem {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: center;
+    width: 100px;
+}
+
+.ebi-box {
+    flex: auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: center;
+}
+
+.ebi-bar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    width: 37px;
+    height: 100%;
+    background-color: #E9ECEF;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+.ebi-legend-box {
+    display: flex;
+    align-items: center;
+    margin-top: 20px;
+    gap: 5px;
+}
+
+.ebi-legend {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+}
+
+.ebi-legend-text {
+    font-weight: 600;
+    font-size: 8px;
+}

@@ -5,6 +5,8 @@ import DataGrid, { Column, Selection, HeaderFilter, Paging, Pager, Sorting, Sear
 import { useState } from 'react';
 import { common } from '../../utils/common';
 import OrderFilterBox from '../../component/FilterBox/OrderFilterBox';
+import Calculation from './subPage/Calculation/Calculation';
+import Payment from './subPage/Payment/Payment';
 
 function Calculate() {
   const [modal, setModal] = useState(false);
@@ -78,7 +80,12 @@ function Calculate() {
   return (
     <div className="Calculate">
       <OrderFilterBox filterTitle="정산" tapList={tapList} dateType={dateType} selectTitle='거래처 선택' handleClickTap={handleClickTap} />
-
+        {
+            tapList[0].checked ? <Calculation /> : <></>
+          }
+          {
+            tapList[1].checked ? <Payment /> : <></>
+          }
     </div>
   );
 }

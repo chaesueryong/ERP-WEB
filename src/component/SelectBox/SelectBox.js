@@ -4,7 +4,7 @@ import SelectItem from '../SelectItem/SelectItem';
 import gray_plus_icon from '../../assets/images/gray-plus-icon.svg';
 import black_plus_icon from '../../assets/images/black-plus-icon.svg';
 
-function SelectBox({placeholder, emptyTitle, selectType, itemType, emptyButton, inputText, customCategoryInputText, handleChange, handleRegistryCategory, handleClickButton, handleDeleteItem, handleClickItem, searchList, addList}) {
+function SelectBox({placeholder, customInputToggle, disabledBox = true, emptyTitle, selectType, itemType, emptyButton, inputText, customCategoryInputText, handleChange, handleRegistryCategory, handleClickButton, handleDeleteItem, handleClickItem, searchList, addList}) {
     const [inputFocus, setInputFocus] = useState(false);
 
     const [categoryInput, setCategoryInput] = useState('');
@@ -31,12 +31,24 @@ function SelectBox({placeholder, emptyTitle, selectType, itemType, emptyButton, 
         handleClickItem(e, selectType);
     }
 
+    const handleKeyDown = (e) => {
+        if(e.key === 'Tab'){
+            setInputFocus(false);
+        }
+    }
+
     const handleOnChange = (e) => {
+        if(e.key === 'Tab'){
+            return;
+        }
         handleChange(e, selectType);
         console.log(e.key);
 
         if(e.key === 'Enter'){
-            handleOnClick(searchList[focusIndex]);
+            if(searchList[focusIndex]){
+                handleOnClick(searchList[focusIndex]);
+            }
+
         }
 
         if(e.key === 'ArrowUp'){
@@ -79,6 +91,7 @@ function SelectBox({placeholder, emptyTitle, selectType, itemType, emptyButton, 
         if(e.key === 'Enter') {
             handleOnRegistryCategory();
         }
+
     }
 
     const handleOnChangeCategory = (e) => {
@@ -120,13 +133,16 @@ function SelectBox({placeholder, emptyTitle, selectType, itemType, emptyButton, 
   return (
     <div className="SelectBox">
         <div className='select-box-left'>
-            <input className='select-input-box'
+            <input className={`select-input-box ${disabledBox ? '' : 'hidden'}`}
                 defaultValue={inputText} 
                 // onBlur={handleOnBlur}
                 onFocus={handleOnFocus}
                 ref={inputRef}
                 placeholder={placeholder}
-                onKeyUp={handleOnChange} />
+                onKeyUp={handleOnChange}
+                onKeyDown={handleKeyDown}
+                style={customInputToggle ? {width: '235px'}: { width: '100%'}}
+                />
             {
                 selectType !== 'categorys' ?
                 <div className='options-box' ref={optionBoxRef} style={inputFocus ? {display: 'block'}: {display: 'none'}}>

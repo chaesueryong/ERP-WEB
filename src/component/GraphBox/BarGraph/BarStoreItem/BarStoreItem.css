@@ -1,0 +1,98 @@
+.BarStoreItem {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: center;
+    width: 100px;
+}
+
+.bsi-box {
+    flex: auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: center;
+}
+
+.bsi-hover {
+    display: none;
+    flex-direction: column;
+    position: absolute;
+    top: -5px;
+    left: 50%;
+    width: 125px;
+    height: 70px;
+    background-color: #000000CC;
+    border-radius: 5px;
+    transform: translate(-50%, -100%);
+    color: white;
+    font-weight: 600;
+    padding: 7px;
+}
+
+.bsi-hover:after {
+    content: " ";
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    margin-left: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: #000000CC transparent transparent transparent;
+
+}
+
+.bsi-hover-date {
+    font-size: 8px;
+}
+
+.bsi-hover-price {
+    font-size: 14px;
+}
+
+.bsi-hover-late-price {
+    font-size: 8px;
+}
+
+.bsi-hover-percent-box {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: auto;
+}
+
+.bsi-hover-box {
+    width: 10px;
+    height: 10px;
+    border-radius: 2px;
+    background-color: #E7F5FF;
+}
+
+.bsi-hover-percent {
+    font-size: 8px;
+    color: #E7F5FF;
+}
+
+.bsi-bar {
+    position: relative;
+    width: 37px;
+    height: 30px;
+    border-radius: 10px;
+}
+
+.bsi-legend-box {
+    display: flex;
+    align-items: center;
+    margin-top: 20px;
+    gap: 5px;
+}
+
+.bsi-legend {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+}
+
+.bsi-legend-text {
+    font-weight: 600;
+    font-size: 8px;
+}

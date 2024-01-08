@@ -189,12 +189,13 @@ input.custom-check-box:checked + label.custom-check-box:before {
     box-sizing: border-box;
 }
 
-.box-select {
-    color: #C0C7CE;
+.modal-col-box-input.hidden {
+    background-color: #E9ECEF;
+    pointer-events: none;
 }
 
-.modal-col-box-input:focus {
-    outline: none;
+.box-select {
+    color: #C0C7CE;
 }
 
 .modal-col-box-input option[value=""][disabled] {
@@ -205,6 +206,7 @@ input.custom-check-box:checked + label.custom-check-box:before {
 .modal-col-box-input::placeholder{
     font-size: 12px;
     font-weight: 500;
+    color: #ADB5BD;
 }
 
 .opt {
@@ -289,6 +291,7 @@ input.custom-check-box:checked + label.custom-check-box:before {
     font-size: 16px;
     font-weight: 600;
     margin: 0 0 0 0;
+    text-align: center;
 }
 
 .order-text-2 {

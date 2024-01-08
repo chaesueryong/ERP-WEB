@@ -38,9 +38,8 @@
     appearance: none;
     background: url('../../assets/images/search-icon.svg') no-repeat calc(100% - 10px) 52%/20px auto;
 }
-
 .input-box:focus {
-    outline: none;
+    background: url('../../assets/images/search-icon-1.svg') no-repeat calc(100% - 10px) 52%/20px auto;
 }
 
 .input-box::placeholder {

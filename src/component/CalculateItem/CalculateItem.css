@@ -1,0 +1,29 @@
+.CalculateItem {
+    display: flex;
+}
+
+.ci-left-box {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 64px;
+    background-color: #F1F3F5;
+    border: 1px solid #ADB5BD;    
+}
+
+.ci-right-box {
+    flex: 1;
+    overflow: hidden;
+}
+
+.ci-account-info-box {
+    display: flex;
+    align-items: center;
+    height: 64px;
+    gap: 20px;
+    padding: 0 20px;
+    font-size: 12px;
+    font-weight: 600;
+    color: #495057;
+    border: 1px solid #495057;
+}

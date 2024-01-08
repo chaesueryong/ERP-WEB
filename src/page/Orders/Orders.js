@@ -160,7 +160,7 @@ const _orderList = [
         amount: 38000000
       },
       {
-        ID: 1,
+        ID: 2,
         code: '001-01',
         name: '상품명품명품명품명',
         season: 'SS',
@@ -172,7 +172,7 @@ const _orderList = [
         amount: 38000000
       },
       {
-        ID: 1,
+        ID: 3,
         code: '001-01',
         name: '상품명품명품명품명',
         season: 'SS',
@@ -184,7 +184,7 @@ const _orderList = [
         amount: 38000000
       },
       {
-        ID: 1,
+        ID: 4,
         code: '001-01',
         name: '상품명품명품명품명',
         season: 'SS',
@@ -196,10 +196,14 @@ const _orderList = [
         amount: 38000000
       },
     ]
-  },
-  {
-    name: '애프터 컴퍼니',
-    amount: '261,100',
+  },{
+    code: '001-01',
+    name: '애프터',
+    orderNumber: '100',
+    orderCount: 10,
+    returnCount: 10,
+    purchasePrice: 38000,
+    qlrh: '비고내용',
     list: [
       {
         ID: 1,
@@ -214,7 +218,31 @@ const _orderList = [
         amount: 38000000
       },
       {
-        ID: 1,
+        ID: 2,
+        code: '001-01',
+        name: '상품명품명품명품명',
+        season: 'SS',
+        color: 'Black',
+        size: 'Free',
+        rhdrmq: '30000',
+        gusworh: '0',
+        orderCount: 100,
+        amount: 38000000
+      },
+      {
+        ID: 3,
+        code: '001-01',
+        name: '상품명품명품명품명',
+        season: 'SS',
+        color: 'Black',
+        size: 'Free',
+        rhdrmq: '30000',
+        gusworh: '0',
+        orderCount: 100,
+        amount: 38000000
+      },
+      {
+        ID: 4,
         code: '001-01',
         name: '상품명품명품명품명',
         season: 'SS',
@@ -226,10 +254,14 @@ const _orderList = [
         amount: 38000000
       },
     ]
-  },
-  {
-    name: '애프터 컴퍼니',
-    amount: '261,100',
+  },{
+    code: '001-01',
+    name: '애프터',
+    orderNumber: '100',
+    orderCount: 10,
+    returnCount: 10,
+    purchasePrice: 38000,
+    qlrh: '비고내용',
     list: [
       {
         ID: 1,
@@ -244,7 +276,31 @@ const _orderList = [
         amount: 38000000
       },
       {
-        ID: 1,
+        ID: 2,
+        code: '001-01',
+        name: '상품명품명품명품명',
+        season: 'SS',
+        color: 'Black',
+        size: 'Free',
+        rhdrmq: '30000',
+        gusworh: '0',
+        orderCount: 100,
+        amount: 38000000
+      },
+      {
+        ID: 3,
+        code: '001-01',
+        name: '상품명품명품명품명',
+        season: 'SS',
+        color: 'Black',
+        size: 'Free',
+        rhdrmq: '30000',
+        gusworh: '0',
+        orderCount: 100,
+        amount: 38000000
+      },
+      {
+        ID: 4,
         code: '001-01',
         name: '상품명품명품명품명',
         season: 'SS',
@@ -256,10 +312,14 @@ const _orderList = [
         amount: 38000000
       },
     ]
-  },
-  {
-    name: '애프터 컴퍼니',
-    amount: '261,100',
+  },{
+    code: '001-01',
+    name: '애프터',
+    orderNumber: '100',
+    orderCount: 10,
+    returnCount: 10,
+    purchasePrice: 38000,
+    qlrh: '비고내용',
     list: [
       {
         ID: 1,
@@ -274,7 +334,31 @@ const _orderList = [
         amount: 38000000
       },
       {
-        ID: 1,
+        ID: 2,
+        code: '001-01',
+        name: '상품명품명품명품명',
+        season: 'SS',
+        color: 'Black',
+        size: 'Free',
+        rhdrmq: '30000',
+        gusworh: '0',
+        orderCount: 100,
+        amount: 38000000
+      },
+      {
+        ID: 3,
+        code: '001-01',
+        name: '상품명품명품명품명',
+        season: 'SS',
+        color: 'Black',
+        size: 'Free',
+        rhdrmq: '30000',
+        gusworh: '0',
+        orderCount: 100,
+        amount: 38000000
+      },
+      {
+        ID: 4,
         code: '001-01',
         name: '상품명품명품명품명',
         season: 'SS',
@@ -286,7 +370,7 @@ const _orderList = [
         amount: 38000000
       },
     ]
-  }
+  },
 ]
 const _returnList = [
   {
@@ -311,7 +395,7 @@ const _returnList = [
         amount: 38000000
       },
       {
-        ID: 1,
+        ID: 2,
         code: '001-01',
         name: '상품명품명품명품명',
         season: 'SS',
@@ -323,7 +407,7 @@ const _returnList = [
         amount: 38000000
       },
       {
-        ID: 1,
+        ID: 3,
         code: '001-01',
         name: '상품명품명품명품명',
         season: 'SS',
@@ -335,37 +419,7 @@ const _returnList = [
         amount: 38000000
       },
       {
-        ID: 1,
-        code: '001-01',
-        name: '상품명품명품명품명',
-        season: 'SS',
-        color: 'Black',
-        size: 'Free',
-        rhdrmq: '30000',
-        gusworh: '0',
-        orderCount: 100,
-        amount: 38000000
-      },
-    ]
-  },
-  {
-    name: '애프터 컴퍼니',
-    amount: '261,100',
-    list: [
-      {
-        ID: 1,
-        code: '001-01',
-        name: '상품명품명품명품명',
-        season: 'SS',
-        color: 'Black',
-        size: 'Free',
-        rhdrmq: '30000',
-        gusworh: '0',
-        orderCount: 100,
-        amount: 38000000
-      },
-      {
-        ID: 1,
+        ID: 4,
         code: '001-01',
         name: '상품명품명품명품명',
         season: 'SS',
@@ -395,7 +449,37 @@ const _returnList = [
         amount: 38000000
       },
       {
-        ID: 1,
+        ID: 2,
+        code: '001-01',
+        name: '상품명품명품명품명',
+        season: 'SS',
+        color: 'Black',
+        size: 'Free',
+        rhdrmq: '30000',
+        gusworh: '0',
+        orderCount: 100,
+        amount: 38000000
+      },
+    ]
+  },
+  {
+    name: '애프터 컴퍼니',
+    amount: '261,100',
+    list: [
+      {
+        ID: 3,
+        code: '001-01',
+        name: '상품명품명품명품명',
+        season: 'SS',
+        color: 'Black',
+        size: 'Free',
+        rhdrmq: '30000',
+        gusworh: '0',
+        orderCount: 100,
+        amount: 38000000
+      },
+      {
+        ID: 4,
         code: '001-01',
         name: '상품명품명품명품명',
         season: 'SS',
@@ -425,7 +509,7 @@ const _returnList = [
         amount: 38000000
       },
       {
-        ID: 1,
+        ID: 2,
         code: '001-01',
         name: '상품명품명품명품명',
         season: 'SS',

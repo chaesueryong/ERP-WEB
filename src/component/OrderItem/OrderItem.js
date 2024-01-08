@@ -41,17 +41,19 @@ function OrderItem({data}) {
 
             <div className='order-bottom' style={isVisible ? {display: 'block'} : {display: 'none'}}>
                 <table className='order-table'>
-                    <tr className='order-table-header'>
-                        <td></td>
-                        <td>거래처 코드</td>
-                        <td>거래처명</td>
-                        <td>발주번호</td>
-                        <td>반품수량</td>
-                        <td>입고수량</td>
-                        <td>구매대금</td>
-                        <td>비고</td>
-                        <td>입고여부</td>
-                    </tr>
+                    <thead>
+                        <tr className='order-table-header'>
+                            <td></td>
+                            <td>거래처 코드</td>
+                            <td>거래처명</td>
+                            <td>발주번호</td>
+                            <td>반품수량</td>
+                            <td>입고수량</td>
+                            <td>구매대금</td>
+                            <td>비고</td>
+                            <td>입고여부</td>
+                        </tr>
+                    </thead>
                     {
                         arr.map((e, i) => (
                             <GridBox key={i} itemData={
@@ -76,6 +78,7 @@ function GridBox({itemData}) {
 
     return (
         <>
+            <tbody>
             <tr className='order-table-body'>
                 <td onClick={toggleGridBox}><img className='order-item-image' alt='' src={down_arrow_icon} /></td>
                 <td>{itemData.code}</td>
@@ -95,19 +98,14 @@ function GridBox({itemData}) {
                             <DataGrid
                                 dataSource={itemData.list}
                                 keyExpr="ID"
-                                // allowColumnReordering={true}
                                 allowColumnResizing={true}
                                 columnAutoWidth={true}
                                 showColumnLines={false}
                                 showBorders={false}
                                 showRowLines={false}
                                 hoverStateEnabled={true}
-                                // filterBuilder={filterBuilder}
                             >
-                                <Selection showCheckBoxesMode='always' mode='multiple' />
-                                {/* <HeaderFilter visible={true} allowSelectAll={true}>
-                                    <Search enabled={true} editorOptions={searchEditorOptions} />
-                                </HeaderFilter> */}
+                                <Selection selectAllMod='allpages' showCheckBoxesMode='always' mode='multiple' />
 
                                 <Sorting mode="multiple" />
                                 <ColumnFixing enabled={true} />
@@ -153,12 +151,14 @@ function GridBox({itemData}) {
                     </div>
                 </td>
             </tr>
+            </tbody>
+
         </>
     )
 }
 
 
-const arr = [1,2,3,4,5];
+const arr = [1];
 
 const filters = [
     {name: '품번', value: 'code', filter: false, checked: true},

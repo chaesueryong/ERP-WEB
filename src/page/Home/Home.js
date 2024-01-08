@@ -71,7 +71,7 @@ function Home() {
         </div>
       </div>
 
-      <ConfirmModal handleConfirm={confirm} isConfirmModal={confirmModal} closeModal={closeModal} text_1={'이미 등록되어 있는 상품이 포함되 있어요<br/>asdf'} />
+      <ConfirmModal handleConfirm={confirm} isConfirmModal={confirmModal} closeModal={closeModal} text_1={'이미 등록되어 있는 상품이 포함되 있어요\n불러올 데이터에 포함할까요?'} />
     </div>
   );
 }
