@@ -141,3 +141,23 @@
   text-align: center !important;
   font-weight: 400;
 }
+
+.dx-datagrid-checkbox-size .dx-checkbox-icon {
+  height: 20px !important;
+  width: 20px !important;
+}
+
+.dx-checkbox-indeterminate .dx-checkbox-icon::before {
+  background-color: black !important;
+}
+
+.dx-checkbox-checked .dx-checkbox-icon::before {
+  background-color: black !important;
+}
+
+
+.dx-checkbox-checked .dx-checkbox-icon {
+  font: 16px/1em DXIcons;
+  background-color: black !important;
+  color: white !important;
+}

@@ -195,6 +195,7 @@ function Products() {
             {/* <ButtonNormal name='상품 관리 바로가기' bg_color='#E9ECEF' color='black' /> */}
           </div>
           <div className='list-button-right'>
+            <ButtonNormal name='인쇄' bg_color='#495057' color='white' />
             <ButtonNormal name='엑셀 내려받기' bg_color='#20C997' color='white' handleClick={onExporting} />
           </div>
         </div>
