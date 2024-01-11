@@ -133,7 +133,7 @@ function SelectBox({placeholder, customInputToggle, disabledBox = true, emptyTit
   return (
     <div className="SelectBox">
         <div className='select-box-left'>
-            <input className={`select-input-box ${disabledBox ? '' : 'hidden'}`}
+            <input disabled={!disabledBox} className={`select-input-box ${disabledBox ? '' : 'hidden'}`}
                 defaultValue={inputText} 
                 // onBlur={handleOnBlur}
                 onFocus={handleOnFocus}

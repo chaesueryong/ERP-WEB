@@ -2,8 +2,6 @@ import { DateBox, DateRangeBox } from 'devextreme-react';
 import './OrderFilterBox.css';
 
 function OrderFilterBox({filterTitle, tapList, dateType, selectTitle, handleClickTap}) {
-
-
   return (
     <div className="OrderFilterBox">
         <div className='order-filter-title'>
@@ -54,7 +52,7 @@ function OrderFilterBox({filterTitle, tapList, dateType, selectTitle, handleClic
                     inputAttr={{ 'aria-label': 'Birth Date' }} 
                     displayFormat={"yyyy-MM-dd"}
                     />
-                  <span>~</span>
+                  <span style={{fontWeight: 600}}>~</span>
                   <DateBox 
                     type="date" 
                     applyValueMode="useButtons"

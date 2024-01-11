@@ -16,11 +16,16 @@ function Orders() {
   ]);
 
   const [dateType, setDateType] = useState([
-    {name: '금일', checked: true},
+    {name: '전체', checked: true},
+    {name: '금일', checked: false},
+    {name: '전일', checked: false},
     {name: '금주', checked: false},
+    {name: '전주', checked: false},
     {name: '당월', checked: false},
-    {name: '당기', checked: false},
+    {name: '전월', checked: false},
+    {name: '전기', checked: false},
     {name: '당년', checked: false},
+    {name: '전년', checked: false},
   ]);
 
   const openModal = () => {
@@ -97,8 +102,13 @@ function Orders() {
             {/* <ButtonNormal name='상품 관리 바로가기' bg_color='#E9ECEF' color='black' /> */}
           </div>
           <div className='list-button-right'>
+          {
+            tapList[0].checked ? 
             <ButtonNormal name='주문 취소' bg_color='#DEE2E6' color='#495057' handleClick={()=>openModal('ordercancel')} />
-            {/* <ButtonNormal name='인쇄' bg_color='#E9ECEF' color='black' /> */}
+            :
+            <></>
+          }
+            <ButtonNormal name='인쇄' bg_color='#495057' color='white' />
             <ButtonNormal name='엑셀 내려받기' bg_color='#20C997' color='white' handleClick={onExporting} />
           </div>
         </div>

@@ -1,6 +1,7 @@
 import axios from "axios";
 
 const baseUrl = 'https://dev-erp.aftercompany.co.kr/';
+// const baseUrl = 'https://dev-api.aftercompany.co.kr/v02/premium/';
 const jwt_token = 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJyb2RlY2s4MjZAb3ZlcnRoZXdpbmRvdy5uZXQiLCJpYXQiOjE3MDI0NTg1MzcsImV4cCI6MTcwNTA1MDUzN30.Ud6soq8aSSImAhV2v6B1g3v_wBmzi5Nk4d4D0Eu8Nog'
 
 export const api = {
