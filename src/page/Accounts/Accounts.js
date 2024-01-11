@@ -348,7 +348,7 @@ function Accounts() {
               <option value='50'>50</option>
               <option value='100'>100</option>
             </select> */}
-            {/* <ButtonNormal name='인쇄' bg_color='#E9ECEF' color='black' /> */}
+            <ButtonNormal name='인쇄' bg_color='#495057' color='white' />
             <ButtonNormal name='엑셀 내려받기' bg_color='#20C997' color='white' handleClick={onExporting} />
           </div>
         </div>

@@ -103,9 +103,9 @@
 }
 
 .ofbr-date-list-box {
-    display: flex;
-    align-items: center;
-    gap: 10px;
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 2px;
 }
 
 .ofbr-date-list-box div {
@@ -113,7 +113,7 @@
     align-items: center;
     justify-content: center;
     width: 41px;
-    height: 34px;
+    height: 20px;
     white-space: nowrap;
     font-size: 12px;
     font-weight: 600;
@@ -128,4 +128,9 @@
     align-items: center;
     gap: 10px;
     height: 45px;
+}
+
+
+.dx-datebox {
+    height: 100% !important;
 }
