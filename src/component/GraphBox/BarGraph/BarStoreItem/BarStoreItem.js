@@ -28,6 +28,8 @@ function BarStoreItem({data, topValue}) {
                             <div className='bsi-hover-percent'>+12%</div>
                         </div>
                     </div>
+
+                    
                 </div>
             </div>
             <div className='bsi-legend-box'>
