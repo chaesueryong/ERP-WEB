@@ -64,12 +64,14 @@
     font-weight: 600;
     gap: 10px;
     cursor: pointer;
+    white-space: nowrap;
 }
 
 .data-box-2 {
     display: flex;
     flex-direction: column;
     justify-content: center;
+    white-space: nowrap;
 }
 
 .data-box-2-text-1 {
