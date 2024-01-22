@@ -7,6 +7,7 @@ import { toastState } from '../../recoil/status';
 import { debounce } from 'lodash';
 import long_back_icon from '../../assets/images/long-back-icon.svg';
 import { useNavigate } from 'react-router-dom';
+import FetchPanel from '../../component/FetchPanel/FetchPanel';
 
 let totalPage = Infinity;
 
@@ -24,6 +25,7 @@ function AddAccountsInfo() {
   const [selectedAccount, setSelectedAccount] = useState('');
 
   const [modalData, setModalData] = useState({});
+  const [fetchType, setFetchType] = useState(0);
 
     // 페이지 데이터
   const [accountList, setAccountList] = useState([]);
@@ -38,6 +40,7 @@ function AddAccountsInfo() {
  
   const getAccountList = async (columns = [], orders = []) => {
     try{
+      setFetchType(1);
       const result = await api.post(api.get_account_list, {
         search_text : _search, //검색어
         columns : ['nm_kr'], //필터
@@ -73,8 +76,14 @@ function AddAccountsInfo() {
       totalPage = result.data.data.totalPages;
   
       _page++;
+
+      if(dataList.length === 0){
+        setFetchType(0);
+      }
     }catch(e){
       console.log(e);
+      setFetchType(3);
+      _page = Infinity;
     }
   }
 
@@ -277,13 +286,7 @@ function AddAccountsInfo() {
 
         </DataGrid>
 
-        {
-          !_isLoading ? 
-          
-          <div>
-            {/* <div>loading</div> */}
-          </div> : <></>
-        }
+        <FetchPanel type={fetchType} />
 
         <div className='empty-target' ref={setTarget}></div>
       </div>
