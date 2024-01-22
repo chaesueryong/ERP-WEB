@@ -14,6 +14,7 @@ import { brandsPageState, toastState } from '../../recoil/status';
 
 import no_image_icon from '../../assets/images/no-image-icon.svg';
 import { debounce } from 'lodash';
+import FetchPanel from '../../component/FetchPanel/FetchPanel';
 
 
 let totalPage = Infinity;
@@ -33,7 +34,7 @@ function Brands() {
   const [target, setTarget] = useState('');
 
   const [modalData, setModalData] = useState({});
-
+  const [fetchType, setFetchType] = useState(0);
 
     // 페이지 데이터
   const [brandList, setBrandList] = useState([]);
@@ -49,6 +50,7 @@ function Brands() {
 
   const getBrandList = async (orders = []) => {
     try{
+      setFetchType(1);
       const result = await api.post(api.get_brand_list, {
         "search_text" : _search, //검색어
         "categorys" : filterList.filter(e => e.checked).map(e => e.name), //카테고리
@@ -77,8 +79,18 @@ function Brands() {
       totalPage = result.data.data.totalPages;
   
       _page++;
+
+      if(dataList.length === 0){
+        setFetchType(0);
+      }
+
+      if(_search !== '' && dataList.length === 0){
+        setFetchType(4);
+      }
     }catch(e) {
       console.log(e);
+      setFetchType(3);
+      _page = Infinity;
     }
 
   }
@@ -200,9 +212,14 @@ function Brands() {
   }
 
 
-  const handleChangeSearch = debounce((e) => {
+  const handleChangeSearch = (e) => {
+    handleDebounce(e);
+  }
+
+  const handleDebounce = debounce((e) => {
     setSearch(e.target.value);
     _search = e.target.value;
+    console.log(_search)
     _page = 0;
     _brandList = [];
     getBrandList();
@@ -225,14 +242,18 @@ function Brands() {
   }
 
   const getCategory = async () => {
-    const categoryList = (await api.post(api.get_brand_category_list, {})).data.data;
+    try {
+      const categoryList = (await api.post(api.get_brand_category_list, {})).data.data;
 
-    const arr = categoryList.map(e => ({
-      name: e,
-      checked: false
-    }));
-
-    setFilterList([...arr])
+      const arr = categoryList.map(e => ({
+        name: e,
+        checked: false
+      }));
+  
+      setFilterList([...arr])
+    }catch(e) {
+      console.log(e);
+    }
   }
 
   const onIntersect = async ([entry], observer) => {
@@ -419,13 +440,9 @@ function Brands() {
         
 
         </DataGrid>
-        {
-          !_isLoading ? 
-          
-          <div>
-            {/* <div>loading</div> */}
-          </div> : <></>
-        }
+        
+        <FetchPanel type={fetchType} />
+
         <div className='empty-target' ref={setTarget}></div>
         {/* <PageNation first={data.first} last={data.last} empty={data.empty} totalPage={data.totalPages} number={data.number} handlePageClick={handlePageClick} /> */}
       </div>

@@ -488,7 +488,7 @@ function AccountRegistrationModal({isModal, closeModal, addAccount, editAccount,
                         _changeSelectBox={changeSelectBox} 
                         _customInput={customInput}
                         _modalValues={modalValues}
-                        _target={'c_account'}
+                        _target={'bank_nm'}
                         _ref={select2}
                         _selectObject={{
                           disabled: '거래 은행을 선택해 주세요',

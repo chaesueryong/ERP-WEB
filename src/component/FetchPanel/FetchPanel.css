@@ -1,0 +1,61 @@
+.fp-box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: white;
+    height: 600px;
+}
+
+
+.type-2-text-1 {
+    font-size: 16px;
+    font-weight: 600;
+    color: #228BE6;
+    margin-top: 20px;
+    margin-bottom: 5px;
+}
+
+.type-2-text-2 {
+    font-size: 24px;
+    font-weight: 600;
+    color: #228BE6;
+}
+
+
+
+
+.type-3-text-1 {
+    font-size: 16px;
+    font-weight: 600;
+    color: #ADB5BD;
+    margin-top: 20px;
+    margin-bottom: 5px;
+}
+
+.type-3-text-2 {
+    font-size: 24px;
+    font-weight: 600;
+    color: #ADB5BD;
+    margin-bottom: 5px;
+}
+
+.type-3-text-3 {
+    font-size: 16px;
+    font-weight: 600;
+    color: #ADB5BD;
+}
+.type-3-text-3 span{
+    font-size: 16px;
+    font-weight: 600;
+    text-decoration: underline;
+    color: #228BE6;
+}
+
+
+.type-4-text-1 {
+    font-size: 24px;
+    font-weight: 600;
+    color: #ADB5BD;
+    margin-top: 20px;
+}
