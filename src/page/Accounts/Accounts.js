@@ -10,6 +10,7 @@ import { useLocation, useNavigate, useSearchParams } from 'react-router-dom';
 import { useRecoilState } from 'recoil';
 import { accountPageState, toastState } from '../../recoil/status';
 import { debounce } from 'lodash';
+import FetchPanel from '../../component/FetchPanel/FetchPanel';
 
 let totalPage = Infinity;
 
@@ -27,6 +28,7 @@ function Accounts() {
   const [target, setTarget] = useState('');
 
   const [modalData, setModalData] = useState({});
+  const [fetchType, setFetchType] = useState(0);
 
     // 페이지 데이터
   const [accountList, setAccountList] = useState([]);
@@ -43,6 +45,7 @@ function Accounts() {
  
   const getAccountList = async (columns = [], orders = []) => {
     try{
+      setFetchType(1);
       const result = await api.post(api.get_account_list, {
         search_text : _search, //검색어
         columns : ['nm_kr'], //필터
@@ -78,8 +81,18 @@ function Accounts() {
       totalPage = result.data.data.totalPages;
   
       _page++;
+
+      if(dataList.length === 0){
+        setFetchType(0);
+      }
+
+      if(_search !== '' && dataList.length === 0){
+        setFetchType(4);
+      }
     }catch(e){
       console.log(e);
+      setFetchType(3);
+      _page = Infinity;
     }
   }
 
@@ -212,9 +225,14 @@ function Accounts() {
     })
   }
 
-  const handleChangeSearch = debounce((e) => {
+  const handleChangeSearch = (e) => {
+    handleDebounce(e);
+  }
+
+  const handleDebounce = debounce((e) => {
     setSearch(e.target.value);
     _search = e.target.value;
+    console.log(_search)
     _page = 0;
     _accountList = [];
     getAccountList();
@@ -290,7 +308,7 @@ function Accounts() {
   }
 
   const onIntersect = async ([entry], observer) => {
-    console.log(entry.isIntersecting)
+
     if (entry.isIntersecting && !_isLoading && totalPage > _page) {
       observer.unobserve(entry.target);
       
@@ -366,6 +384,7 @@ function Accounts() {
           onCellClick={onCellClick}
           ref={dataGridRef}
           filterBuilder={filterBuilder}
+          noDataText=''
         >
           {/* <Export enabled={true} /> */}
           <Selection selectAllMod='allpages' showCheckBoxesMode='always' mode='multiple' />
@@ -421,13 +440,7 @@ function Accounts() {
 
         </DataGrid>
 
-        {
-          !_isLoading ? 
-          
-          <div>
-            {/* <div>loading</div> */}
-          </div> : <></>
-        }
+        <FetchPanel type={fetchType} />
 
         <div className='empty-target' ref={setTarget}></div>
         {/* <PageNation first={data.first} last={data.last} empty={data.empty} totalPage={data.totalPages} number={data.number} handlePageClick={handlePageClick} /> */}

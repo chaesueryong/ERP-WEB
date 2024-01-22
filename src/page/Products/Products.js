@@ -8,6 +8,7 @@ import { api } from '../../api/api';
 import ProductRegistrationModal from '../../component/modal/ProductRegistrationModal/ProductRegistrationModal';
 import ProductOrderModal from '../../component/modal/ProductOrderModal/ProductOrderModal';
 import { common } from '../../utils/common';
+import FetchPanel from '../../component/FetchPanel/FetchPanel';
 
 let totalPage = Infinity;
 
@@ -27,6 +28,7 @@ function Products() {
   const [data, setData] = useState({});
 
   const [target, setTarget] = useState('');
+  const [fetchType, setFetchType] = useState(0);
 
   const dataGridRef = useRef(null);
 
@@ -36,6 +38,7 @@ function Products() {
  
   const getAccountList = async(columns = [], orders = []) => {
     try{
+      setFetchType(1);
       const result = await api.post(api.get_account_list, {
         search_text : _search, //검색어
         columns : ['nm_kr'], //필터
@@ -71,8 +74,14 @@ function Products() {
       totalPage = result.data.data.totalPages;
   
       _page++;
+
+      if(dataList.length === 0){
+        setFetchType(0);
+      }
     }catch(e){
       console.log(e);
+      setFetchType(3);
+      _page = Infinity;
     }
   }
 
@@ -287,13 +296,8 @@ function Products() {
           }
 
         </DataGrid>
-        {
-          !_isLoading ? 
-          
-          <div>
-            {/* <div>loading</div> */}
-          </div> : <></>
-        }
+        
+        <FetchPanel type={fetchType} />
 
         <div className='empty-target' ref={setTarget}></div>
       </div>
